@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Campus Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+      <style>
+          .login-container{
+              padding-inline: 50px;
+              background-color: #005595;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-content: center;
+              height: 100vh;
+              flex-direction: column;
+
+          }
+          .login-container-box{
+              display: flex;
+              justify-content: space-around;
+              border-radius: 12px;
+              background-color: white;
+              width: 100%;
+              padding: 50px 40px;
+          }
+          .login-container-box > div{
+              flex: 0.5;
+          }
+          .login-details{
+              padding: 20px;
+              display: flex;
+              flex-direction: column;
+              align-content: center;
+              justify-content: center;
+              max-width: 400px;
+          }
+          .custom-input{
+              border-radius: 18px;
+              cursor: pointer;
+          }
+          .custom-label{
+              font-size: 14px;
+              margin-bottom: 5px;
+          }
+          .login-submit{
+              background-color: #005595;
+              color: #FFCE00;
+              border: none;
+              padding: 5px 30px;
+              border-radius: 18px;
+              font-weight: bold;
+              margin-top: 10px;
+              transition: all 300ms ease-in-out;
+          }
+          .login-submit:hover{
+              transform: scale(1.1);
+          }
+          .login-university-image{
+              width: 100%;
+              max-width: 600px;
+              height: auto;
+          }
+          .forgot-password{
+              color: #005595;
+              font-size: 14px;
+              cursor: pointer;
+              margin-top: 6px;
+          }
+          .form-control:focus{
+              border: 2px solid #005595;
+              box-shadow: none;
+          }
+          @media only screen and (max-width: 768px) {
+              .login-container-box {
+                  flex-direction: column-reverse;
+                  align-items: center;
+              }
+            }
+
+          @media only screen and (max-width: 768px) {
+              .logo-container{
+                  border-radius: 0px !important;
+                  padding: 0px 20px;
+              }
+            }
+
+            .logo {
+              font-family: 'Arial', sans-serif;
+              font-size: 3rem;
+              color: #333;
+              display: inline-block;
+              position: relative;
+              overflow: hidden;
+            }
+
+            .campus, .cart {
+              display: inline-block;
+              position: relative;
+              transform-style: preserve-3d;
+            }
+
+            .campus {
+              animation: campusAnimation 2s ease-in-out infinite alternate;
+            }
+
+            .cart {
+              animation: cartAnimation 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes campusAnimation {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(-10px); }
+            }
+
+            @keyframes cartAnimation {
+              0% { transform: translateY(0); }
+              100% { transform: translateY(10px); }
+            }
+
+            .campus::before, .cart::before {
+              content: '';
+              position: absolute;
+              bottom: -10px;
+              width: 100%;
+              height: 2px;
+              background-color: #333;
+              transform: rotateY(180deg);
+              animation: lineAnimation 2s ease-in-out infinite alternate;
+            }
+
+            @keyframes lineAnimation {
+              0% { transform: rotateY(180deg); }
+              100% { transform: rotateY(0); }
+            }
+
+            .campus::after, .cart::after {
+              content: '';
+              position: absolute;
+              top: -10px;
+              width: 100%;
+              height: 2px;
+              background-color: #333;
+              transform: rotateY(0);
+              animation: lineAnimation 2s ease-in-out infinite alternate-reverse;
+            }
+            .logo-container{
+                background-color: #005595;
+                border-radius: 50px;
+                max-height: 250px;
+                min-height: 100px;
+            }
+            .logo-container .logo{
+                color: #FFCE00;
+            }
+            .error{
+                text-align: right;
+                color: #C10E21;
+                font-size: 12px;
+            }
+            input[type="file"] {
+            padding: 10px;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            width: 300px;
+        }
+
+      </style>
+  </head>
+  <body>
+    <div class="login-container">
+        <div class="login-container-box align-items-center">
+            <div class="login-details">
+                <h2 class="text-center">Register</h2>
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group ">
+                        <label for="first-name" class="custom-label">First Name</label>
+                        <input type="text" name="first_name" autocomplete="off" value="{{ first_name }}" class="custom-input form-control" id="first-name" placeholder="Enter your first name">
+                    </div>
+                    {% if first_error %}
+                    <div id="email-error" class="error">{{ first_error }}</div>
+                    {% endif %}
+                    <div class="form-group ">
+                        <label for="last-name" class="custom-label">Last Name</label>
+                        <input type="text" name="last_name" value="{{ last_name }}" autocomplete="off" class="custom-input form-control" id="last-name" placeholder="Enter your last name">
+                    </div>
+                    {% if last_error %}
+                    <div id="email-error" class="error">{{ last_error }}</div>
+                    {% endif %}
+                    <div class="form-group ">
+                        <label for="email" class="custom-label">Email</label>
+                        <input type="text" name="email" value="{{ email }}" autocomplete="off" class="custom-input form-control" id="email" placeholder="Enter your uwindsor email">
+                    </div>
+                    {% if email_error %}
+                    <div id="email-error" class="error">{{ email_error }}</div>
+                    {% endif %}
+                    <div class="form-group ">
+                        <label for="username" class="custom-label">Username</label>
+                        <input type="text" name="username" value="{{ username }}" autocomplete="off" class="custom-input form-control" id="username" placeholder="Enter your username">
+                    </div>
+                    {% if username_error %}
+                    <div id="email-error" class="error">{{ username_error }}</div>
+                    {% endif %}
+                    <div class="form-group ">
+                        <label for="password" class="custom-label">Password</label>
+                        <input type="password" name="password" value="{{ password }}" class="custom-input form-control" id="password" placeholder="Enter your password">
+                    </div>
+                    {% if password_error %}
+                    <div id="email-error" class="error">{{ password_error }}</div>
+                    {% endif %}
+                    <div class="form-group">
+                        <label for="confirm-password" class="custom-label">Confirm Password</label>
+                        <input type="password" name="confirm_password" value="{{ confirm_password }}" class="custom-input form-control" id="confirm-password" placeholder="Enter your password again">
+                    </div>
+                    {% if confirm_password_error %}
+                    <div id="email-error" class="error">{{ confirm_password_error }}</div>
+                    {% endif %}
+                    <a class="d-block text-end forgot-password">Forgot Password</a>
+                    <input type="submit" class="login-submit"/>
+                </form>
+            </div>
+            <div class="logo-container text-center d-flex align-items-center flex-column justify-content-center">
+                <div class="logo">
+                  <span class="campus">CAMPUS</span>
+                  <span class="cart">CART</span>
+                </div>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
