@@ -5,8 +5,8 @@ from django.contrib import messages
 
 # Create your views here.
 def login(request):
-    if request.user.is_authenticated:
-        return redirect('/')
+    # if request.user.is_authenticated:
+    #     return redirect('/')
     errors = {}
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -34,6 +34,8 @@ def login(request):
 
 
 def register(request):
+    # if request.user.is_authenticated:
+    #     return redirect('/')
     if request.method == 'POST':
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
@@ -67,6 +69,17 @@ def register(request):
                            'last_name': last_name, 'last_error': errors.get('last_name', ''),
                            'password': password, 'password_error': errors.get('password', ''),
                            'username': username, 'username_error': errors.get('username', '')})
+
+        if User.objects.filter(username=username).exists():
+            errors['username'] = 'Username taken! Please try with a different username.'
+        elif User.objects.filter(email=email).exists():
+            errors['email'] = 'Email already exists! Please try a different email.'
+        else:
+            user = User.objects.create_user(first_name=first_name, last_name=last_name, username=username,
+                                            password=password, email=email)
+            user.save()
+            return redirect('login')
+
     return render(request, 'accounts/register.html',
                   {'email': '', 'email_error': '',
                    'confirm_password': '', 'confirm_password_error': '',
@@ -74,3 +87,4 @@ def register(request):
                    'last_name': '', 'last_error': '',
                    'username': '', 'username_error': '',
                    'password': '', 'password_error': ''})
+
