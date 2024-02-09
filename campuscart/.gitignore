@@ -1,1 +1,5 @@
 .env
+.idea/
+accounts/__pycache__/
+accounts/migrations/__pycache__/
+campuscart/__pycache__/

@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Campus Cart</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+      <style>
+          .login-container{
+              padding-inline: 50px;
+              background-color: #005595;
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-content: center;
+              height: 100vh;
+              flex-direction: column;
+
+          }
+          .login-container-box{
+              display: flex;
+              justify-content: space-around;
+              border-radius: 12px;
+              background-color: white;
+              width: 100%;
+              padding: 50px 40px;
+          }
+          .login-container-box div{
+              flex: 0.5;
+          }
+          .login-details{
+              padding: 20px;
+              display: flex;
+              flex-direction: column;
+              align-content: center;
+              justify-content: center;
+              max-width: 400px;
+          }
+          .custom-input{
+              border-radius: 18px;
+              cursor: pointer;
+          }
+          .custom-label{
+              font-size: 14px;
+              margin-bottom: 5px;
+          }
+          .login-submit{
+              background-color: #005595;
+              color: #FFCE00;
+              border: none;
+              padding: 5px 30px;
+              border-radius: 18px;
+              font-weight: bold;
+              margin-top: 10px;
+          }
+          .login-university-image{
+              width: 100%;
+              max-width: 600px;
+              height: auto;
+          }
+          .forgot-password{
+              color: #005595;
+              font-size: 14px;
+              cursor: pointer;
+              margin-top: 6px;
+          }
+          .form-control:focus{
+              border: 2px solid #005595;
+              box-shadow: none;
+          }
+          @media only screen and (max-width: 768px) {
+              .login-container-box{
+                  flex-direction: column-reverse;
+                  align-items: center;
+              }
+            }
+      </style>
+  </head>
+  <body>
+    <div class="login-container">
+        <div class="login-container-box">
+            <div class="login-details">
+                <h2 class="text-center">Login</h2>
+                <form>
+                    <div class="form-group mb-2">
+                        <label for="username" class="custom-label">Username</label>
+                        <input type="text" class="custom-input form-control" id="username" placeholder="Enter username">
+                    </div>
+                    <div class="form-group mb-2">
+                        <label for="password" class="custom-label">Password</label>
+                        <input type="password" class="custom-input form-control" id="password" placeholder="Enter password">
+                    </div>
+                    <a class="d-block text-end forgot-password">Forgot Password</a>
+                    <input type="submit" class="login-submit"/>
+                </form>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+                <img class="login-university-image" src="https://www.uwindsor.ca/finance/sites/all/themes/uwindsor_bootstrap/images/uwindsor_logo.svg" alt="University Logo"/>
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
