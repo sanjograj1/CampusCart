@@ -1,9 +1,36 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User, auth
+from django.contrib import messages
 
 
 # Create your views here.
 def login(request):
-    return render(request, 'accounts/login.html')
+    if request.user.is_authenticated:
+        return redirect('/')
+    errors = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = auth.authenticate(username=username, password=password)
+
+        if user is not None:
+            auth.login(request, user)
+            return redirect('/')
+
+        messages.add_message(request, messages.ERROR, 'Invalid credentials! Please try again',
+                             extra_tags='error-toast')
+        if errors:
+            return render(request, 'accounts/login.html', {
+                'page_title': 'Login',
+                'username': request.POST.get('username'),
+                'password': request.POST.get('password')
+            })
+    return render(request, 'accounts/login.html', {
+        'page_title': 'Login',
+        'username': '',
+        'password': ''
+    })
 
 
 def register(request):
