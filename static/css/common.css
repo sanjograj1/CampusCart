@@ -1,0 +1,96 @@
+@media (max-width: 768px) {
+  .home-image-container {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 992px) {
+  .home-image-box>.home-image-type {
+    font-size: 35px;
+  }
+}
+
+@media (min-width: 992px) {
+  .home-image-box>.home-image-type {
+    font-size: 50px;
+  }
+}
+
+.home-image-box {
+  flex: 1;
+  cursor: pointer;
+}
+
+.home-image-box>img {
+  opacity: 0.5;
+  transition: all .2s ease-in-out;
+}
+
+.home-image-box>img:hover {
+  transform: scale(1.1);
+}
+
+.home-image-box>.home-image-type {
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  width: max-content;
+}
+
+.success-toast {
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+.error-toast {
+  min-width: 250px;
+  margin-left: -125px;
+  background-color: white;
+  color: #C10E21;
+  text-align: center;
+  border-radius: 2px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  bottom: 30px;
+  font-size: 17px;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    opacity: 1;
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+
+  to {
+    bottom: 30px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 30px;
+    opacity: 1;
+  }
+
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}

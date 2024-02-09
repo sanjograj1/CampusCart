@@ -19,7 +19,7 @@ def register(request):
         if not first_name:
             errors['first_name'] = 'Please enter your first name'
         if not last_name:
-            errors['last_name'] = 'Please enter your last'
+            errors['last_name'] = 'Please enter your last name'
         if not username:
             errors['username'] = 'Please enter your username'
         if not email.endswith('@uwindsor.ca'):
