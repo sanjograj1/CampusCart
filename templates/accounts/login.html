@@ -58,18 +58,4 @@
         {% endfor %}
     {% endif %}
 </body>
-<script>
-    const toast_success = document.querySelector('.success-toast');
-    const toast_error = document.querySelector('.error')
-    if(toast_success){
-        setTimeout(() => {
-            toast_success.style.display = 'none'
-        },2500)
-    }
-    if(toast_error){
-        setTimeout(() => {
-            toast_error.style.display = 'none'
-        },2500)
-    }
-</script>
 </html>

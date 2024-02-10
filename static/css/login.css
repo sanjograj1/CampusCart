@@ -37,7 +37,16 @@ body{
     position: relative;
 }
 
-.custom-label::after{
+input[type="file"]::file-selector-button {
+  font-weight: bold;
+  border-radius: 3px;
+    border: none;
+    background-color: #005595;
+    color: #FFCE00;
+    cursor: pointer;
+}
+
+.required > .custom-label::after{
     content: "*";
     background-image: none;
     position: absolute;
@@ -46,7 +55,6 @@ body{
     margin: 2px 0 0 1px;
     color: #C10E21;
     font-size: 18px;
-
 }
 
 .login-submit {
