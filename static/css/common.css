@@ -38,59 +38,66 @@
   width: max-content;
 }
 
-.success-toast {
+.success-toast,.error-toast {
   min-width: 250px;
-  margin-left: -125px;
-  background-color: #333;
+  text-align: center;
+  border-radius: 6px;
+  padding: 16px;
+  position: fixed;
+  z-index: 1;
+  left: 50%;
+  font-size: 17px;
+  animation: slideDown 3s, fadeOut 8.5s;
+  opacity: 1;
+  transform: translateX(-50%);
+  top: -100px;
+}
+
+.activate-toast {
+  background-color: #14a44d;
   color: #fff;
-  text-align: center;
-  border-radius: 2px;
-  padding: 16px;
-  position: fixed;
-  z-index: 1;
-  left: 50%;
-  bottom: 30px;
-  font-size: 17px;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-}
-
-.error-toast {
   min-width: 250px;
-  margin-left: -125px;
-  background-color: white;
-  color: #C10E21;
   text-align: center;
-  border-radius: 2px;
+  border-radius: 6px;
   padding: 16px;
   position: fixed;
   z-index: 1;
   left: 50%;
-  bottom: 30px;
   font-size: 17px;
-  animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    opacity: 1;
+  animation: slideDown 3s, fadeOut 30.5s;
+  opacity: 1;
+  transform: translateX(-50%);
+  top: -100px;
 }
 
-@keyframes fadein {
+.success-toast{
+    background-color: #14a44d;
+    color: #fff;
+}
+
+.error-toast{
+    background-color: white;
+    color: #C10E21;
+}
+
+@keyframes slideDown {
   from {
-    bottom: 0;
+    top: 0;
     opacity: 0;
   }
-
   to {
-    bottom: 30px;
+    top: 10%;
     opacity: 1;
   }
 }
 
-@keyframes fadeout {
+@keyframes fadeOut {
   from {
-    bottom: 30px;
+    top: 10%;
     opacity: 1;
   }
-
   to {
-    bottom: 0;
     opacity: 0;
+    top: 0;
   }
 }
