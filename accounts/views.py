@@ -13,6 +13,8 @@ from django.utils.encoding import force_bytes, force_str
 from django.core.mail import EmailMessage
 from .tokens import account_activation_token
 from django.utils.text import slugify
+from accounts.forms import ProfileForm
+from accounts.models import Profile
 
 
 # Create your views here.
@@ -175,3 +177,17 @@ def user_logout(request):
     auth.logout(request)
     messages.add_message(request, messages.SUCCESS, 'You have successfully logged out !!', extra_tags='success-toast')
     return redirect('login')
+
+
+
+@login_required
+def profile(request):
+    if request.method == "POST":
+        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profile updated")
+            return redirect("accounts:profile")
+    else:
+        form = ProfileForm(instance=request.user.profile)
+    return render(request, "accounts/profile.html", {"form": form})
