@@ -27,4 +27,19 @@ def create_product(request):
         form = ProductForm()
     return render(request, "products/create_product.html", {"form": form})
 
+@login_required
+def edit_product(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    if request.user != product.user:
+        return redirect(
+            "home"
+        )  # Or some other appropriate response for unauthorized access
+    if request.method == "POST":
+        form = ProductForm(request.POST, request.FILES, instance=product)
+        if form.is_valid():
+            form.save()
+            return redirect("products:home")
+    else:
+        form = ProductForm(instance=product)
+    return render(request, "products/edit_product.html", {"form": form})
 
