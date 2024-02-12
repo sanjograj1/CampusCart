@@ -19,10 +19,10 @@ class RegistrationForm(UserCreationForm):
     class Meta:
         model = get_user_model()
         fields = [
-            "first_name",
-            "last_name",
             "username",
             "email",
+            "first_name",
+            "last_name",
             "password1",
             "password2",
         ]
@@ -31,7 +31,10 @@ class RegistrationForm(UserCreationForm):
         email = self.cleaned_data["email"]
         if not email.endswith("@uwindsor.ca"):
             raise forms.ValidationError("Please enter a uwindsor.ca email")
+        elif get_user_model().objects.filter(email=email).exists():
+                raise forms.ValidationError('Email already exists! Please try a different email.')
         return email
+    
 
     def clean(self):
         cleaned_data = super().clean()

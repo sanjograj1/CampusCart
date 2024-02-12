@@ -1,23 +1,28 @@
-.login-container {
+body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   justify-content: center;
   align-items: center;
   background: #005595;
+}
+
+.login-container {
   width: 100%;
+  max-width: 600px;
 }
 
 .login-container-box {
   border-radius: 12px;
   background-color: white;
-  width: 60%;
+  width: 100%;
   padding: 30px 40px 30px;
 }
 
-.login-container-box > .error {
+
+.login-container-box>.error {
   text-align: right;
-  color: #c10e21;
+  color: #C10E21;
   font-size: 16px;
 }
 
@@ -32,20 +37,29 @@
   position: relative;
 }
 
-.custom-label::after {
+input[type="file"]::file-selector-button {
+  font-weight: bold;
+  border-radius: 3px;
+  border: none;
+  background-color: #005595;
+  color: #FFCE00;
+  cursor: pointer;
+}
+
+.required>.custom-label::after {
   content: "*";
   background-image: none;
   position: absolute;
   line-height: 14px;
   background-size: cover;
   margin: 2px 0 0 1px;
-  color: #c10e21;
+  color: #C10E21;
   font-size: 18px;
 }
 
 .login-submit {
   background-color: #005595;
-  color: #ffce00;
+  color: #FFCE00;
   border: none;
   padding: 5px 30px;
   border-radius: 18px;
@@ -75,11 +89,13 @@
   .login-container {
     width: 80%;
   }
+
   .login-container-box {
     flex-direction: column-reverse;
     align-items: center;
     padding: 25px 20px;
   }
+
   .login-details {
     width: 100%;
     max-width: unset;
@@ -87,7 +103,7 @@
 }
 
 .error {
-  color: #c10e21;
+  color: #C10E21;
   font-size: 16px;
 }
 
@@ -108,7 +124,7 @@
 
 .or-tag-span::before {
   background-color: #96999e;
-  content: "";
+  content: '';
   height: 1px;
   position: absolute;
   top: 50%;
@@ -119,7 +135,7 @@
 
 .or-tag-span::after {
   background-color: #96999e;
-  content: "";
+  content: '';
   height: 1px;
   position: absolute;
   top: 50%;
@@ -128,9 +144,10 @@
   left: 100%;
 }
 
+
 .go-to-register {
   text-decoration: none;
-  background-color: #ffce00;
+  background-color: #FFCE00;
   color: #005595;
   padding: 10px 15px;
   font-weight: 800;
@@ -141,7 +158,7 @@
 }
 
 .logo {
-  font-family: "Arial", sans-serif;
+  font-family: 'Arial', sans-serif;
   font-size: 3rem;
   color: #333;
   display: inline-block;
@@ -186,7 +203,7 @@
 
 .campus::before,
 .cart::before {
-  content: "";
+  content: '';
   position: absolute;
   bottom: -10px;
   width: 100%;
@@ -208,7 +225,7 @@
 
 .campus::after,
 .cart::after {
-  content: "";
+  content: '';
   position: absolute;
   top: -10px;
   width: 100%;
@@ -226,5 +243,5 @@
 }
 
 .logo-container .logo {
-  color: #ffce00;
+  color: #FFCE00;
 }

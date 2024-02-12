@@ -35,7 +35,7 @@ def login(request):
                 request,
                 messages.ERROR,
                 "Please verify your account and try again!!",
-                extra_tags="error-toast",
+                extra_tags="primary",
             )
         else:
             user = auth.authenticate(username=username, password=password)
@@ -48,7 +48,7 @@ def login(request):
                 request,
                 messages.ERROR,
                 "Invalid credentials! Please try again",
-                extra_tags="error-toast",
+                extra_tags="danger",
             )
             if errors:
                 return render(
@@ -67,35 +67,27 @@ def login(request):
     )
 
 
-def sendemailverification(request, user, user_email):
-    mail_subject = "Activate your user account."
-    message = render_to_string(
-        "accounts/activate_account.html",
-        {
-            "user": user.username,
-            "domain": get_current_site(request).domain,
-            "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-            "token": account_activation_token.make_token(user),
-            "protocol": "https" if request.is_secure() else "http",
-        },
-    )
-    email = EmailMessage(mail_subject, message, to=[user_email])
-    if email.send():
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            f"Dear {user}, "
-            f"please go to you email {user_email} inbox and click on received activation "
-            f"link to confirm and complete the registration. Note: Check your spam folder.",
-            extra_tags="activate-toast",
-        )
+def activate(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = get_user_model().objects.get(pk=uid)
+    except:
+        user = None
+
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+
+        messages.add_message(request, messages.SUCCESS,
+                             "Thank you for your email confirmation. Now you can login your account.",
+                             extra_tags='success')
+        return redirect('login')
     else:
-        messages.add_message(
-            request,
-            messages.ERROR,
-            f"Problem sending email to {user_email}, check if you typed it correctly.",
-            extra_tags="error-toast",
-        )
+        messages.add_message(request, messages.SUCCESS,
+                             "Activation link is invalid!",
+                             extra_tags='danger')
+
+    return redirect('accounts:login')
 
 
 def register(request):
@@ -105,13 +97,17 @@ def register(request):
     if request.method == "POST":
         form = RegistrationForm(request.POST)
         if form.is_valid():
-
             inactive_user = send_verification_email(request, form)
-
             profile = Profile.objects.create(user=inactive_user)
             profile.save()
-            messages.success(request, "registered Successfully")
-
+            messages.add_message(
+            request,
+            messages.SUCCESS,
+            f"Dear {inactive_user}, "
+            f"please go to you email {inactive_user.email} inbox and click on received activation "
+            f"link to confirm and complete the registration. Note: Check your spam folder.",
+            extra_tags="success",
+        )
             return redirect("accounts:login")
     else:
         form = RegistrationForm()
@@ -126,13 +122,14 @@ def home(request):
     return render(request, "accounts/home.html", context)
 
 
+
 def user_logout(request):
     auth.logout(request)
     messages.add_message(
         request,
         messages.SUCCESS,
         "You have successfully logged out !!",
-        extra_tags="success-toast",
+        extra_tags="success",
     )
     return redirect("accounts:login")
 
@@ -140,11 +137,11 @@ def user_logout(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=request.user.profile)
+        form = ProfileForm(request.POST, request.FILES, instance=request.user)
         if form.is_valid():
             form.save()
             messages.success(request, "Profile updated")
             return redirect("accounts:profile")
     else:
-        form = ProfileForm(instance=request.user.profile)
+        form = ProfileForm(instance=request.user)
     return render(request, "accounts/profile.html", {"form": form})
