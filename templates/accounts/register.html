@@ -1,25 +1,14 @@
+{% extends "base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-   <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
-      <title>Campus Cart</title>
-      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
-         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-         crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-         crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
-         integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
-         crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css" />
-   </head>
-   <body>
+      {% block custom_css %}
+          <link
+      rel="stylesheet"
+      href="{% static 'css/login.css' %}"
+      type="text/css"
+    />
+  {% endblock custom_css %}
+
+{% block content %}
       <div class="login-container">
          <div class="logo-container text-center d-flex align-items-center flex-column justify-content-center">
             <div class="logo">
@@ -32,7 +21,7 @@
                <h2 class="text-center">Create a New Account</h2>
                <form method="post" enctype="multipart/form-data">
                   {% csrf_token %} 
-                  <div class="form-group required">
+                  <div class="form-group ">
                       <label
                      for="first-name" class="custom-label">First Name</label>
                       <input type="text" name="first_name"
@@ -42,14 +31,14 @@
                   {% if first_error %} 
                   <div id="email-error" class="error">{{ first_error }}</div>
                   {% endif %} 
-                  <div class="form-group required"> <label for="last-name" class="custom-label">Last
+                  <div class="form-group "> <label for="last-name" class="custom-label">Last
                      Name</label> <input type="text" name="last_name" value="{{ last_name }}" autocomplete="off"
                         class="custom-input form-control" id="last-name" placeholder="Enter your last name"> 
                   </div>
                   {% if last_error %} 
                   <div id="email-error" class="error">{{ last_error }}</div>
                   {% endif %} 
-                  <div class="form-group required">
+                  <div class="form-group ">
                      <label for="email" class="custom-label">Email</label> <input type="text" name="email" value="{{ email }}"
                         autocomplete="off" class="custom-input form-control" id="email" placeholder="Enter your uwindsor email">
                   </div>
@@ -57,21 +46,21 @@
                   <div id="email-error" class="error">{{ email_error }}</div>
                   {% endif %} 
                   <div
-                     class="form-group required"> <label for="username" class="custom-label">Username</label> <input type="text"
+                     class="form-group "> <label for="username" class="custom-label">Username</label> <input type="text"
                      name="username" value="{{ username }}" autocomplete="off" class="custom-input form-control" id="username"
                      placeholder="Enter your username"> </div>
                   {% if username_error %} 
                   <div id="email-error" class="error">{{ username_error }}
                   </div>
                   {% endif %} 
-                  <div class="form-group required"> <label for="password"
+                  <div class="form-group "> <label for="password"
                      class="custom-label">Password</label> <input type="password" name="password" value="{{ password }}"
                      class="custom-input form-control" id="password" placeholder="Enter your password"> </div>
                   {% if password_error %} 
                   <div id="email-error" class="error">{{ password_error }}</div>
                   {% endif %} 
                   <div
-                     class="form-group required"> <label for="confirm-password" class="custom-label">Confirm Password</label> <input
+                     class="form-group"> <label for="confirm-password" class="custom-label">Confirm Password</label> <input
                      type="password" name="confirm_password" value="{{ confirm_password }}" class="custom-input form-control"
                      id="confirm-password" placeholder="Enter your password again"> </div>
                   {% if confirm_password_error %} 
@@ -79,21 +68,34 @@
                      id="email-error" class="error">{{ confirm_password_error }}
                   </div>
                   {% endif %}
-                    <div class="form-group mt-2">
-                        <label for="profile-pic" class="custom-label upload-profile">Upload Your Profile Pic</label>
-                        <input type="file" name="profile_pic" id="profile-pic">
-                    </div>
+                   <a class="d-block text-end forgot-password">Forgot Password</a>
                    <input type="submit" class="login-submit" />
                </form>
                <div class="or-tag"><span class="or-tag-span">or</span></div>
-               <a class="go-to-register" href="{% url 'login' %}">Log In</a>
+               <a class="go-to-register" href="{% url 'accounts:login' %}">Log In</a>
             </div>
          </div>
       </div>
       {% if messages %}
-          {% for message in messages %}
-          <div{% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</div>
-          {% endfor %}
+      {% for message in messages %}
+      <div {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</div>
+      {% endfor %}
       {% endif %}
-   </body>
-</html>
+   {% endblock content %}
+
+     {% block js_scripts %}
+   <script>
+      const toast_success = document.querySelector('.success-toast');
+      const toast_error = document.querySelector('.error')
+      if (toast_success) {
+        setTimeout(() => {
+          toast_success.style.display = 'none'
+        }, 2500)
+      }
+      if (toast_error) {
+        setTimeout(() => {
+          toast_error.style.display = 'none'
+        }, 2500)
+      }
+   </script>
+     {% endblock js_scripts %}
