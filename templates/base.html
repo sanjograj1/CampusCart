@@ -13,6 +13,7 @@
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
   <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+  {% block head %}{% endblock %}
 </head>
 
 <body>
@@ -39,6 +40,9 @@
             <a href='{% url "products:home" %}' class="btn btn-text nav-link">Home</a>
           </li>
           <li class="d-flex nav-item px-lg-3">
+            <a href='{% url "books:home" %}' class="btn btn-text nav-link">Books</a>
+          </li>
+          <li class="d-flex nav-item px-lg-3">
             <a href='{% url "products:sell" %}' class="btn btn-text nav-link">Sell a Product</a>
           </li>
         </ul>
@@ -55,7 +59,7 @@
       </div>
     </div>
   </header>
-  <div class="content p-1 mt-5">
+  <div class="content p-1 mt-5 mb-5">
     {% block content %}
     {% endblock %}
   </div>
