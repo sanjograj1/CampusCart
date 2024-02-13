@@ -1,12 +1,10 @@
 from django.urls import path
 from . import views
 
-app_name="accounts"
+app_name = "accounts"
 urlpatterns = [
-    path('login', views.login, name='login'),
-    path('register', views.register, name='register'),
-    path('logout', views.user_logout, name='logout'),
-    path('activate/<uidb64>/<token>', views.activate, name='activate'),
-    path("profile/", views.profile, name="profile")
-
+    path("login/", views.login, name="login"),
+    path("register/", views.register, name="register"),
+    path("logout/", views.user_logout, name="logout"),
+    path("profile/", views.profile, name="profile"),
 ]
