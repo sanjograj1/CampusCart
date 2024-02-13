@@ -1,0 +1,230 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="books-header pt-4">
+        <h2>Books</h2>
+        <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="row justify-content-between books-content-collection">
+            {% for book in books %}
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{{ book.book_cover }}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        {{ book.title }}
+                    </div>
+                    <div class="book-card__author">
+                        {{ book.author }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+            <div class="book-card">
+                <div class="book-card__cover">
+                    <div class="book-card__book">
+                        <div class="book-card__book-front">
+                            <img class="book-card__img" src="{% static 'images/book.jpg' %}" />
+                        </div>
+                        <div class="book-card__book-back"></div>
+                        <div class="book-card__book-side"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="book-card__title">
+                        Harry Potter e a Pedra Filosofal
+                    </div>
+                    <div class="book-card__author">
+                        J. K. Rowling
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
