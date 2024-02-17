@@ -117,8 +117,7 @@ def register(request):
 
 @login_required(login_url="login")
 def home(request):
-    pic = request.user.profile_image
-    context = {"page_title": "Campus Cart", "profile": pic}
+    context = {"page_title": "Campus Cart"}
     return render(request, "accounts/home.html", context)
 
 
