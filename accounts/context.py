@@ -1,3 +1,6 @@
 def profile_image(request):
-    profile_image = request.user.profile.profile_image
+    if request.user.is_authenticated:
+        profile_image = request.user.profile.profile_image
+    else:
+        profile_image = None
     return {'profile_image': profile_image}
