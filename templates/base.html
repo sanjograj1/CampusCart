@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page_title }}</title>
+  <title>{{ title }}</title>
   <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
   <link rel="stylesheet" href="https://aui.heart.org/aha-ui/dev/1.0.3/dist/css/aha-dist.css" />
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
@@ -49,7 +49,7 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ profile }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
+      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">

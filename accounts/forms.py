@@ -2,12 +2,33 @@ from django import forms
 from .models import Profile
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
+from crispy_forms.layout import Layout, Submit, Field
+from crispy_forms.helper import FormHelper
+from PIL import Image
 
 
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ["phone_number", "address", "profile_image"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('phone_number', css_class='form-control'),
+            Field('address', css_class='form-control'),
+            Field('profile_image', css_class='form-control'),
+        )    
+
+    def save(self):
+        super.save()  
+
+        img = Image.open(self.profile_image.path)
+        if img.height > 400 and img.width > 400:
+            output_size = (400,400)
+            img.thumbnail(output_size)
+            img.save(self.profile_image.path)
 
 
 class RegistrationForm(UserCreationForm):
@@ -43,3 +64,46 @@ class RegistrationForm(UserCreationForm):
         if password and confirm_password and password != confirm_password:
             raise forms.ValidationError("Passwords do not match")
         return cleaned_data
+
+
+class UserUpdateForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=100)
+    last_name = forms.CharField(max_length=100)
+    email = forms.EmailField()
+
+    class Meta:
+        model = get_user_model()
+        fields = [
+            "username",
+            "email",
+            "first_name",
+            "last_name",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('username', css_class='form-control'),
+            Field('email', css_class='form-control'),
+            Field('first_name', css_class='form-control'),
+            Field('last_name', css_class='form-control'),
+        ) 
+        self.fields['username'].disabled = True 
+        self.fields['email'].disabled = True
+        self.fields['username'].help_text = 'Cannot Change Username again'
+        self.fields['email'].help_text = 'Cannot Change Email again'
+
+class ProfileUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['phone_number','address','profile_image']       
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('phone_number', css_class='form-control'),
+            Field('address', css_class='form-control'),
+            Field('profile_image', css_class='form-control'),
+        )        
