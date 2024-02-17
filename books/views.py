@@ -1,9 +1,27 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import redirect, render
+from .forms import BookForm
+from .models import Book
 
 @login_required()
 # Create your views here.
-def furniture(request):
+def bookhome(request):
+    all_books = Book.objects.all()
     return render(request, 'books/home.html',{
         'page_title': 'Books',
+        'all_books':all_books
     })
+
+
+@login_required()
+def upload_book(request):
+    if request.method == 'POST':
+        form = BookForm(request.POST,request.FILES)
+        if form.is_valid():
+            book = form.save(commit=False)
+            book.seller = request.user
+            book.save()
+            return redirect('books:home')
+    else:
+        form = BookForm()
+    return render(request, 'books/upload_book.html',{'form': form})
