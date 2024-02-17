@@ -3,6 +3,5 @@
 .env
 venv
 .vscode
-media/
 mydatabase
 myenv

@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ page_title }}</title>
+  <title>{{ title }}</title>
   <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
   <link rel="stylesheet" href="https://aui.heart.org/aha-ui/dev/1.0.3/dist/css/aha-dist.css" />
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
@@ -19,13 +19,13 @@
 <body>
   <div class="header-top w-100 position-relative"></div>
   <header class="aui-main-header aui-pri-header">
-    <a href='{% url "products:home" %}' class="aui-skip-content">Skip to main
+    <a href='{% url "accounts:home" %}' class="aui-skip-content">Skip to main
       content</a>
     <nav
       class="py-2 m-0 w-100 position-relative navbar-expand-lg justify-content-between aui-header-content aui-pri-header-t">
       <div
         class="position-absolute logo-container text-center d-flex align-items-center flex-column justify-content-center">
-        <a href='{% url "products:home" %}'>
+        <a href='{% url "accounts:home" %}'>
           <div class="logo">
             <span class="campus">CAMPUS</span>
             <span class="cart">CART</span>
@@ -37,7 +37,7 @@
       <div class="justify-content-lg-center collapse navbar-collapse aui-pri-nav" id="toggleNav">
         <ul class="navbar-nav mx-lg-3 flex-lg-row flex-column">
           <li class="d-flex nav-item px-lg-3">
-            <a href='{% url "products:home" %}' class="btn btn-text nav-link">Home</a>
+            <a href='{% url "accounts:home" %}' class="btn btn-text nav-link">Home</a>
           </li>
           <li class="d-flex nav-item px-lg-3">
             <a href='{% url "books:home" %}' class="btn btn-text nav-link">Books</a>
@@ -49,7 +49,7 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ profile }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
+      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">

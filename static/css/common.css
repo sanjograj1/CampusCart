@@ -16,6 +16,10 @@
   }
 }
 
+.home-container {
+  margin-top: -3em;
+}
+
 .home-image-box {
   flex: 1;
   cursor: pointer;
@@ -38,7 +42,8 @@
   width: max-content;
 }
 
-.success-toast,.error-toast {
+.success-toast,
+.error-toast {
   min-width: 250px;
   text-align: center;
   border-radius: 6px;
@@ -70,14 +75,14 @@
   top: -100px;
 }
 
-.success-toast{
-    background-color: #14a44d;
-    color: #fff;
+.success-toast {
+  background-color: #14a44d;
+  color: #fff;
 }
 
-.error-toast{
-    background-color: white;
-    color: #C10E21;
+.error-toast {
+  background-color: white;
+  color: #C10E21;
 }
 
 @keyframes slideDown {
@@ -85,6 +90,7 @@
     top: 0;
     opacity: 0;
   }
+
   to {
     top: 10%;
     opacity: 1;
@@ -96,6 +102,7 @@
     top: 10%;
     opacity: 1;
   }
+
   to {
     opacity: 0;
     top: 0;
