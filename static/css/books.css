@@ -160,3 +160,18 @@ main {
 .book-card:hover .book-card__book-side {
     opacity: 1;
 }
+
+
+.upload-book {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    right: 0;
+    background-color: #005596;
+    color: #fff;
+}
+
+.upload-book:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
