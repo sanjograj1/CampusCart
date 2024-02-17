@@ -3,5 +3,6 @@ from . import views
 
 app_name = "books"
 urlpatterns = [
-    path('', views.furniture, name='home'),
+    path('', views.bookhome, name='home'),
+    path('upload', views.upload_book, name='upload-book'),
 ]
