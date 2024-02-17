@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="home-container">
+    <div class="home-image-container d-flex flex-wrap">
+        <a href="{% url 'products:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
+            <img class="mw-100 h-auto" src="{% static 'images/accounts/electronics.avif' %}" alt="Electronics">
+            <span class="home-image-type position-absolute">All Products</span>
+        </a>
+        <a href="{% url 'books:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
+            <img class="mw-100 h-auto" src="{% static 'images/accounts/furniture.avif' %}" alt="Furniture">
+            <span class="home-image-type position-absolute">Books</span>
+        </a>
+    </div>
+    <div class="home-image-container d-flex flex-wrap">
+        <a class="position-relative home-image-box p-0 overflow-hidden">
+            <img class="mw-100 h-auto" src="{% static 'images/accounts/rent.avif' %}" alt="Rental">
+            <span class="home-image-type position-absolute">Rental</span>
+        </a>
+        <a class="position-relative home-image-box p-0 overflow-hidden">
+            <img class="mw-100 h-auto" src="{% static 'images/accounts/lost.avif' %}" alt="Lost & Found">
+            <span class="home-image-type position-absolute">Lost and Found</span>
+        </a>
+    </div>
+</div>
+{% endblock content %}
