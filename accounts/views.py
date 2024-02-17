@@ -1,21 +1,16 @@
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.core.files.base import ContentFile
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User, auth
+from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.template.loader import render_to_string
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.utils.encoding import force_bytes, force_str
-from django.core.mail import EmailMessage
+from django.utils.http import urlsafe_base64_decode
+from django.utils.encoding import force_str
 from .tokens import account_activation_token
-from django.utils.text import slugify
-from accounts.forms import ProfileForm, RegistrationForm
-from accounts.models import Profile
+from .models import Profile
 from verify_email.email_handler import send_verification_email
+from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
 
 
 # Create your views here.
@@ -55,7 +50,7 @@ def login(request):
                     request,
                     "accounts/login.html",
                     {
-                        "page_title": "Login",
+                        "title": "Login",
                         "username": request.POST.get("username"),
                         "password": request.POST.get("password"),
                     },
@@ -63,7 +58,7 @@ def login(request):
     return render(
         request,
         "accounts/login.html",
-        {"page_title": "Login", "username": "", "password": ""},
+        {"title": "Login", "username": "", "password": ""},
     )
 
 
@@ -117,7 +112,9 @@ def register(request):
 
 @login_required(login_url="login")
 def home(request):
-    context = {"page_title": "Campus Cart"}
+    context = {
+        "title": "Campus Cart",
+    }
     return render(request, "accounts/home.html", context)
 
 
@@ -136,11 +133,19 @@ def user_logout(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        form = ProfileForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, "Profile updated")
+        user_form = UserUpdateForm(request.POST, instance=request.user)
+        profile_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Your Profile has been updated")
             return redirect("accounts:profile")
     else:
-        form = ProfileForm(instance=request.user)
-    return render(request, "accounts/profile.html", {"form": form})
+        user_form = UserUpdateForm(instance=request.user)
+        profile_form = ProfileUpdateForm(instance=request.user.profile)
+
+    return render(request, "accounts/profile.html",{
+            'user_form' : user_form,
+            'profile_form' : profile_form,
+            "title": "Profile",
+        })
