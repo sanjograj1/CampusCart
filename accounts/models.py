@@ -11,3 +11,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f"Profile of {self.user.username}"
+
+
+class Contact(models.Model):
+
+    name = models.CharField(max_length=50)
+    email = models.CharField(max_length=70, default="")
+    number = models.CharField(max_length=70, default="")
+
+
+    def _str_(self):
+        return self.name
