@@ -105,6 +105,7 @@ LOGIN_REDIRECT_URL = "accounts:login"
 LOGIN_URL = "accounts:login"
 LOGOUT_REDIRECT_URL = "accounts:login"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+EXPIRE_AFTER = "2m"
 
 MESSAGE_TAGS = {
     messages.DEBUG: "secondary",
