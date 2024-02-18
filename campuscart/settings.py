@@ -29,7 +29,8 @@ INSTALLED_APPS = [
     "verify_email.apps.VerifyEmailConfig",
     "accounts",
     "products",
-    "books"
+    "books",
+    "events"
 ]
 
 MIDDLEWARE = [
