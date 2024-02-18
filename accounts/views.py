@@ -93,8 +93,6 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             inactive_user = send_verification_email(request, form)
-            profile = Profile.objects.create(user=inactive_user)
-            profile.save()
             messages.add_message(
             request,
             messages.SUCCESS,
@@ -110,7 +108,7 @@ def register(request):
     return render(request, "accounts/register.html", {"form": form})
 
 
-@login_required(login_url="login")
+@login_required
 def home(request):
     context = {
         "title": "Campus Cart",

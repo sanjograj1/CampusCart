@@ -9,5 +9,6 @@ urlpatterns = [
     path("verification/", include("verify_email.urls")),
     path("", include("accounts.urls", namespace="accounts")),
     path("product", include("products.urls", namespace="products")),
-    path('books/', include('books.urls',namespace="books"))
+    path('books/', include('books.urls',namespace="books")),
+    path('events/', include('events.urls',namespace="events"))
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
