@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from django.utils.http import urlsafe_base64_decode
 from django.utils.encoding import force_str
 from .tokens import account_activation_token
-from .models import Profile
+from .models import Profile, Contact
 from verify_email.email_handler import send_verification_email
 from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
 
@@ -149,3 +149,17 @@ def profile(request):
             'profile_form' : profile_form,
             "title": "Profile",
         })
+
+@login_required
+def contactus(request):
+    print('Hi')
+    if request.method == 'POST':
+        name = request.POST['name']
+        email = request.POST['email']
+        number = request.POST['number']
+        contact = Contact(name=name, email=email, number=number)
+        print('hello')
+        contact.save()
+        print('use created')
+        messages.info(request, "We'll get in touch with you soon.")
+    return render(request, 'accounts/contactus.html')
