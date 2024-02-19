@@ -15,11 +15,11 @@
     <div class="mt-4">
         <div class="row justify-content-between books-content-collection">
             {% for book in all_books %}
-            <div class="book-card">
+            <a href="{% url 'books:book-detail' book.id %}" class="book-card">
                 <div class="book-card__cover">
                     <div class="book-card__book">
                         <div class="book-card__book-front">
-                            <img class="book-card__img" src="{{ book.book_cover.url }}" />
+                            <img class="book-card__img" src="{{ book.book_cover.url }}" alt="Book Cover" />
                         </div>
                         <div class="book-card__book-back"></div>
                         <div class="book-card__book-side"></div>
@@ -36,7 +36,7 @@
                         ${{ book.price }}
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
     </div>
