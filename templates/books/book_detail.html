@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+ 
+<div class="container">
+    <div class="books-header pt-4">
+        <h1>Current Book</h2>
+            <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row">
+            <div class="book-image one-half">
+                <img class="mw-100 h-auto" src="{{ book.book_cover.url }}" alt="{{ book.title }}">
+            </div>
+            <div class="book-imfornation one-half">
+                <h4>By {{ book.author }} (Author)</h4>
+                <div class="books-author-underline"></div>
+                <h1 class="book-title my-3">{{ book.title }}</h1>
+                <span>${{ book.price }}</span>
+                <p class="book-description">{{ book.description }}</p>
+                <a class="contact-seller">Contact Seller</a>
+            </div>
+    </div>
+    </section>
+</div>
+</div>
+{% endblock content %}

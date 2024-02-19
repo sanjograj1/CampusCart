@@ -108,3 +108,11 @@
     top: 0;
   }
 }
+
+.contact-seller {
+  background: #00a7e1;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1px solid #00a7e1;
+  cursor: pointer;
+}
