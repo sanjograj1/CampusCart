@@ -1,34 +1,59 @@
 {% extends "base.html" %}
 {% load static %}
 {% block content %}
+{% load crispy_forms_tags %}
 <div class="container">
-    <h1>All Products</h1>
-    {% if products %}
-    <div class="row mt-3">
-        {% for product in products %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                <img src="{{ product.image.url }}" class="card-img-top" height="300" alt="{{ product.title }}">
-                <div class="card-body">
-                    <a href="#" class="btn btn-primary float-end">Buy</a>
-                    <h5 class="card-title">{{ product.title }}</h5>
-                    <p class="card-text">Price: ${{ product.price }}</p>
+  <h1>All Products</h1>
 
-                    <p class="card-text">Uploaded At <small class="text-body-secondary"> {{ product.user.username
-                            }}</small></p>
-                    <p class="card-text">Uploaded At <small class="text-body-secondary"> {{ product.created_at
-                            }}</small></p>
+    
+  <hr>
+  <div class="row mt-3"> 
+  
+  <div class="col-md-6 mb-3">
+    <form class="d-flex">
+    <div class="input-group">
+    {{ form|crispy }}
+    <button class="btn" type="submit">Search</button>
+    <a href="{% url 'products:home' %}" class="text-link float-end">Reset</a>
+   
+
+    </form> 
+  </div>
+  </div>
+<div class="col-md-6 mb-3">
+</div>
+    </div>
+
+{% if form.search.value   %}
+Searched for: <b>{{ form.search.value }} </b > with Category: {{ form.category.category }}
+    <hr/>
+{% endif %}
 
 
-                </div>
-            </div>
+
+
+  {% if products %}
+  <div class="row mt-3">
+    {% for product in products %}
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" height="300" alt="{{ product.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.title }}
+            <span class="badge rounded-pill text-bg-secondary text-dark"  style="float:right">{{product.user.username}}</span>
+          </h5>
+          <a href="{% url 'products:detail_product' product.pk %}" class="btn btn-primary float-end btn-sm"  style="float:right">View Details</a>
+          <p class="card-text">Price: ${{ product.price }}</p>
+          <p class="card-text">Uploaded At <small class="text-body-secondary"> {{product.created_at}}</small></p>
         </div>
-        {% endfor %}
+      </div>
     </div>
-    {% else %}
-    <div class="alert alert-info mt-3" role="alert">
-        No products available.
-    </div>
-    {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+  <div class="alert alert-info mt-3" role="alert">
+    No products available.
+  </div>
+  {% endif %}
 </div>
 {% endblock content %}
