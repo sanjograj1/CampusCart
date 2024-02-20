@@ -52,7 +52,7 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
+      <img src="{{user.profile.get_profile_image}}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
         aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
@@ -62,7 +62,18 @@
       </div>
     </div>
   </header>
+    {% if messages%}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} rounded-0 mb-0">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+  {% endif%} 
   <div class="content p-1 mt-5 mb-5">
+
     {% block content %}
     {% endblock %}
   </div>
