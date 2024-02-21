@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load notifications_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,6 +11,12 @@
   <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
   <link rel="stylesheet" href="https://aui.heart.org/aha-ui/dev/1.0.3/dist/css/aha-dist.css" />
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
+  <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
+  {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
   {% block head %}{% endblock %}
@@ -39,6 +45,9 @@
           <li class="d-flex nav-item px-lg-3">
             <a href='{% url "accounts:home" %}' class="btn btn-text nav-link">Home</a>
           </li>
+            <li class="d-flex nav-item px-lg-3">
+            <a href='{% url "products:home" %}' class="btn btn-text nav-link">Products</a>
+          </li>
           <li class="d-flex nav-item px-lg-3">
             <a href='{% url "books:home" %}' class="btn btn-text nav-link">Books</a>
           </li>
@@ -55,7 +64,7 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{user.profile.get_profile_image}}" class="profile-pic dropdown-toggle" id="navDropdown1"
+      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
@@ -63,6 +72,15 @@
           <li><a class="dropdown-item py-2" href='{% url "accounts:logout" %}'>Sign Out</a></li>
         </ul>
       </div>
+    </div>
+      <div class="notification-icon position-absolute">
+      <a href="{% url 'accounts:notifications' %}"
+        class="icon-button position-relative d-flex align-items-center justify-content-center" id="notificationdrop">
+        <span class="material-symbols-outlined notification-svg">
+          notifications
+        </span>
+        <span class="icon-button__badge">{% live_notify_badge %}</span>
+      </a>
     </div>
   </header>
   {% if messages%}
