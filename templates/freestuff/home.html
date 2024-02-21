@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container position-relative">
+    <a class="position-absolute upload-item" href="/">Upload your free Item</a>
+    <div class="free-item-header pt-4">
+        <h1>Free Items</h2>
+            <div class="free-item-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="row justify-content-between free-content-collection">
+
+        </div>
+    </div>
+</div>
+{% endblock content %}

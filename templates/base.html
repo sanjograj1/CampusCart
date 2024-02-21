@@ -46,14 +46,17 @@
             <a href='{% url "events:event-home" %}' class="btn btn-text nav-link">Events</a>
           </li>
           <li class="d-flex nav-item px-lg-3">
+            <a href='{% url "freestuff:home" %}' class="btn btn-text nav-link">It's Free</a>
+          </li>
+          <li class="d-flex nav-item px-lg-3">
             <a href='{% url "products:sell" %}' class="btn btn-text nav-link">Sell a Product</a>
           </li>
         </ul>
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{user.profile.get_profile_image}}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
-        aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
+      <img src="{{user.profile.get_profile_image}}" class="profile-pic dropdown-toggle" id="navDropdown1"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
           <li><a class="dropdown-item py-2" href='{% url "accounts:profile" %}'>Profile</a></li>
@@ -62,16 +65,16 @@
       </div>
     </div>
   </header>
-    {% if messages%}
-    {% for message in messages %}
-      <div class="alert alert-{{ message.tags }} rounded-0 mb-0">
-        {{ message }}
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-    {% endfor %}
-  {% endif%} 
+  {% if messages%}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} rounded-0 mb-0">
+    {{ message }}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  {% endfor %}
+  {% endif%}
   <div class="content p-1 mt-5 mb-5">
 
     {% block content %}
