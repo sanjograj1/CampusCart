@@ -30,7 +30,8 @@ INSTALLED_APPS = [
     "accounts",
     "products",
     "books",
-    "events"
+    "events",
+    "freestuff"
 ]
 
 MIDDLEWARE = [
