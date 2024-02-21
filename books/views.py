@@ -24,10 +24,6 @@ def upload_book(request):
             book = form.save(commit=False)
             book.seller = request.user
             book.save()
-            sender = get_user_model().objects.get(username=request.user)
-            receiver = get_user_model().objects.exclude(username=request.user)
-            description = f'<b>{book.title}</b> (Book). Click <a href="/books/book-detail/{book.id}">here</a> to view.'
-            notify.send(sender, recipient=receiver, verb='Upload', description=description)
             return redirect('books:home')
     else:
         form = BookForm()
