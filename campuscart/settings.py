@@ -31,7 +31,8 @@ INSTALLED_APPS = [
     "products",
     "books",
     "events",
-    "freestuff"
+    "freestuff",
+    "notifications"
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "EST"
 
 USE_I18N = True
 
