@@ -5,9 +5,6 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from django.utils.http import urlsafe_base64_decode
-from django.utils.encoding import force_str
-from .tokens import account_activation_token
 from .models import Profile
 from verify_email.email_handler import send_verification_email
 from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
@@ -62,29 +59,6 @@ def login(request):
     )
 
 
-def activate(request, uidb64, token):
-    try:
-        uid = force_str(urlsafe_base64_decode(uidb64))
-        user = get_user_model().objects.get(pk=uid)
-    except:
-        user = None
-
-    if user is not None and account_activation_token.check_token(user, token):
-        user.is_active = True
-        user.save()
-
-        messages.add_message(request, messages.SUCCESS,
-                             "Thank you for your email confirmation. Now you can login your account.",
-                             extra_tags='success')
-        return redirect('login')
-    else:
-        messages.add_message(request, messages.SUCCESS,
-                             "Activation link is invalid!",
-                             extra_tags='danger')
-
-    return redirect('accounts:login')
-
-
 def register(request):
     if request.user.is_authenticated:
         return redirect("/")
@@ -94,13 +68,13 @@ def register(request):
         if form.is_valid():
             inactive_user = send_verification_email(request, form)
             messages.add_message(
-            request,
-            messages.SUCCESS,
-            f"Dear {inactive_user}, "
-            f"please go to you email {inactive_user.email} inbox and click on received activation "
-            f"link to confirm and complete the registration. Note: Check your spam folder.",
-            extra_tags="success",
-        )
+                request,
+                messages.SUCCESS,
+                f"Dear {inactive_user}, "
+                f"please go to you email {inactive_user.email} inbox and click on received activation "
+                f"link to confirm and complete the registration. Note: Check your spam folder.",
+                extra_tags="success",
+            )
             return redirect("accounts:login")
     else:
         form = RegistrationForm()
@@ -114,7 +88,6 @@ def home(request):
         "title": "Campus Cart",
     }
     return render(request, "accounts/home.html", context)
-
 
 
 def user_logout(request):
@@ -132,7 +105,7 @@ def user_logout(request):
 def profile(request):
     if request.method == "POST":
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST,request.FILES, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -142,8 +115,18 @@ def profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    return render(request, "accounts/profile.html",{
-            'user_form' : user_form,
-            'profile_form' : profile_form,
-            "title": "Profile",
-        })
+    return render(request, "accounts/profile.html", {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        "title": "Profile",
+    })
+
+
+@login_required
+def notifications_view(request):
+    notifications = request.user.notifications.all()
+    request.user.notifications.mark_all_as_read()
+    return render(request, 'notifications.html', {
+        'notifications': notifications,
+        'title': 'Notifications'
+    })

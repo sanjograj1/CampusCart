@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container position-relative">
+    <div class="books-header pt-4">
+        <h1>Your Notifications</h2>
+            <div class="notification-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="notification-container d-flex flex-column w-75 m-auto">
+            {% if notifications %}
+            {% for notification in notifications %}
+            <div class="notification-box d-flex align-items-center">
+                <div class="notification-user-pic-container">
+                    <img src="{{ notification.actor.profile.profile_image.url }}" class="profile-pic"
+                        alt="Profile Pic" />
+                </div>
+                <div class="notification-description">
+                    <div>
+                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> uploaded a new Item
+                    </div>
+                    <p>
+                        {% autoescape off %}
+                        {{ notification.description }}
+                        {% endautoescape %}
+                    </p>
+                    <div>{{ notification.timestamp }}</div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-center mt-4">No New Notifications to display.</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
