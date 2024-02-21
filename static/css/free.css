@@ -1,0 +1,51 @@
+.free-item-header-underline {
+    border-style: solid;
+    border-color: #ffce00;
+    border-width: 2px;
+    border-bottom: none;
+    width: 70px;
+    animation-fill-mode: both;
+    animation-name: slidein;
+    opacity: 0;
+    animation-delay: .2s;
+    animation-duration: 1s;
+}
+
+
+@keyframes slidein {
+    0% {
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateZ(0);
+        opacity: 1;
+    }
+}
+
+
+.free-content-collection {
+    row-gap: 40px;
+}
+
+@media only screen and (max-width: 768px) {
+    .free-content-collection {
+        justify-content: center !important;
+    }
+}
+
+.upload-item {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    right: 0;
+    background-color: #005596;
+    color: #fff;
+}
+
+.upload-item:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
