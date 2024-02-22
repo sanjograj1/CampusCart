@@ -94,18 +94,28 @@ main {
     padding: 16px;
     border-radius: 5px;
     background-color: #fff;
-    box-shadow: 0 3px 6px #005595, 0 3px 6px #005595
+    box-shadow: 0 3px 6px #005595, 0 3px 6px #005595;
 }
 
 .book-card:hover {
-    box-shadow: 0 3px 6px #FFCE00, 0 3px 6px #FFCE00
+    box-shadow: 0 3px 6px #FFCE00, 0 3px 6px #FFCE00;
+}
+
+.book-card-shadow-none {
+    padding: 0;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+.book-card-shadow-none:hover {
+    box-shadow: none;
 }
 
 .book-card .book-card__cover {
     position: relative;
     width: 200px;
     height: 300px;
-    margin: 0 auto 8px auto;
+    margin: 0 auto;
     perspective: 1000px;
 }
 
@@ -211,6 +221,10 @@ main {
     }
 }
 
+.book-image img {
+    max-height: 500px;
+}
+
 .book-title {
     color: black;
     font-size: 32px;
@@ -223,4 +237,40 @@ main {
     margin-top: 10px;
     font-weight: 500;
     min-height: 200px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 15;
+    -webkit-box-orient: vertical;
+    max-height: 400px;
+}
+
+
+.book-additional-details {
+    background-color: #efefef;
+    border-top: 1px solid #d7d7d7;
+    border-bottom: 1px solid #d7d7d7;
+    margin: 1rem 0;
+    padding: 1.5rem;
+    gap: 20px;
+    font-weight: 500;
+}
+
+.contact-seller {
+    bottom: 0;
+    left: 0;
+}
+
+
+.aui-multiple-carousel {
+    border-left: none;
+    border-right: none;
+}
+
+.aui-multiple-carousel .carousel-control-next {
+    right: 0;
+}
+
+.aui-multiple-carousel .carousel-control-prev {
+    left: -10px;
 }
