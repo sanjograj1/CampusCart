@@ -6,27 +6,83 @@
 <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
- 
+
 <div class="container">
     <div class="books-header pt-4">
-        <h1>Current Book</h2>
+        <h1>{{ book.title }}</h2>
             <div class="books-header-underline"></div>
     </div>
     <div class="mt-4">
         <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row">
-            <div class="book-image one-half">
+            <div class="book-image d-flex justify-content-center align-items-center one-half">
                 <img class="mw-100 h-auto" src="{{ book.book_cover.url }}" alt="{{ book.title }}">
             </div>
-            <div class="book-imfornation one-half">
+            <div class="book-information one-half position-relative">
                 <h4>By {{ book.author }} (Author)</h4>
-                <div class="books-author-underline"></div>
-                <h1 class="book-title my-3">{{ book.title }}</h1>
                 <span>${{ book.price }}</span>
                 <p class="book-description">{{ book.description }}</p>
-                <a class="contact-seller">Contact Seller</a>
+                <a class="contact-seller position-absolute">Contact Seller</a>
             </div>
+        </section>
+        <section class="book-additional-details my-4 d-flex flex-column">
+            <div class="book-extra-info">
+                <span>Language : </span>
+                <span>{{ book.language }}</span>
+            </div>
+            <div class="book-extra-info">
+                <span>Length : </span>
+                <span>{{ book.pages }} pages</span>
+            </div>
+            <div class="book-extra-info">
+                <span>Category : </span>
+                <span>{{ book.category }}</span>
+            </div>
+        </section>
+        {% if same_category_books %}
+        <h2 class="mt-4">Books with Similar Category</h2>
+        <div id="multiple-carousel-slider" class="carousel slide aui-multiple-carousel" data-ride="carousel"
+            data-interval="false">
+            <div id="carousel-container" class="carousel-inner row p-0 m-0">
+                {% for book in same_category_books %}
+                <div
+                    class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 mt-lg-4 ci {% if forloop.first %}active{% endif %}">
+                    <a href="{% url 'books:book-detail' book.id %}" class="book-card book-card-shadow-none">
+                        <div class="book-card__cover">
+                            <div class="book-card__book">
+                                <div class="book-card__book-front">
+                                    <img class="book-card__img" src="{{ book.book_cover.url }}" alt="Book Cover" />
+                                </div>
+                                <div class="book-card__book-back"></div>
+                                <div class="book-card__book-side"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="book-card__title">
+                                {{ book.title }}
+                            </div>
+                            <div class="book-card__author">
+                                By {{ book.author }}
+                            </div>
+                            <div class="book-card__author">
+                                ${{ book.price }}
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-next" href="#multiple-carousel-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon aha-icon-arrow-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            <a class="carousel-control-prev action-disable" href="#multiple-carousel-slider" role="button"
+                data-slide="prev">
+                <span class="carousel-control-prev-icon aha-icon-arrow-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+
+        </div>
+        {% endif %}
     </div>
-    </section>
-</div>
 </div>
 {% endblock content %}
