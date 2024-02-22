@@ -79,7 +79,10 @@ def register(request):
     else:
         form = RegistrationForm()
 
-    return render(request, "accounts/register.html", {"form": form})
+    return render(request, "accounts/register.html", {
+        "form": form,
+        'title':'Register'
+        })
 
 
 @login_required
