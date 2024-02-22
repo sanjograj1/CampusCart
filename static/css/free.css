@@ -27,6 +27,7 @@ img {
 .card__container {
     display: grid;
     row-gap: 3.5rem;
+    justify-items: center;
 }
 
 .card__article {
@@ -160,9 +161,6 @@ img {
 
 /* For large devices */
 @media screen and (min-width: 1120px) {
-    .custom-container {
-        height: 100vh;
-    }
 
     .card__container {
         grid-template-columns: repeat(3, 1fr);

@@ -5,6 +5,7 @@ from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.helper import FormHelper
 from PIL import Image
+from django.conf import settings
 
 
 class ProfileForm(forms.ModelForm):
@@ -50,8 +51,8 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        if not email.endswith("@uwindsor.ca"):
-            raise forms.ValidationError("Please enter a uwindsor.ca email")
+        if not email.endswith(settings.EMAIL_VERIFY):
+            raise forms.ValidationError(f'Please enter a {settings.EMAIL_VERIFY} mail')
         elif get_user_model().objects.filter(email=email).exists():
                 raise forms.ValidationError('Email already exists! Please try a different email.')
         return email

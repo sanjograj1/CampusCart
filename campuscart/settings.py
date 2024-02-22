@@ -133,3 +133,5 @@ EMAIL_HOST_USER = "campuscartdjango@gmail.com"
 EMAIL_HOST_PASSWORD = "hqkkmzvaxdfpdwau"
 
 PASSWORD_RESET_TIMEOUT = 14800
+
+EMAIL_VERIFY = "uwindsor.ca"

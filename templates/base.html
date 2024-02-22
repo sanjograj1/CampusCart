@@ -7,7 +7,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{ title }}</title>
+  <title>Campus Cart | {{ title }}</title>
   <link rel="shortcut icon" href="{%  static 'favicon.ico' %}">
   <link rel="stylesheet" href="https://aui.heart.org/aha-ui/dev/1.0.3/dist/css/aha-dist.css" />
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
@@ -45,7 +45,7 @@
           <li class="d-flex nav-item px-lg-3">
             <a href='{% url "accounts:home" %}' class="btn btn-text nav-link">Home</a>
           </li>
-            <li class="d-flex nav-item px-lg-3">
+          <li class="d-flex nav-item px-lg-3">
             <a href='{% url "products:home" %}' class="btn btn-text nav-link">Products</a>
           </li>
           <li class="d-flex nav-item px-lg-3">
@@ -64,8 +64,8 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
+      <img src="{{ profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown"
+        aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
           <li><a class="dropdown-item py-2" href='{% url "accounts:profile" %}'>Profile</a></li>
@@ -73,7 +73,7 @@
         </ul>
       </div>
     </div>
-      <div class="notification-icon position-absolute">
+    <div class="notification-icon position-absolute">
       <a href="{% url 'accounts:notifications' %}"
         class="icon-button position-relative d-flex align-items-center justify-content-center" id="notificationdrop">
         <span class="material-symbols-outlined notification-svg">
