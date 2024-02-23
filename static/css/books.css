@@ -274,3 +274,7 @@ main {
 .aui-multiple-carousel .carousel-control-prev {
     left: -10px;
 }
+
+.dropdown-item {
+    gap: 10px;
+}

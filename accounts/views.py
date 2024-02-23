@@ -8,6 +8,8 @@ from django.contrib.auth import get_user_model
 from .models import Profile
 from verify_email.email_handler import send_verification_email
 from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
+from books.models import Book
+from freestuff.models import FreeStuffItem
 
 
 # Create your views here.
@@ -132,4 +134,15 @@ def notifications_view(request):
     return render(request, 'notifications.html', {
         'notifications': notifications,
         'title': 'Notifications'
+    })
+
+
+@login_required
+def user_listing(request):
+    user_books = Book.objects.filter(seller=request.user)
+    user_free_items = FreeStuffItem.objects.filter(seller=request.user)
+    return render(request,'accounts/user_listing.html',{
+        'user_books': user_books,
+        'user_free_items': user_free_items,
+        'title':'My Listings'
     })
