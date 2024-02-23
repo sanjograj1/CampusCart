@@ -240,9 +240,9 @@ main {
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 15;
+    -webkit-line-clamp: 14;
     -webkit-box-orient: vertical;
-    max-height: 400px;
+    max-height: 330px;
 }
 
 
@@ -256,9 +256,14 @@ main {
     font-weight: 500;
 }
 
-.contact-seller {
+.seller-information {
     bottom: 0;
     left: 0;
+}
+
+.seller-information p {
+    font-weight: 500;
+    text-decoration: underline;
 }
 
 
@@ -277,4 +282,9 @@ main {
 
 .dropdown-item {
     gap: 10px;
+}
+
+
+.checked {
+    color: orange;
 }

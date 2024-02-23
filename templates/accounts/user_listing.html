@@ -16,7 +16,7 @@
             {% if user_books or user_free_items %}
             <div class="card__container">
                 {% for book in user_books %}
-                <a href="{% url 'books:book-detail' book.id %}" class="book-card">
+                <a href="{% url 'books:edit-book' book.id %}" class="book-card">
                     <div class="book-card__cover">
                         <div class="book-card__book">
                             <div class="book-card__book-front">
