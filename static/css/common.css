@@ -8,12 +8,17 @@
   .home-image-box>.home-image-type {
     font-size: 35px;
   }
+
+  .seller-information {
+    position: static !important;
+  }
 }
 
 @media (min-width: 992px) {
   .home-image-box>.home-image-type {
     font-size: 50px;
   }
+
 }
 
 .home-container {
@@ -115,6 +120,10 @@
   border-radius: 8px;
   border: 1px solid #00a7e1;
   cursor: pointer;
+}
+
+.contact-seller:hover {
+  color: unset;
 }
 
 
