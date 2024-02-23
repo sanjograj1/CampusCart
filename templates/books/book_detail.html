@@ -4,6 +4,7 @@
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 {% endblock %}
 {% block content %}
 
@@ -21,7 +22,22 @@
                 <h4>By {{ book.author }} (Author)</h4>
                 <span>${{ book.price }}</span>
                 <p class="book-description">{{ book.description }}</p>
-                <a class="contact-seller position-absolute">Contact Seller</a>
+                <div class="position-absolute seller-information w-100">
+                    <p>Seller Information</p>
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a class="contact-seller"
+                            href="MSTeams:/l/chat/0/0?users={{ book.seller.email }}&message=Is it available">Contact
+                            Seller</a>
+                        <div>
+                            <b>{{ book.seller.first_name }} {{ book.seller.last_name }}</b>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star checked"></span>
+                            <span class="fa fa-star"></span>
+                            <span class="fa fa-star"></span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
         <section class="book-additional-details my-4 d-flex flex-column">
