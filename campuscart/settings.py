@@ -70,7 +70,7 @@ WSGI_APPLICATION = "campuscart.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase 1",
+        "NAME": "mydatabase_1",
     }
 }
 
