@@ -8,7 +8,6 @@ CATEGORY_LIST = [
     ("Electronics", "Electronics"),
     ("Clothing", "Clothing"),
     ("Shoes", "Shoes"),
-    ("Books", "Books"),
     ("Furniture", "Furniture"),
     ("Others", "Others"),
 ]

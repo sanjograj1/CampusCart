@@ -9,6 +9,7 @@ from .models import Profile
 from verify_email.email_handler import send_verification_email
 from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
 from books.models import Book
+from products.models import Product
 from freestuff.models import FreeStuffItem
 
 
@@ -141,8 +142,10 @@ def notifications_view(request):
 def user_listing(request):
     user_books = Book.objects.filter(seller=request.user)
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
+    user_products = Product.objects.filter(user=request.user)
     return render(request,'accounts/user_listing.html',{
         'user_books': user_books,
         'user_free_items': user_free_items,
+        'user_products':user_products,
         'title':'My Listings'
     })
