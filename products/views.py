@@ -1,8 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+
+from notifications.signals import notify
 from .forms import ProductForm, ProductFilterForm
 from .models import Product
+from django.contrib.auth import get_user_model
 
 from django.contrib import messages
 
@@ -24,11 +27,12 @@ def home(request):
                 products = Product.objects.filter(title__icontains=search)
             else:
                 products = Product.objects.all()
+                print(products[0].description)
     else:
 
         products = Product.objects.all()
 
-    return render(request, "products/home.html", {"products": products, "form": form})
+    return render(request, "products/home.html", {"products": products, "form": form,'title':'Products'})
 
 
 @login_required
@@ -41,7 +45,10 @@ def create_product(request):
             product = form.save(commit=False)
             product.user = request.user
             product.save()
-            print("product", product.id)
+            sender = get_user_model().objects.get(username=request.user)
+            receiver = get_user_model().objects.exclude(username=request.user)
+            description = f'<b>{product.title}</b> ({product.category}). Click <a href="/product/detail-product/{product.id}">here</a> to view.'
+            notify.send(sender, recipient=receiver, verb='Upload', description=description)
             return redirect("products:home")
     else:
         form = ProductForm()
@@ -57,7 +64,7 @@ def detail_product(request, pk):
     return render(
         request,
         "products/product_detail.html",
-        {"product": product, "is_interested": is_interested},
+        {"product": product, "is_interested": is_interested,'title':product.title},
     )
 
 
@@ -77,17 +84,25 @@ def interested_product(request, pk):
 
 
 @login_required
-def edit_product(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    if request.user != product.user:
-        return redirect(
-            "home"
-        )  # Or some other appropriate response for unauthorized access
-    if request.method == "POST":
-        form = ProductForm(request.POST, request.FILES, instance=product)
-        if form.is_valid():
-            form.save()
-            return redirect("products:home")
-    else:
-        form = ProductForm(instance=product)
-    return render(request, "products/edit_product.html", {"form": form})
+def edit_product(request, productid):
+    my_product = get_object_or_404(Product, pk=productid)
+    if my_product.user != request.user:
+        messages.success(request, "You don't have the access to the Product",extra_tags='danger')
+        return redirect('accounts:user-listing')
+    if request.method == 'POST':
+        if 'action' in request.POST:
+            form = ProductForm(request.POST,request.FILES, instance=my_product)
+            if form.is_valid():
+                book = form.save(commit=False)
+                book.save()
+                return redirect('accounts:user-listing')
+        else:
+            my_product.delete()
+            messages.success(request, "Your Product has been deleted",extra_tags='danger')
+            return redirect('accounts:user-listing')
+    else:    
+        form = ProductForm(instance=my_product)
+    return render(request, 'products/edit_product.html',{
+        'form': form,
+        'title':'Edit Product'
+        })
