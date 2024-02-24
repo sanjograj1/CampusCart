@@ -3,19 +3,11 @@
 {% load static %}
 {% block content %}
 <div class="container">
-   <h1>Sell Products</h1>
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-    {{message}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-  {% endif %}
+  <h1>Sell Products</h1>
   <div class="card">
     <div class="card-body">
-      <form method="POST"  enctype="multipart/form-data">
-        {% csrf_token %} 
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="row g-3">
           {% for field in form %}
           <div class="col-sm-6">
@@ -23,7 +15,8 @@
           </div>
           {% endfor %}
         </div>
-        <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action">Create Product</button>
+        <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action">Create
+          Product</button>
       </form>
     </div>
   </div>
