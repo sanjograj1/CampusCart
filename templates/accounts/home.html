@@ -9,7 +9,7 @@
             <span class="home-image-type position-absolute">All Products</span>
         </a>
         <a href="{% url 'books:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
-            <img class="mw-100 h-auto" src="{% static 'images/accounts/book-home.jpg' %}" alt="Furniture">
+            <img class="mw-100 h-auto" src="{% static 'images/accounts/furniture.avif' %}" alt="Furniture">
             <span class="home-image-type position-absolute">Books</span>
         </a>
     </div>
@@ -24,4 +24,29 @@
         </a>
     </div>
 </div>
+
+<hr/>
+
+{% if products %}
+  <marquee>
+  <div class="row mt-3" style>
+    {% for product in products %}
+    <div class="col-md-3 mb-3">
+      <div class="card">
+        <img src="{{ product.image.url }}" class="card-img-top" height="300" alt="{{ product.title }}">
+        <div class="card-body">
+          <h5 class="card-title">{{ product.title }}
+            <span class="badge rounded-pill text-bg-secondary text-dark"  style="float:right">{{product.user.username}}</span>
+          </h5>
+          <a href="{% url 'products:detail_product' product.pk %}" class="btn btn-primary float-end btn-sm"  style="float:right">View Details</a>
+          <p class="card-text">Price: ${{ product.price }}</p>
+          <p class="card-text">Uploaded At <small class="text-body-secondary"> {{product.created_at}}</small></p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  </marquee>
+
+  {% endif %}
 {% endblock content %}
