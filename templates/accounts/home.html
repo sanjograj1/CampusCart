@@ -1,34 +1,55 @@
 {% extends "base.html" %}
 {% load static %}
-
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css" />
+{% endblock %}
 {% block content %}
-<div class="home-container">
-    <div class="home-image-container d-flex flex-wrap">
-        <a href="{% url 'products:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
-            <img class="mw-100 h-auto" src="{% static 'images/accounts/electronics.avif' %}" alt="Electronics">
-            <span class="home-image-type position-absolute">All Products</span>
-        </a>
-        <a href="{% url 'books:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
-            <img class="mw-100 h-auto" src="{% static 'images/accounts/furniture.avif' %}" alt="Furniture">
-            <span class="home-image-type position-absolute">Books</span>
-        </a>
-    </div>
-    <div class="home-image-container d-flex flex-wrap">
-        <a href="{% url 'accounts:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
-            <img class="mw-100 h-auto" src="{% static 'images/accounts/rent.avif' %}" alt="Rental">
-            <span class="home-image-type position-absolute">Rental</span>
-        </a>
-        <a href="{% url 'accounts:home' %}" class="position-relative home-image-box p-0 overflow-hidden">
-            <img class="mw-100 h-auto" src="{% static 'images/accounts/lost.avif' %}" alt="Lost & Found">
-            <span class="home-image-type position-absolute">Lost and Found</span>
-        </a>
-    </div>
+<div class="home-container d-flex flex-column container mt-4 pb-4">
+  <h1 class="m-auto">Welcome to Campus Cart</h1>
+  <p class="m-auto text-center">Campus Cart is the ultimate online marketplace for uwindsor students. With a wide
+    range of
+    categories and
+    features, we
+    provide a seamless platform for students to buy and sell products, book exchange, or even find upcoming events.
+    Start
+    exploring today and make the most of your university experience.</p>
+  <div>
+    <img src="{% static 'images/accounts/cover.webp' %}" class="home-image">
+  </div>
 </div>
-
-<hr/>
+<section class="services pt-4 container">
+  <h2 class="pb-4 text-bold display-4">Services We Provide</h2>
+  <div class="services-container">
+    <div class="services-container-box">
+      <h3>Student Marketplace</h3>
+      <p>Our platform offers a diverse marketplace for all university students to buy, sell, and exchange whatever
+        they need,
+        from textbooks to electronics, with ease.</p>
+    </div>
+    <div class="services-container-box">
+      <h3>Book Exchange</h3>
+      <p>Our book exchange program allows students to exchange textbooks and course materials with their peers,
+        saving them money
+        and hassle.</p>
+    </div>
+    <div class="services-container-box">
+      <h3>Electronics Resale</h3>
+      <p>Our electronics resale program allows students to buy and sell electronics, such as laptops, phones, and
+        other devices,
+        at affordable prices.</p>
+    </div>
+    <div class="services-container-box">
+      <h3>Event Promotion</h3>
+      <p>Our event promotion service allows student organizations to promote their events to a wider audience,
+        ensuring a
+        successful and well-attended event.</p>
+    </div>
+  </div>
+</section>
 
 {% if products %}
-  <marquee>
+<marquee>
   <div class="row mt-3" style>
     {% for product in products %}
     <div class="col-md-3 mb-3">
@@ -36,9 +57,11 @@
         <img src="{{ product.image.url }}" class="card-img-top" height="300" alt="{{ product.title }}">
         <div class="card-body">
           <h5 class="card-title">{{ product.title }}
-            <span class="badge rounded-pill text-bg-secondary text-dark"  style="float:right">{{product.user.username}}</span>
+            <span class="badge rounded-pill text-bg-secondary text-dark"
+              style="float:right">{{product.user.username}}</span>
           </h5>
-          <a href="{% url 'products:detail_product' product.pk %}" class="btn btn-primary float-end btn-sm"  style="float:right">View Details</a>
+          <a href="{% url 'products:detail_product' product.pk %}" class="btn btn-primary float-end btn-sm"
+            style="float:right">View Details</a>
           <p class="card-text">Price: ${{ product.price }}</p>
           <p class="card-text">Uploaded At <small class="text-body-secondary"> {{product.created_at}}</small></p>
         </div>
@@ -46,7 +69,7 @@
     </div>
     {% endfor %}
   </div>
-  </marquee>
+</marquee>
 
-  {% endif %}
+{% endif %}
 {% endblock content %}
