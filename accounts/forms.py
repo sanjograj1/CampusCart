@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile
+from .models import Profile, UserComment
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.layout import Layout, Submit, Field
@@ -107,4 +107,17 @@ class ProfileUpdateForm(forms.ModelForm):
             Field('phone_number', css_class='form-control'),
             Field('address', css_class='form-control'),
             Field('profile_image', css_class='form-control'),
-        )        
+        )
+
+class UserCommentsForm(forms.ModelForm):
+
+    class Meta:
+        model = UserComment
+        fields = ['comment']  
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('comment', css_class='form-control'),
+        )         
