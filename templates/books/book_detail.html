@@ -29,12 +29,8 @@
                             href="MSTeams:/l/chat/0/0?users={{ book.seller.email }}&message=Is it available">Contact
                             Seller</a>
                         <div>
-                            <b>{{ book.seller.first_name }} {{ book.seller.last_name }}</b>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star checked"></span>
-                            <span class="fa fa-star"></span>
-                            <span class="fa fa-star"></span>
+                            <a href="{% url 'accounts:user-rating' book.seller.username %}">
+                                <b>{{ book.seller.first_name }} {{ book.seller.last_name }}</b></a>
                         </div>
                     </div>
                 </div>

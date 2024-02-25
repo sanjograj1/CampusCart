@@ -1,13 +1,14 @@
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect,reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import Profile
+from .models import Profile, UserComment
+from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
-from .forms import UserUpdateForm, ProfileUpdateForm, ProfileForm, RegistrationForm
+from .forms import UserUpdateForm, ProfileUpdateForm, UserCommentsForm, RegistrationForm
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
@@ -113,9 +114,7 @@ def user_logout(request):
 def profile(request):
     if request.method == "POST":
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(
-            request.POST, request.FILES, instance=request.user.profile
-        )
+        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -125,15 +124,11 @@ def profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
-    return render(
-        request,
-        "accounts/profile.html",
-        {
-            "user_form": user_form,
-            "profile_form": profile_form,
-            "title": "Profile",
-        },
-    )
+    return render(request, "accounts/profile.html", {
+        'user_form': user_form,
+        'profile_form': profile_form,
+        "title": "Profile",
+    })
 
 
 @login_required
@@ -156,4 +151,30 @@ def user_listing(request):
         'user_free_items': user_free_items,
         'user_products':user_products,
         'title':'My Listings'
+    })
+
+
+@login_required
+def user_rating(request, username):
+    current_user = get_object_or_404(get_user_model(), username=username)
+    comments = UserComment.objects.filter(user=current_user).order_by('-commented_date')
+    if request.method == 'POST':
+        comment_form = UserCommentsForm(request.POST)
+        if comment_form.is_valid():
+            form = comment_form.save(commit=False)
+            form.commented_by = request.user
+            form.user = current_user
+            form.save()
+            description = f'{request.user} added a new comnent on your profile Click <a href="/profile/rating/{current_user.username}">here</a> to view.'
+            notify.send(request.user, recipient=current_user, verb='Comment', description=description)
+            messages.success(request, "Your comment has been added")
+            url = reverse('accounts:user-rating', args=[username])
+            return redirect(url)
+    else:
+        comment_form = UserCommentsForm()
+    return render(request,'accounts/user_rating.html',{
+        'comment_form':comment_form,
+        'current_user':current_user,
+        'title': f'{current_user.username.upper()} Rating',
+        'comments':comments
     })

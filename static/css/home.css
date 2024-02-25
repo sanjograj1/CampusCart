@@ -1,0 +1,25 @@
+.home-image {
+    border-radius: 6px;
+    width: 100%;
+}
+
+.home-container {
+    gap: 20px;
+}
+
+
+.services-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+}
+
+
+.services-container-box {
+    background: #fff;
+    padding: 25px;
+    flex-grow: 1;
+    flex-basis: 450px;
+    border-radius: 12px;
+}
