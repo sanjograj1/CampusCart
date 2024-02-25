@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="books-header pt-4">
+        {% if current_user == user %}
+        <h1>My Feedback</h1>
+        {% else %}
+        <h1>{{ current_user.first_name }} {{ current_user.last_name }}'s Feedback</h1>
+        {% endif %}
+        <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        {% if comments %}
+        {% for comment in comments %}
+        <div class="notification-box d-flex align-items-center">
+            <div class="notification-user-pic-container">
+                <img src="{{ comment.commented_by.profile.profile_image.url }}" class="profile-pic" alt="Profile Pic" />
+            </div>
+            <div class="notification-description">
+                <div>
+                    <b>{{ comment.comment }}</b>
+                </div>
+                <p>Commented By : {{ comment.commented_by.first_name }} {{ comment.commented_by.last_name }}</p>
+                <div>{{ comment.commented_date }}</div>
+            </div>
+        </div>
+        {% endfor %}
+        {% elif current_user == user %}
+        <h2 class="text-center mt-4">You don't have any Feedback</h2>
+        {% else %}
+        <h2 class="text-center mt-4">No Feedback for the current user</h2>
+        {% endif %}
+        {% if current_user != user %}
+        <h3 class="mt-4">Add your comment</h3>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in comment_form %}
+                <div class="col-sm-6">
+                    {{ field|as_crispy_field }}
+                </div>
+                {% endfor %}
+            </div>
+            <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit"
+                name="action">Comment</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}

@@ -22,7 +22,13 @@
                 </div>
                 <div class="notification-description">
                     <div>
-                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> uploaded a new Item
+                        {%if notification.verb == 'Upload' %}
+                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> uploaded a new
+                        Item
+                        {% elif notification.verb == 'Comment' %}
+                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> commented on your
+                        profile
+                        {% endif %}
                     </div>
                     <p>
                         {% autoescape off %}
