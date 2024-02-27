@@ -13,5 +13,7 @@ urlpatterns = [
     path('books/', include('books.urls',namespace="books")),
     path('events/', include('events.urls',namespace="events")),
     path('free/', include('freestuff.urls',namespace="freestuff")),
+    path('lostandfound/', include('lostfound.urls',namespace="lostfound")),
+
     path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

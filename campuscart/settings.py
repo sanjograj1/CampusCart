@@ -32,7 +32,8 @@ INSTALLED_APPS = [
     "books",
     "events",
     "freestuff",
-    "notifications"
+    "notifications",
+    "lostfound"
 ]
 
 MIDDLEWARE = [
