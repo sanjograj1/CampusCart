@@ -7,7 +7,7 @@ from .models import FreeStuffItem
 class FreeItemForm(forms.ModelForm):
     class Meta:
         model = FreeStuffItem
-        fields = ['title', 'description', 'quantity', 'item_image']
+        fields = ['title', 'description', 'quantity','category','condition', 'item_image']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -16,5 +16,7 @@ class FreeItemForm(forms.ModelForm):
             Field('title', css_class='form-control'),
             Field('description', css_class='form-control'),
             Field('quantity', css_class='form-control'),
+            Field('category', css_class='form-control'),
+            Field('condition', css_class='form-control'),
             Field('item_image', css_class='form-control'),
         )
