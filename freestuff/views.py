@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import FreeItemForm
 from .models import FreeStuffItem
 
@@ -28,3 +28,12 @@ def upload_item(request):
         'form': form,
         'title':'Upload your Item'
         })
+
+
+@login_required
+def item_detail(request, itemid):
+    current_item = get_object_or_404(FreeStuffItem, pk=itemid)
+    return render(request, 'freestuff/item_detail.html',{
+        'title':current_item.title,
+        'item':current_item,
+    })
