@@ -29,7 +29,11 @@ INSTALLED_APPS = [
     "verify_email.apps.VerifyEmailConfig",
     "accounts",
     "products",
-    "books"
+    "books",
+    "events",
+    "freestuff",
+    "notifications",
+    "lostfound"
 ]
 
 MIDDLEWARE = [
@@ -55,7 +59,6 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-               # 'accounts.context.profile_image',
             ],
         },
     },
@@ -68,7 +71,7 @@ WSGI_APPLICATION = "campuscart.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": "mydatabase",
+        "NAME": "mydatabase_1",
     }
 }
 
@@ -82,7 +85,7 @@ AUTH_PASSWORD_VALIDATORS = []
 
 LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = "UTC"
+TIME_ZONE = "EST"
 
 USE_I18N = True
 
@@ -105,6 +108,7 @@ LOGIN_REDIRECT_URL = "accounts:login"
 LOGIN_URL = "accounts:login"
 LOGOUT_REDIRECT_URL = "accounts:login"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
+EXPIRE_AFTER = "2m"
 
 MESSAGE_TAGS = {
     messages.DEBUG: "secondary",
@@ -129,3 +133,5 @@ EMAIL_HOST_USER = "campuscartdjango@gmail.com"
 EMAIL_HOST_PASSWORD = "hqkkmzvaxdfpdwau"
 
 PASSWORD_RESET_TIMEOUT = 14800
+
+EMAIL_VERIFY = "uwindsor.ca"

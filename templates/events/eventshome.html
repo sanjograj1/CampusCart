@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/events.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="item-container">
+        <div class="image-container">
+            <img src="./images/image1.jpg" alt="event image">
+        </div>
+
+        <div class="body-container">
+            <div class="overlay"></div>
+
+            <div class="event-info">
+                <p class="title">Exploring Explainable AI</p>
+                <div class="separator"></div>
+                <p class="info">Technical Workshop</p>
+                <p class="price">$20</p>
+
+                <div class="additional-info">
+                    <p class="info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        300 Ouellette Avenue
+                    </p>
+                    <p class="info">
+                        <i class="far fa-calendar-alt"></i>
+                        Sat, Sep 20, 10:00 AM EDT
+                    </p>
+
+                    <p class="info description">
+                        As AI systems become more prevalent in our daily lives, understanding their 
+                        decision-making processes and ensuring transparency and accountability<span>more...</span>
+                    </p>
+
+                </div>
+            </div>
+            <button class="action">Buy Tickets</button>
+        </div>
+    </div>
+
+
+    <div class="item-container">
+        <div class="image-container">
+            <img src="./images/image2.jpg" alt="event image">
+        </div>
+
+        <div class="body-container">
+            <div class="overlay"></div>
+
+            <div class="event-info">
+                <p class="title">UofW Women's vs Waterloo Warriors</p>
+                <div class="separator"></div>
+                <p class="info">Hockey League</p>
+                <p class="price">$20</p>
+
+                <div class="additional-info">
+                    <p class="info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Lancers Stadium
+                    </p>
+                    <p class="info">
+                        <i class="far fa-calendar-alt"></i>
+                        Mon, Sep 28, 8:00 PM EDT
+                    </p>
+
+                    <p class="info description">
+                        With both teams poised to deliver an exciting spectacle, this game is sure to captivate hockey
+                        enthusiasts and supporters alike, offering an <span>more...</span>
+                    </p>
+
+                </div>
+            </div>
+            <button class="action">Buy Tickets</button>
+        </div>
+    </div>
+
+    <div class="item-container">
+        <div class="image-container">
+            <img src="./images/image3.jpg" alt="event image">
+        </div>
+
+        <div class="body-container">
+            <div class="overlay"></div>
+
+            <div class="event-info">
+                <p class="title">SoCA Jazz Faculty</p>
+                <div class="separator"></div>
+                <p class="info">Music Concert</p>
+                <p class="price">$10</p>
+
+                <div class="additional-info">
+                    <p class="info">
+                        <i class="fas fa-map-marker-alt"></i>
+                        Alumni Auditorium, Main Campus
+                    </p>
+                    <p class="info">
+                        <i class="far fa-calendar-alt"></i>
+                        Fri, Oct 5, 9:00 PM EDT
+                    </p>
+
+                    <p class="info description">
+                        Embark on a captivating musical journey that traces the evolution of my musical
+                        prowess through a carefully curated recital.<span>more...</span>
+                    </p>
+
+                </div>
+            </div>
+            <button class="action">Buy Tickets</button>
+        </div>
+    </div>
+</div>
+{% endblock content %}

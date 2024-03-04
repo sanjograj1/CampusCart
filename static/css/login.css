@@ -78,6 +78,8 @@ input[type="file"]::file-selector-button {
   font-size: 14px;
   cursor: pointer;
   margin-top: 6px;
+  width: max-content;
+  float: right;
 }
 
 .form-control:focus {

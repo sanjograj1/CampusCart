@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/lostfound.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="user-options">
+        <div class="search-box">
+            <button class="btn-search"><i class="fas fa-search"></i></button>
+            <input type="text" class="input-search" placeholder="Type to Search...">
+        </div>
+    </div>
+    <div class="card-display justify-content-between">
+        <div class="listing">
+            <div class="card-details">
+                <div class="card-header">
+                    <div class="item-title">Bicycle</div>
+                    <div class="post-date">2024-01-01</div>
+                </div>
+            </div>
+            <div class="card-desc">It's a yellow color bike, it a old model with refurbished pedals</div>
+
+            <div class="card-main-body">
+                <div class="card">
+                    <img src="https://img.freepik.com/free-photo/white-bicycle-standing-park-morning-fitness-loneliness_1153-6768.jpg?size=626&ext=jpg"
+                        class="card-img" alt="">
+                    <div class="card-body">
+                        <p class="cardd-sub-title">Location:</p>
+                        <p class="card-info">"Near Toldo Health Center"</p>
+
+                        <button class="card-btn">View Details</button>
+                    </div>
+                </div>
+                <div class="option-button">
+                    <button class="claim-btn">Claim</button>
+                    <button class="message-btn">Message</button>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="listing">
+            <div class="card-details">
+                <div class="card-header">
+                    <div class="item-title">HC Verma: Volume 1</div>
+                    <div class="post-date">2024-01-01</div>
+                </div>
+            </div>
+            <div class="card-desc">It's a New Hardcover Edition, with no identity sticker</div>
+
+            <div class="card-main-body">
+
+                <div class="card">
+                    <img src="https://rukminim2.flixcart.com/image/850/1000/jjhglu80/regionalbooks/4/4/9/combo-set-of-two-book-concepts-of-physics-vol-1-2-new-edition-original-imaf6yhsmubhk4wh.jpeg"
+                        class="card-img" alt="">
+                    <div class="card-body">
+                        <p class="cardd-sub-title">Location:</p>
+                        <p class="card-info">In CAW Building</p>
+
+                        <button class="card-btn">View Details</button>
+                    </div>
+                </div>
+                <div class="option-button">
+                    <button class="claim-btn">Claim</button>
+                    <button class="message-btn">Message</button>
+                    <button class="view-details-btn">View Details</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

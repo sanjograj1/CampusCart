@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/product.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container position-relative">
+    <a class="position-absolute upload-book" href='{% url "accounts:user-rating" user %}'>My Feedback</a>
+    <div class="books-header pt-4">
+        <h1>My Listings</h2>
+            <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="custom-container">
+            {% if user_books or user_free_items or user_products %}
+            <div class="card__container">
+                {% for book in user_books %}
+                <a href="{% url 'books:edit-book' book.id %}" class="book-card">
+                    <div class="book-card__cover">
+                        <div class="book-card__book">
+                            <div class="book-card__book-front">
+                                <img class="book-card__img" src="{{ book.book_cover.url }}" alt="Book Cover" />
+                            </div>
+                            <div class="book-card__book-back"></div>
+                            <div class="book-card__book-side"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="book-card__title">
+                            {{ book.title }}
+                        </div>
+                        <div class="book-card__author">
+                            By {{ book.author }}
+                        </div>
+                        <div class="book-card__author">
+                            ${{ book.price }}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+                {% for item in user_free_items %}
+                <article class="card__article">
+                    <img src="{{ item.item_image.url }}" alt="image" class="card__img">
+
+                    <div class="card__data">
+                        <span class="card__description">Vancouver Mountains, Canada</span>
+                        <h2 class="card__title">{{ item.title }}</h2>
+                        <a href="#" class="card__button">Read More</a>
+                    </div>
+                </article>
+                {% endfor %}
+                {% for product in user_products %}
+                <div class="my-3">
+                    <div class="card p-0 p-sm-3 aha-card-sm" aria-label="Card">
+                        <div class="row no-gutters align-items-start">
+                            <div class="col-12 col-sm-3 p-4 p-sm-0 card-head-img"><img src="{{ product.image.url }}"
+                                    class="card-img mx-auto" alt="{{ product.title }}"></div>
+                            <div class="col-12 col-sm-9 p-4 py-sm-0 card-body">
+                                <span href="#" class="d-block mb-2 mb-sm-2 card-title">
+                                    <h3 class="m-0">{{ product.title }}</h3>
+                                    <h6>${{ product.price }}</h6>
+                                </span>
+                                <div class="aha-card-tags">
+                                    <span class="tag font-italic">{{ product.category }}</span>
+                                </div>
+                                <div class="card-detail">
+                                    <span class="pr-sm-4 mb-2 mb-sm-0 d-block d-sm-inline">
+                                        {{ product.description }}</span>
+                                </div>
+                                <div class="d-flex">
+                                    <a href="{% url 'products:edit-product' product.pk %}"
+                                        class="btn btn-md btn-round btn-sm btn-primary mt-3" style="float:right">Edit
+                                        Product</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <h3>No Listings Available</h3>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

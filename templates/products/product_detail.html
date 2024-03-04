@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/product.css' %}" type="text/css" />
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="books-header pt-4">
+    <h1>Product Details</h2>
+      <div class="books-header-underline"></div>
+  </div>
+  <div class="card mb-3 mt-4">
+    <div class="d-flex card-inner">
+      <div class="col-md-4 p-0">
+        <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.title }}">
+      </div>
+      <div class="col-md-8">
+        <div class="card-body h-100 position-relative">
+          <h5 class="card-title">{{ product.title }}
+          </h5>
+          {% if is_interested %}
+          <button class="btn btn-default float-end" style="float:right" disabled>Interested</button>
+          {% else %}
+          <a href="{% url 'products:interested_product' product.id %}" class="btn btn-success float-end"
+            style="float:right">Interested ?</a>
+          {% endif %}
+          <p class="card-text">Price: ${{ product.price }}</p>
+          <div class="aha-card-tags">
+            <span class="tag font-italic">{{ product.category }}</span>
+          </div>
+          <p class="card-text">{{ product.description }}</p>
+          <p class="card-text pb-2">Uploaded At : {{product.created_at}}
+          <div class="seller-information position-absolute">
+            <p>Seller Information</p>
+            <div class="">
+              <b class="mr-4">{{ product.user.first_name }} {{ product.user.last_name }}</b>
+              <a class="contact-seller"
+                href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
+                Seller</a>
+            </div>
+          </div>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

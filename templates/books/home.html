@@ -3,6 +3,7 @@
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
 
@@ -13,31 +14,33 @@
             <div class="books-header-underline"></div>
     </div>
     <div class="mt-4">
-        <div class="row justify-content-between books-content-collection">
-            {% for book in all_books %}
-            <div class="book-card">
-                <div class="book-card__cover">
-                    <div class="book-card__book">
-                        <div class="book-card__book-front">
-                            <img class="book-card__img" src="{{ book.book_cover.url }}" />
+        <div class="custom-container">
+            <div class="card__container">
+                {% for book in all_books %}
+                <a href="{% url 'books:book-detail' book.id %}" class="book-card">
+                    <div class="book-card__cover">
+                        <div class="book-card__book">
+                            <div class="book-card__book-front">
+                                <img class="book-card__img" src="{{ book.book_cover.url }}" alt="Book Cover" />
+                            </div>
+                            <div class="book-card__book-back"></div>
+                            <div class="book-card__book-side"></div>
                         </div>
-                        <div class="book-card__book-back"></div>
-                        <div class="book-card__book-side"></div>
                     </div>
-                </div>
-                <div>
-                    <div class="book-card__title">
-                        {{ book.title }}
+                    <div>
+                        <div class="book-card__title">
+                            {{ book.title }}
+                        </div>
+                        <div class="book-card__author">
+                            By {{ book.author }}
+                        </div>
+                        <div class="book-card__author">
+                            ${{ book.price }}
+                        </div>
                     </div>
-                    <div class="book-card__author">
-                        By {{ book.author }}
-                    </div>
-                    <div class="book-card__author">
-                        ${{ book.price }}
-                    </div>
-                </div>
+                </a>
+                {% endfor %}
             </div>
-            {% endfor %}
         </div>
     </div>
 </div>

@@ -2,6 +2,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background: #F4F8FD;
 }
 
 a:hover {
@@ -187,6 +188,7 @@ footer a:hover {
 
 .profile-dropdown {
     background-color: #E5E5E5;
+    z-index: 11;
 }
 
 .profile-dropdown>ul {

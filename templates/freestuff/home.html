@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container position-relative">
+    <a class="position-absolute upload-item" href='{% url "freestuff:upload-item" %}'>Upload your free Item</a>
+    <div class="free-item-header pt-4">
+        <h1>Free Items</h2>
+            <div class="free-item-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="custom-container">
+            <div class="card__container">
+                {% for item in items %}
+                <article class="card__article">
+                    <img src="{{ item.item_image.url }}" alt="image" class="card__img">
+
+                    <div class="card__data">
+                        <span class="card__description">{{ item.condition }}</span>
+                        <h2 class="card__title">{{ item.title }}</h2>
+                        <span class="card__description">{{ item.category }}</span>
+                        <a href="{% url 'freestuff:item-detail' item.id %}" class="card__button">Read More</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
