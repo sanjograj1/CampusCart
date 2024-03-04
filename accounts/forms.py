@@ -1,10 +1,11 @@
 from django import forms
-from .models import Profile
+from .models import Profile, UserComment
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.helper import FormHelper
 from PIL import Image
+from django.conf import settings
 
 
 class ProfileForm(forms.ModelForm):
@@ -50,8 +51,8 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"]
-        if not email.endswith("@uwindsor.ca"):
-            raise forms.ValidationError("Please enter a uwindsor.ca email")
+        if not email.endswith(settings.EMAIL_VERIFY):
+            raise forms.ValidationError(f'Please enter a {settings.EMAIL_VERIFY} mail')
         elif get_user_model().objects.filter(email=email).exists():
                 raise forms.ValidationError('Email already exists! Please try a different email.')
         return email
@@ -106,4 +107,34 @@ class ProfileUpdateForm(forms.ModelForm):
             Field('phone_number', css_class='form-control'),
             Field('address', css_class='form-control'),
             Field('profile_image', css_class='form-control'),
-        )        
+        )
+
+class UserCommentsForm(forms.ModelForm):
+
+    class Meta:
+        model = UserComment
+        fields = ['comment']  
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('comment', css_class='form-control'),
+        )         
+
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Name')
+    email = forms.EmailField(label='Email')
+    phone_number = forms.CharField(max_length=15, label='Phone Number')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('name', css_class='form-control'),
+            Field('email', css_class='form-control'),
+            Field('phone_number', css_class='form-control'),
+            Submit('submit', 'Submit', css_class='btn btn-primary')
+        )
