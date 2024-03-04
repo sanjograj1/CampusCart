@@ -1,28 +1,13 @@
 {% extends "base.html" %}
-{% load static %}
+{% load crispy_forms_tags %}
 
 {% block content %}
-
 <div class="container my-4">
     <h3>Contact Us</h3>
-    <form action="contactus" method="post">{% csrf_token %}
-  <div class="form-group">
-    <label for="name">Name</label>
-    <input type="text" class="form-control" id="name" name='name' placeholder="Enter Your Name">
-  </div>
-  <div class="form-group">
-    <label for="name">Email</label>
-    <input type="email" class="form-control" id="email" name='email' placeholder="Enter Your Email">
-  </div>
-
-    <div class="form-group">
-    <label for="name">Phone</label>
-    <input type="tel" class="form-control" id="number" name='number' placeholder="Enter Your Phone Number">
-  </div>
-      <button type="submit" class="btn btn-success">Submit</button>
+    <form action="{% url 'accounts:contactus' %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit" class="btn btn-success">Submit</button>
     </form>
-
-
 </div>
-
 {% endblock content %}
