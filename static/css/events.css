@@ -1,12 +1,18 @@
-.container{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
+.upload-event {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    right: 0;
+    background-color: #005596;
+    color: #fff;
 }
 
-.item-container{
+.upload-event:hover {
+    color: #fff;
+    transform: scale(1.1);
+}
+
+.item-container {
     position: relative;
     margin: 24px;
     width: 320px;
@@ -18,7 +24,7 @@
 }
 
 .image-container,
-.body-container{
+.body-container {
     position: absolute;
     top: 0;
     left: 0;
@@ -26,15 +32,15 @@
     height: 100%;
 }
 
-.image-container img{
+.image-container img {
     width: 100%;
 }
 
-.body-container{
+.body-container {
     position: relative;
 }
 
-.overlay{
+.overlay {
     position: relative;
     width: 100%;
     height: 400px;
@@ -43,12 +49,12 @@
     transition: height linear 0.4s, opacity linear 0.2s;
 }
 
-.item-container:hover .overlay{ 
-    opacity: 1;   
+.item-container:hover .overlay {
+    opacity: 1;
     height: 150px;
 }
 
-.event-info{
+.event-info {
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -58,7 +64,7 @@
 }
 
 .title,
-.price{
+.price {
     color: #18537a;
     text-align: center;
     font-size: 1.5em;
@@ -67,43 +73,43 @@
     margin: 12px;
 }
 
-.info{
+.info {
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
 
-.separator{
+.separator {
     width: 20%;
     height: 6px;
     background-color: #17537a;
     margin-bottom: 16px;
 }
 
-.additional-info{
+.additional-info {
     border-top: 1px solid #bbb;
     margin-top: 12px;
     padding: 28px;
     padding-bottom: 0;
 }
 
-.additional-info .info{
+.additional-info .info {
     font-size: 0.9em;
     margin-bottom: 20px;
     text-align: center;
 }
 
-.info i{
+.info i {
     color: #18537a;
     font-size: 1.1em;
     margin-right: 4px;
 }
 
-.info span{
+.info span {
     color: #18537a;
     font-weight: bolder;
 }
 
-.action{
+.action {
     color: #fff;
     border: 3px solid #fff;
     background-color: transparent;
@@ -122,10 +128,23 @@
     transition: backgroung-color 0.4s, top 0.4s;
 }
 
-.item-container:hover .action{
+.item-container:hover .action {
     top: 50px;
 }
 
-.action:hover{
+.action:hover {
     background-color: rgba(255, 255, 255, 0.2);
-} 
+}
+
+.events-header-underline {
+    border-style: solid;
+    border-color: #ffce00;
+    border-width: 2px;
+    border-bottom: none;
+    width: 70px;
+    animation-fill-mode: both;
+    animation-name: slidein;
+    opacity: 0;
+    animation-delay: .2s;
+    animation-duration: 1s;
+}
