@@ -13,3 +13,8 @@ def eventdetail(request):
     return render(request, 'events/eventdetail.html',{
         'title': 'Event Detail',
     })
+
+
+@login_required
+def uploadevent(request):
+    return render(request,'events/upload_event.html')

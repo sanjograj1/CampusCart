@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/events.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="events-header pt-4">
+        <h1>Add your Event</h2>
+            <div class="events-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="col-sm-6">
+                    {{ field|as_crispy_field }}
+                </div>
+                {% endfor %}
+            </div>
+            <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action">Add Event</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}
