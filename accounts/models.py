@@ -20,3 +20,13 @@ class UserComment(models.Model):
 
     def __str__(self):
         return f'Rating for {self.user.username}'
+
+class Contact(models.Model):
+
+    name = models.CharField(max_length=50)
+    email = models.EmailField(max_length=70)
+    number = models.IntegerField()
+
+
+    def _str_(self):
+        return self.name
