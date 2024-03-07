@@ -121,3 +121,19 @@ class UserCommentsForm(forms.ModelForm):
         self.helper.layout = Layout(
             Field('comment', css_class='form-control'),
         )         
+
+
+class ContactForm(forms.Form):
+    name = forms.CharField(max_length=100, label='Name')
+    email = forms.EmailField(label='Email')
+    phone_number = forms.CharField(max_length=15, label='Phone Number')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('name', css_class='form-control'),
+            Field('email', css_class='form-control'),
+            Field('phone_number', css_class='form-control'),
+            Submit('submit', 'Submit', css_class='btn btn-primary')
+        )

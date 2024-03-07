@@ -5,10 +5,10 @@ from django.shortcuts import get_object_or_404, render, redirect,reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import Profile, UserComment
+from .models import Contact, Profile, UserComment
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
-from .forms import UserUpdateForm, ProfileUpdateForm, UserCommentsForm, RegistrationForm
+from .forms import ContactForm, UserUpdateForm, ProfileUpdateForm, UserCommentsForm, RegistrationForm
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
@@ -178,3 +178,21 @@ def user_rating(request, username):
         'title': f'{current_user.username.upper()} Rating',
         'comments':comments
     })
+
+@login_required
+def contactus(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            number = form.cleaned_data['phone_number']
+
+            contact = Contact.objects.create(name=name, email=email, number=number)
+
+        
+            messages.info(request, "We'll get in touch with you soon.")
+            return redirect('accounts:contactus')
+    else:
+        form = ContactForm()
+    return render(request, 'accounts/contactus.html', {'form': form})
