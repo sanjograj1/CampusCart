@@ -72,10 +72,14 @@
                 class="material-symbols-outlined">
                 person
               </span>Profile</a></li>
-          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:user-listing" %}'><span
+           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:user-listing" %}'><span
                 class="material-symbols-outlined">
-                person
+                inventory
               </span>My Listings</a></li>
+            <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:login-history" %}'>
+              <span class="material-symbols-outlined">
+                history
+              </span>My Login History</a></li>
           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:logout" %}'>
               <span class="material-symbols-outlined">
                 logout

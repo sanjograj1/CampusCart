@@ -1,17 +1,19 @@
 import os
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render, redirect,reverse
+from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model
-from .models import Contact, Profile, UserComment
+from .models import Contact, UserComment, UserSession
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
 from .forms import ContactForm, UserUpdateForm, ProfileUpdateForm, UserCommentsForm, RegistrationForm
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
+from django.utils import timezone
+from datetime import timedelta
 
 
 # Create your views here.
@@ -85,12 +87,12 @@ def register(request):
 
     return render(request, "accounts/register.html", {
         "form": form,
-        'title':'Register'
-        })
+        'title': 'Register'
+    })
+
 
 @login_required()
 def home(request):
-
     # get all products sorted count of interested users
     products = Product.objects.all().order_by("-interested_users")[:4]
     context = {
@@ -98,6 +100,7 @@ def home(request):
         "products": products,
     }
     return render(request, "accounts/home.html", context)
+
 
 def user_logout(request):
     auth.logout(request)
@@ -146,11 +149,11 @@ def user_listing(request):
     user_books = Book.objects.filter(seller=request.user)
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
     user_products = Product.objects.filter(user=request.user)
-    return render(request,'accounts/user_listing.html',{
+    return render(request, 'accounts/user_listing.html', {
         'user_books': user_books,
         'user_free_items': user_free_items,
-        'user_products':user_products,
-        'title':'My Listings'
+        'user_products': user_products,
+        'title': 'My Listings'
     })
 
 
@@ -172,12 +175,13 @@ def user_rating(request, username):
             return redirect(url)
     else:
         comment_form = UserCommentsForm()
-    return render(request,'accounts/user_rating.html',{
-        'comment_form':comment_form,
-        'current_user':current_user,
+    return render(request, 'accounts/user_rating.html', {
+        'comment_form': comment_form,
+        'current_user': current_user,
         'title': f'{current_user.username.upper()} Rating',
-        'comments':comments
+        'comments': comments
     })
+
 
 @login_required
 def contactus(request):
@@ -190,9 +194,21 @@ def contactus(request):
 
             contact = Contact.objects.create(name=name, email=email, number=number)
 
-        
             messages.info(request, "We'll get in touch with you soon.")
             return redirect('accounts:contactus')
     else:
         form = ContactForm()
     return render(request, 'accounts/contactus.html', {'form': form})
+
+
+@login_required
+def login_history(request):
+    all_history = UserSession.objects.filter(user=request.user).order_by('-created_at')
+    one_day_ago = UserSession.objects.filter(user=request.user, created_at__gte=timezone.now() - timedelta(days=1))
+    seven_day_ago = UserSession.objects.filter(user=request.user, created_at__gte=timezone.now() - timedelta(days=7))
+    return render(request, 'accounts/login_history.html', {
+        'all_history': all_history,
+        'title': 'Login History',
+        'one_day_ago': one_day_ago,
+        'seven_day_ago': seven_day_ago
+    })

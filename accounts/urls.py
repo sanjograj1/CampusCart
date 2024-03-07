@@ -12,4 +12,5 @@ urlpatterns = [
     path("profile/rating/<username>", views.user_rating, name="user-rating"),
     path('notifications/', views.notifications_view, name='notifications'),
     path('contactus/', views.contactus, name='contactus'),
+    path('login-history/', views.login_history, name='login-history'),
 ]

@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/userhistory.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="books-header pt-4">
+        <h1>Login History</h1>
+        <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="user-history d-flex row">
+            <div class='login-details-container'>
+                <h2>Login Date</h2>
+                <table class="aui-responsive-status-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">
+                                <div class="aui-th">Date</div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for current_login in all_history %}
+                        <tr class="aui-table-status-success">
+                            <td data-title="Date">
+                                <div class="aui-td">{{ current_login.created_at }}</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="second">
+                <div class="login-extra-details d-flex flex-wrap justify-content-around align-items-center pt-5">
+                    <div class="total">
+                        <h3>Total Login</h3>
+                        <p>{{ all_history|length }}</p>
+                    </div>
+                    <div class="one-day">
+                        <h3>In Past 24 Hours</h3>
+                        <p>{{ one_day_ago|length }}</p>
+                    </div>
+                    <div class="one-week">
+                        <h3>In Past One Week</h3>
+                        <p>{{ seven_day_ago|length }}</p>
+                    </div>
+                    <div class="one-month">
+                        <h3>Total Login</h3>
+                        <p>30</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
