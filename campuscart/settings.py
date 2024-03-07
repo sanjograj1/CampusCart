@@ -1,12 +1,10 @@
 from pathlib import Path
-from dotenv import load_dotenv
 import os
 
 from django.contrib.messages import constants as messages
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-load_dotenv(BASE_DIR / ".env")
 
 SECRET_KEY = "django-insecure-bx-o=&x6(9enor-jk*qv#t5c^r4@e8wnpjo01y#kve-6fluz+w"
 
@@ -44,6 +42,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "accounts.middleware.UserSessionMiddleware"
 ]
 
 ROOT_URLCONF = "campuscart.urls"
@@ -109,6 +108,8 @@ LOGIN_URL = "accounts:login"
 LOGOUT_REDIRECT_URL = "accounts:login"
 CRISPY_TEMPLATE_PACK = "bootstrap4"
 EXPIRE_AFTER = "2m"
+SESSION_COOKIE_AGE = 1200
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 MESSAGE_TAGS = {
     messages.DEBUG: "secondary",

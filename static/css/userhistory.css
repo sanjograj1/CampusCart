@@ -1,0 +1,25 @@
+.user-history{
+    gap: 20px;
+}
+
+.login-details-container {
+    flex: 0.3;
+}
+
+
+.second{
+    flex: 0.7;
+}
+
+.login-extra-details{
+    gap: 25px;
+}
+
+.login-extra-details div{
+    padding: 10px;
+    flex-basis: 300px;
+    background-color: white;
+    border-radius: 10px;
+    text-align: center;
+    padding-top: 25px;
+}

@@ -7,26 +7,35 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
-    profile_image = models.ImageField(upload_to="profile_images/",default='profile_images/default.png')
+    profile_image = models.ImageField(upload_to="profile_images/", default='profile_images/default.png')
 
     def __str__(self):
         return f"Profile of {self.user.username}"
 
+
 class UserComment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    commented_by = models.ForeignKey(User,on_delete=models.CASCADE,related_name="commented_by")
+    commented_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name="commented_by")
     comment = models.TextField()
     commented_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Rating for {self.user.username}'
 
-class Contact(models.Model):
 
+class Contact(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=70)
     number = models.IntegerField()
 
-
     def _str_(self):
         return self.name
+
+
+class UserSession(models.Model):
+    user = models.ForeignKey('auth.User', on_delete=models.CASCADE)
+    session_key = models.CharField(max_length=60)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.created_at}"
