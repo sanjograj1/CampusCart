@@ -94,9 +94,9 @@ def register(request):
 @login_required()
 def home(request):
     # get all products sorted count of interested users
-    products = Product.objects.all().order_by("-interested_users")[:4]
+    products = Product.objects.filter(interested_users=request.user).order_by("-interested_users")
     context = {
-        "title": "Campus Cart",
+        "title": "Home",
         "products": products,
     }
     return render(request, "accounts/home.html", context)
