@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
@@ -212,3 +213,19 @@ def login_history(request):
         'one_day_ago': one_day_ago,
         'seven_day_ago': seven_day_ago
     })
+
+
+
+@login_required
+def change_theme(request):
+    current_theme = request.COOKIES.get('theme', 'primary')
+    response = HttpResponse("Setting Theme")
+    
+    if current_theme == 'primary':
+        next_theme = 'secondary'
+    else:
+        next_theme = 'primary'
+    response = redirect(request.META.get('HTTP_REFERER', '/'))
+    response.set_cookie('theme', next_theme, max_age=5*24*60*60)
+    
+    return response

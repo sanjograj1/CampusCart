@@ -13,4 +13,5 @@ urlpatterns = [
     path('notifications/', views.notifications_view, name='notifications'),
     path('contactus/', views.contactus, name='contactus'),
     path('login-history/', views.login_history, name='login-history'),
+    path('change-theme/', views.change_theme, name='change-theme'),
 ]
