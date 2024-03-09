@@ -2,7 +2,11 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/books-custom.css' %}" type="text/css" />
+{% endif %}
 <link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/product.css' %}" type="text/css" />
 {% endblock %}
@@ -11,7 +15,7 @@
     <a class="position-absolute upload-book" href='{% url "accounts:user-rating" user %}'>My Feedback</a>
     <div class="books-header pt-4">
         <h1>My Listings</h1>
-            <div class="books-header-underline"></div>
+        <div class="books-header-underline"></div>
     </div>
     <div class="mt-4">
         <div class="custom-container">

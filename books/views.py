@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from notifications.signals import notify
 from django.contrib import messages
@@ -41,12 +42,25 @@ def upload_book(request):
 @login_required
 def book_detail(request, bookid):
     current_book = get_object_or_404(Book, pk=bookid)
+
+    # get same category books
     same_category_books = Book.objects.exclude(pk=current_book.id).filter(category=current_book.category)
-    return render(request, 'books/book_detail.html',{
-        'title':current_book.title,
-        'book':current_book,
+
+    # Update viewed_books in the cookies
+    current_viewed_books = request.COOKIES.get('viewed_books','')
+    current_viewed_books = [int(book) for book in current_viewed_books.split(',') if book]
+    if bookid not in current_viewed_books:
+        current_viewed_books.append(bookid)
+
+    current_viewed_books_str = ','.join(map(str, current_viewed_books))  
+    response = HttpResponse("Viewed Books")
+    response = render(request, 'books/book_detail.html', {
+        'title': current_book.title,
+        'book': current_book,
         'same_category_books': same_category_books
     })
+    response.set_cookie('viewed_books', current_viewed_books_str, max_age=36000)
+    return response
  
  
 @login_required
