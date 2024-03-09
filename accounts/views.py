@@ -96,9 +96,17 @@ def register(request):
 def home(request):
     # get all products sorted count of interested users
     products = Product.objects.filter(interested_users=request.user).order_by("-interested_users")
+    current_viewed_books = request.COOKIES.get('viewed_books','')
+    current_viewed_books = [int(book) for book in current_viewed_books.split(',') if book]
+    viewed_books = Book.objects.filter(id__in=current_viewed_books)
+    viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
+    for books in viewed_books:
+        print(books.id)
+
     context = {
         "title": "Home",
         "products": products,
+        'viewed_books':viewed_books
     }
     return render(request, "accounts/home.html", context)
 

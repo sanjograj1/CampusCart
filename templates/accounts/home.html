@@ -3,6 +3,7 @@
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
 <div class="home-container d-flex flex-column container mt-4 pb-4">
@@ -47,9 +48,61 @@
     </div>
   </div>
 </section>
-  {% if products %}
+{% if viewed_books %}
+<div class="books-header pt-4">
+  <h2 class="mt-5 ml-5 display-4">Recently Viewed Books</h2>
+  <div class="underline ml-5"></div>
+</div>
+<div class="mx-5">
+  <div id="multiple-carousel-slider" class="carousel slide aui-multiple-carousel border-0 mt-5" data-ride="carousel"
+    data-interval="false">
+    <div id="carousel-container" class="carousel-inner row p-0 m-0">
+      {% for book in viewed_books %}
+      <div
+        class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 mt-lg-4 ci {% if forloop.first %}active{% endif %}">
+        <a href="{% url 'books:book-detail' book.id %}" class="book-card book-card-shadow-none">
+          <div class="book-card__cover">
+            <div class="book-card__book">
+              <div class="book-card__book-front">
+                <img class="book-card__img" src="{{ book.book_cover.url }}" alt="Book Cover" />
+              </div>
+              <div class="book-card__book-back"></div>
+              <div class="book-card__book-side"></div>
+            </div>
+          </div>
+          <div>
+            <div class="book-card__title">
+              {{ book.title }}
+            </div>
+            <div class="book-card__author">
+              By {{ book.author }}
+            </div>
+            <div class="book-card__author">
+              ${{ book.price }}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    <a class="carousel-control-next" href="#multiple-carousel-slider" role="button" data-slide="next">
+      <span class="carousel-control-next-icon aha-icon-arrow-right" aria-hidden="true"></span>
+      <span class="sr-only">Next</span>
+    </a>
+    <a class="carousel-control-prev action-disable" href="#multiple-carousel-slider" role="button" data-slide="prev">
+      <span class="carousel-control-prev-icon aha-icon-arrow-left" aria-hidden="true"></span>
+      <span class="sr-only">Previous</span>
+    </a>
+
+  </div>
+</div>
+{% endif %}
+{% if products %}
 <div class="mt-5">
-    <h1 class="ml-5">Interested Products</h1>
+  <div class="books-header pt-4">
+    <h2 class="mt-5 ml-5 display-4">Interested Products</h2>
+    <div class="underline ml-5"></div>
+  </div>
   <div id="multiple-carousel-slider" class="carousel slide aui-multiple-carousel px-5 border-0" data-ride="carousel"
     data-interval="false">
     <div id="carousel-container" class="carousel-inner row p-0 m-0">

@@ -2,7 +2,11 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/notifications-custom.css' %}" type="text/css" />
+{% endif %}
 {% endblock %}
 {% block content %}
 
