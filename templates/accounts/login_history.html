@@ -2,7 +2,11 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/books-custom.css' %}" type="text/css" />
+{% endif %}
 <link rel="stylesheet" href="{% static 'css/userhistory.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
