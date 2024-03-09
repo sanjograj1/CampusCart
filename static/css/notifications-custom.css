@@ -1,0 +1,75 @@
+.notification-container {
+    gap: 30px;
+}
+
+.notification-header-underline {
+    border-style: solid;
+    border-color: #005595;
+    border-width: 2px;
+    border-bottom: none;
+    width: 70px;
+    animation-fill-mode: both;
+    animation-name: slidein;
+    opacity: 0;
+    animation-delay: .2s;
+    animation-duration: 1s;
+}
+
+@keyframes slidein {
+    0% {
+        transform: translate3d(100%, 0, 0);
+        visibility: visible;
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateZ(0);
+        opacity: 1;
+    }
+}
+
+.notification-box {
+    gap: 10px;
+    border-bottom: 1px solid #e3e3e3;
+    border-top: 1px solid #e3e3e3;
+    padding-block: 10px;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.notification-box:hover {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.notification-description {
+    padding-left: 20px;
+    border-left: 1px solid #FFCE00;
+}
+
+.notification-description a {
+    text-decoration: underline;
+}
+
+@media screen and (max-width: 992px) {
+    .notification-container {
+        width: 100% !important;
+    }
+}
+
+
+.notification-user-pic-container>.profile-pic {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+
+.notification-svg {
+    transition: transform 0.3s ease-in-out;
+}
+
+.notification-svg:hover {
+    transform: rotate(30deg);
+}

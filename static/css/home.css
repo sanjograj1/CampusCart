@@ -23,3 +23,16 @@
     flex-basis: 450px;
     border-radius: 12px;
 }
+
+.underline {
+    border-style: solid;
+    border-color: #ffce00;
+    border-width: 3px;
+    border-bottom: none;
+    width: 150px;
+    animation-fill-mode: both;
+    animation-name: slidein;
+    opacity: 0;
+    animation-delay: .2s;
+    animation-duration: 1s;
+}
