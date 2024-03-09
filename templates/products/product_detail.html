@@ -37,7 +37,10 @@
           <div class="seller-information position-absolute">
             <p>Seller Information</p>
             <div class="">
-              <b class="mr-4">{{ product.user.first_name }} {{ product.user.last_name }}</b>
+            
+<a href="{% url 'accounts:user-rating' product.user.username %}"><b class="mr-4">{{ product.user.first_name }} {{ product.user.last_name }}</b></a>
+ 
+ 
               <a class="contact-seller"
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>
