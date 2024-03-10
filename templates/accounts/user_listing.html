@@ -50,9 +50,9 @@
                     <img src="{{ item.item_image.url }}" alt="image" class="card__img">
 
                     <div class="card__data">
-                        <span class="card__description">Vancouver Mountains, Canada</span>
+                        <span class="card__description">{{ item.condition }}</span>
                         <h2 class="card__title">{{ item.title }}</h2>
-                        <a href="#" class="card__button">Read More</a>
+                        <a href="{% url 'freestuff:edit-item' item.pk %}" class="card__button">Edit Item</a>
                     </div>
                 </article>
                 {% endfor %}

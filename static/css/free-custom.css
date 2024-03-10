@@ -178,7 +178,7 @@ img {
 
 .free-item-header-underline {
     border-style: solid;
-    border-color: #ffce00;
+    border-color: #005596;
     border-width: 2px;
     border-bottom: none;
     width: 70px;
@@ -219,7 +219,7 @@ img {
     padding: 10px 20px;
     border-radius: 6px;
     right: 0;
-    background-color: #005596;
+    background-color: #ffce00;
     color: #fff;
 }
 

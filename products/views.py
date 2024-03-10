@@ -27,7 +27,6 @@ def home(request):
                 products = Product.objects.filter(title__icontains=search)
             else:
                 products = Product.objects.all()
-                print(products[0].description)
     else:
 
         products = Product.objects.all()
@@ -41,7 +40,6 @@ def create_product(request):
         form = ProductForm(request.POST, request.FILES)
 
         if form.is_valid():
-            print(form.errors, dir(form))
             product = form.save(commit=False)
             product.user = request.user
             product.save()
@@ -73,7 +71,6 @@ def detail_product(request, pk):
 def interested_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     product.interested_users.add(request.user)
-    print("product", product.id)
     messages.add_message(
         request,
         messages.SUCCESS,
