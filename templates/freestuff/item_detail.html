@@ -2,6 +2,7 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -10,21 +11,21 @@
 
 <div class="container">
     <div class="books-header pt-4">
-        <h1>{{ item.title }}</h2>
-            <div class="books-header-underline"></div>
+        <h1>{{ item.title }}</h1>
+        <div class="books-header-underline"></div>
     </div>
     <div class="mt-4">
         <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row">
             <div class="book-image d-flex justify-content-center align-items-center one-half">
                 <img class="mw-100 h-auto" src="{{ item.item_image.url }}" alt="{{ item.title }}">
             </div>
-            <div class="book-information one-half position-relative">
+            <div class="item-information one-half position-relative">
                 <h6>Quantity : {{ item.quantity }}</h6>
                 <ul class="aui-tag-list">
                     <li class="aui-tag-item font-italic">{{ item.condition }}</li>
                     <li class="aui-tag-item font-italic">{{ item.category }}</li>
                 </ul>
-                <p class="book-description">{{ item.description }}</p>
+                <p class="item-description mt-2">{{ item.description }}</p>
                 <div class="position-absolute seller-information w-100">
                     <p>Seller Information</p>
                     <div class="d-flex align-items-center justify-content-between">
