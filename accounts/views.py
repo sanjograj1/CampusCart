@@ -100,8 +100,6 @@ def home(request):
     current_viewed_books = [int(book) for book in current_viewed_books.split(',') if book]
     viewed_books = Book.objects.filter(id__in=current_viewed_books)
     viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
-    for books in viewed_books:
-        print(books.id)
 
     context = {
         "title": "Home",

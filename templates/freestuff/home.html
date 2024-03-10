@@ -2,7 +2,11 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/free-custom.css' %}" type="text/css" />
+{% endif %}
 {% endblock %}
 {% block content %}
 <div class="container position-relative">
