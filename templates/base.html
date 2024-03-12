@@ -13,13 +13,11 @@
   <script src="https://aui.heart.org/aha-ui/dev/1.0.3/dist/js/aha-dist.js"></script>
   <script src="{% static 'notifications/notify.js' %}" type="text/javascript"></script>
   {% register_notify_callbacks callbacks='fill_notification_list,fill_notification_badge' %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" />
+  <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-  {% if theme == 'primary' %}
   <link rel="stylesheet" href="{% static 'css/base.css' %}" type="text/css" />
-  {% else %}
-  <link rel="stylesheet" href="{% static 'css/base-custom.css' %}" type="text/css" />
-  {% endif %}
   <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
   {% block head %}{% endblock %}
 </head>
@@ -65,27 +63,29 @@
         </ul>
       </div>
     </nav>
+
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ user.profile.profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
+    {% if user.profile.profile_image %}
+      <img src="{{ user.profile.profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
+      {% else %}
+      <img src="{% static 'images/default.png' %}" class="profile-pic dropdown-toggle" id="navDropdown1"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
+      {% endif %}
+
+        
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:profile" %}'><span
                 class="material-symbols-outlined">
                 person
               </span>Profile</a></li>
-          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:user-listing" %}'><span
+           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:user-listing" %}'><span
                 class="material-symbols-outlined">
                 inventory
               </span>My Listings</a></li>
-          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:login-history" %}'>
+            <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:login-history" %}'>
               <span class="material-symbols-outlined">
                 history
               </span>My Login History</a></li>
-          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:change-theme" %}'>
-              <span class="material-symbols-outlined">
-                palette
-              </span>Change Theme</a></li>
           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:logout" %}'>
               <span class="material-symbols-outlined">
                 logout
@@ -118,7 +118,7 @@
     {% block content %}
     {% endblock %}
   </div>
-  <footer>© 2024 <a href="/">Campus Cart</a> | <a href="{% url 'accounts:contactus' %}">Contact Us</a></footer>
+  <footer>©️ 2024 <a href="/">Campus Cart</a> | <a href="{% url 'accounts:contactus' %}">Contact Us</a></footer>
 </body>
 
 </html>

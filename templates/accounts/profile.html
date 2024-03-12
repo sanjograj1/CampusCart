@@ -2,6 +2,20 @@
 {% load crispy_forms_tags %}
 {% load static %}
 {% block content %}
+<link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
+<script id="search-js" defer="" src="https://api.mapbox.com/search-js/v1.0.0-beta.18/web.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
+  <style>
+    #map {  width: 100%;height: 300px; }
+  </style>
+
+
+
+
+
+
+
 <div class="container">
   {% if messages %}
   {% for message in messages %}
@@ -27,9 +41,18 @@
               </div>
               {% endfor %}
               {% for field in profile_form %}
-              <div class="col-sm-6">
-                {{ field|as_crispy_field }}
-              </div>
+
+                 {% if field.name == "address" %}
+                 <br>
+            <div id="map"></div>
+            <input type="hidden" name="address" id="addressDict" value="">
+            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+
+            {% else %}
+            {{ field|as_crispy_field }}
+            {% endif %}
+         
+              
               {% endfor %}
             </div>
             <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action"> Update
@@ -45,7 +68,11 @@
           </div>
     
         <div class="card-body">
-        <img  id= "prev_profie_img" src="{{user.profile.get_profile_image}}" class="circle" alt="Profile Image">
+        {% if user.profile.profile_image %}
+          <img  id= "prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+          {% else %}
+          <img  id= "prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
+          {% endif %}
         <hr/>
           <h6 class="card-subtitle mb-2 text-body-secondary" >
           <span id= "prev_first_name" >[First Name]</span> <span id= "prev_last_name" >[Last Name]</span>
@@ -54,10 +81,18 @@
           </h6>
           <p class="card-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
   <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-</svg> <span id= "prev_address" >[Address]</span>
+</svg> <span id= "prev_address" >          
+  {% if full_address %}
+    <span class=" text-sm" id="currentStatus">{{full_address}}</span>
+
+  
+  {% else %}
+  <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
+</span>
+{% endif %} 
 </p>
         <span class="badge text-bg-light" id= "prev_phone_number" >[Phone Number]</span>
-        <span class="badge text-bg-light" id= "prev_email" >[Phone Number]</span>
+        <span class="badge text-bg-light" id= "prev_email" >[Email]</span>
         </div>
       </div>
     </div>
@@ -78,20 +113,29 @@ let prev_phone_number= document.getElementById('prev_phone_number');
 let prev_profie_img= document.getElementById('prev_profie_img');
 let prev_email= document.getElementById('prev_email');
 
-  prev_first_name.innerHTML= form.first_name.value;
-  prev_last_name.innerHTML= form.last_name.value;
-  prev_username.innerHTML= form.username.value;
-  prev_address.innerHTML= form.address.value;
-  prev_phone_number.innerHTML= form.phone_number.value;
-  prev_email.innerHTML= form.email.value;
 
+
+function updatePreview(){
+
+  if (form.first_name.value !== '') {
+    prev_first_name.innerHTML = form.first_name.value;
+  }
+  if (form.last_name.value !== '') {
+    prev_last_name.innerHTML = form.last_name.value;
+  }
+  if (form.username.value !== '') {
+    prev_username.innerHTML = form.username.value;
+  }
+  if (form.phone_number.value !== '') {
+    prev_phone_number.innerHTML = form.phone_number.value;
+  }
+  if (form.email.value !== '') {
+    prev_email.innerHTML = form.email.value;
+  }
+}
+updatePreview();
 form.addEventListener('input', function(e){
-  prev_first_name.innerHTML= form.first_name.value;
-  prev_last_name.innerHTML= form.last_name.value;
-  prev_username.innerHTML= form.username.value;
-  prev_address.innerHTML= form.address.value;
-  prev_phone_number.innerHTML= form.phone_number.value;
-  prev_email.innerHTML= form.email.value;
+updatePreview();
   prev_profie_img.src= URL.createObjectURL(form.profile_image.files[0]);
 });
 
@@ -99,5 +143,42 @@ form.addEventListener('input', function(e){
 
 </script>
 
+ <script>
+    const ACCESS_TOKEN = 'pk.eyJ1IjoiYWRtaW5lcmVmaCIsImEiOiJjbHNxMHA3Nzgwd2d2Mmtuem9vZXplcGNnIn0.UszWUOoih3vGKZeZlnn35g';
+     
+    let currentStatus=document.getElementById('currentStatus');
+    let addressDict=document.getElementById('addressDict');
+    mapboxgl.accessToken = ACCESS_TOKEN;
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [{{user_longitude}}, {{user_latitude}}],
+      zoom: 8.8
+    });
+     
+    const searchJS = document.getElementById('search-js');
+    searchJS.onload = function () {
+      const searchBox = new MapboxSearchBox();
+      console.log("",searchBox);
+      searchBox.accessToken = ACCESS_TOKEN;
+      searchBox.options = {
+      types: 'address,poi',
+      proximity: [{{user_longitude}}, {{user_latitude}}]
+      //current location
 
+    };
+    searchBox.marker = true;
+    searchBox.mapboxgl = mapboxgl;
+    map.addControl(searchBox);
+    searchBox.addEventListener('retrieve', (event) => {
+      const featureCollection = event.detail;
+      const feature = featureCollection.features[0];
+      console.log(feature)
+      currentStatus.innerHTML = `<b>Selected Address</b> : ${feature.properties.full_address}`;
+      addressDict.value=JSON.stringify(feature.properties);
+
+    
+    });
+    };
+  </script>
 {% endblock content %}
