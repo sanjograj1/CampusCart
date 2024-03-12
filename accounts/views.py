@@ -1,4 +1,5 @@
 import json
+from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
