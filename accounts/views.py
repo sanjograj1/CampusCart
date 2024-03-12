@@ -1,7 +1,5 @@
-import os
-
+import json
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
@@ -9,7 +7,13 @@ from django.contrib.auth import get_user_model
 from .models import Contact, UserComment, UserSession
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
-from .forms import ContactForm, UserUpdateForm, ProfileUpdateForm, UserCommentsForm, RegistrationForm
+from .forms import (
+    ContactForm,
+    UserUpdateForm,
+    ProfileUpdateForm,
+    UserCommentsForm,
+    RegistrationForm,
+)
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
@@ -123,8 +127,11 @@ def user_logout(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        print("FILES", request.FILES)
+        user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
+        profile_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -133,12 +140,32 @@ def profile(request):
     else:
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
+        # get address from profile form
+        try:
+            address_dict = request.user.profile.address
+            address_dict = json.loads(address_dict)
+            print("ADDRESS DICT", address_dict)
+            coordinates = address_dict.get("coordinates")
+            user_latitude = coordinates.get("latitude")
+            user_longitude = coordinates.get("longitude")
+            full_address = address_dict.get("full_address")
+        except:
+            user_latitude = 40.71669
+            user_longitude = -73.961614
+            full_address=""
 
-    return render(request, "accounts/profile.html", {
-        'user_form': user_form,
-        'profile_form': profile_form,
-        "title": "Profile",
-    })
+    return render(
+        request,
+        "accounts/profile.html",
+        {
+            "user_form": user_form,
+            "profile_form": profile_form,
+            "title": "Profile",
+            "user_latitude": user_latitude,
+            "full_address": full_address,
+            "user_longitude": user_longitude,
+        },
+    )
 
 
 @login_required
