@@ -152,6 +152,7 @@ def profile(request):
         except:
             user_latitude = 40.71669
             user_longitude = -73.961614
+            full_address=""
 
     return render(
         request,
