@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="{% static 'css/events.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 {% endblock %}
 {% block content %}
 
@@ -43,12 +45,13 @@
                                 </p>
 
                                 <p class="info description">
-                                    {{ event.description }}
-                                </p>
-
+                                    {{ event.description|truncatechars:60}}
+                                
+                                <span class="info-description"><a href="{% url 'events:event-detail' event.id %}"></a>more...</span>
+                            </p>
                             </div>
-                        </div>
-                        <button class="action">Buy Tickets</button>
+                        </div>  
+                        <button class="action" onclick="window.location.href='{% url 'events:event-detail' event.id %}'">Buy Tickets</button>
                     </div>
                 </div>
                 {% endfor %}
