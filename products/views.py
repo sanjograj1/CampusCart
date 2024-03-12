@@ -68,6 +68,10 @@ def create_product(request):
 def detail_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     is_interested = product.is_interested(request.user)
+    # get similer products based on category of product
+    similar_products = Product.objects.filter(category=product.category).exclude(
+        id=product.id
+    )[:4]
     # see other product in same price range where price difference is less than 10%
     same_price_products = Product.objects.filter(
         price__gte=Decimal(product.price) * Decimal("0.8"),
@@ -81,6 +85,7 @@ def detail_product(request, pk):
             "product": product,
             "is_interested": is_interested,
             "title": product.title,
+            "similar_products": similar_products,
             "same_price_products": same_price_products,
         },
     )
