@@ -8,6 +8,9 @@ class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = ['title', 'description', 'price','location','date_and_time','category', 'total_seats', 'image']
+        widgets = {
+            'date_and_time':forms.TextInput(attrs={'type':'datetime-local'}),
+        }
     
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

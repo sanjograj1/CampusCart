@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
 from notifications.signals import notify
 
 from .forms import EventForm
@@ -16,9 +16,11 @@ def eventshome(request):
     })
 
 @login_required
-def eventdetail(request):
+def eventdetail(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
     return render(request, 'events/eventdetail.html',{
         'title': 'Event Detail',
+        'event': event,
     })
 
 
