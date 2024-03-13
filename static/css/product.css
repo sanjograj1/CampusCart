@@ -57,7 +57,19 @@
     }
 }
 
-.card-body .seller-information {
+.card-detail-body .seller-information {
     bottom: 15px;
     left: unset;
+}
+
+.card-detail-body {
+    min-height: 400px;
+}
+
+.card-text {
+    display: -webkit-box;
+    max-height: 160px;
+    -webkit-line-clamp: 6;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
