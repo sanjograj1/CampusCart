@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
-from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model, authenticate
 from .models import Contact, UserComment, UserSession
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
@@ -14,6 +14,7 @@ from .forms import (
     ProfileUpdateForm,
     UserCommentsForm,
     RegistrationForm,
+    LoginForm
 )
 from books.models import Book
 from products.models import Product
@@ -26,55 +27,33 @@ from datetime import timedelta
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
-        return redirect("/")
-    errors = {}
+        return redirect("accounts:home")
+    
     if request.method == "POST":
-        username = request.POST.get("username")
-        password = request.POST.get("password")
-        try:
-            existing_user = get_user_model().objects.get(username=username)
-        except get_user_model().DoesNotExist:
-            existing_user = False
-        if existing_user and not existing_user.is_active:
-            messages.add_message(
-                request,
-                messages.ERROR,
-                "Please verify your account and try again!!",
-                extra_tags="primary",
-            )
-        else:
-            user = auth.authenticate(username=username, password=password)
-
+        form = LoginForm(None,data=request.POST)
+        if form.is_valid():
+            user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
                 auth.login(request, user)
-                return redirect("/")
-
+                return redirect("accounts:home")
+        else:
             messages.add_message(
-                request,
-                messages.ERROR,
-                "Invalid credentials! Please try again",
-                extra_tags="danger",
-            )
-            if errors:
-                return render(
                     request,
-                    "accounts/login.html",
-                    {
-                        "title": "Login",
-                        "username": request.POST.get("username"),
-                        "password": request.POST.get("password"),
-                    },
-                )
-    return render(
-        request,
-        "accounts/login.html",
-        {"title": "Login", "username": "", "password": ""},
-    )
+                    messages.ERROR,
+                    "Invalid credentials! Please try again",
+                    extra_tags="danger",
+                )        
+    else:
+        form = LoginForm()  
+    return render(request,"accounts/login.html", {
+        "title": "Login",
+        "form":form
+    })
 
 
 def register(request):
     if request.user.is_authenticated:
-        return redirect("/")
+        return redirect("accounts:home")
 
     if request.method == "POST":
         form = RegistrationForm(request.POST)
@@ -91,7 +70,6 @@ def register(request):
             return redirect("accounts:login")
     else:
         form = RegistrationForm()
-
     return render(request, "accounts/register.html", {
         "form": form,
         'title': 'Register'

@@ -1,7 +1,7 @@
 from django import forms
 from .models import Profile, UserComment
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.helper import FormHelper
 from PIL import Image
@@ -31,13 +31,19 @@ class ProfileForm(forms.ModelForm):
             img.thumbnail(output_size)
             img.save(self.profile_image.path)
 
+class LoginForm(AuthenticationForm):
+    username = forms.CharField(label="Username",max_length=150,widget=forms.TextInput(attrs={'autofocus': True}))
+    password = forms.CharField(label="Password",strip=False,widget=forms.PasswordInput)
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('username', css_class='form-control'),
+            Field('password', css_class='form-control'),
+        )
 
 class RegistrationForm(UserCreationForm):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    username = forms.CharField(max_length=100)
-    email = forms.EmailField()
-
     class Meta:
         model = get_user_model()
         fields = [
@@ -68,10 +74,6 @@ class RegistrationForm(UserCreationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
-    first_name = forms.CharField(max_length=100)
-    last_name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-
     class Meta:
         model = get_user_model()
         fields = [
@@ -110,7 +112,6 @@ class ProfileUpdateForm(forms.ModelForm):
         )
 
 class UserCommentsForm(forms.ModelForm):
-
     class Meta:
         model = UserComment
         fields = ['comment']  

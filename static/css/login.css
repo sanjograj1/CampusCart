@@ -230,7 +230,6 @@ input[type="file"]::file-selector-button {
   background: #fff;
   border-radius: 16px;
   width: 90%;
-  height: 600px;
 }
 
 .register-box {
