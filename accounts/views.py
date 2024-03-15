@@ -18,6 +18,7 @@ from .forms import (
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
+from rentals.models import Rental
 from django.utils import timezone
 from datetime import timedelta
 
@@ -184,10 +185,12 @@ def user_listing(request):
     user_books = Book.objects.filter(seller=request.user)
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
     user_products = Product.objects.filter(user=request.user)
+    user_rentals = Rental.objects.filter(seller = request.user)
     return render(request, 'accounts/user_listing.html', {
         'user_books': user_books,
         'user_free_items': user_free_items,
         'user_products': user_products,
+        'user_rentals' : user_rentals,
         'title': 'My Listings'
     })
 

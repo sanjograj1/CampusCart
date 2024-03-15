@@ -56,6 +56,18 @@
                     </div>
                 </article>
                 {% endfor %}
+                {% for rental in user_rentals %}
+                <article class="card__article">
+                    <img src="{{ item.item_image.url }}" alt="image" class="card__img">
+
+                    <div class="card__data">
+                        <span class="card__description">{{ rental.description }}</span>
+                        <span class="card__description">{{ rental.price }}</span>
+                        <h2 class="card__title">{{ rental.title }}</h2>
+                        <a href="{% url 'rentals:edit-property' rental.pk %}" class="card__button">Edit Property</a>
+                    </div>
+                </article>
+                {% endfor %}
                 {% for product in user_products %}
                 <div class="my-3">
                     <div class="card p-0 p-sm-3 aha-card-sm" aria-label="Card">
