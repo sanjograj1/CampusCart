@@ -16,7 +16,7 @@
         <div class="custom-container">
             <div class="card__container">
                 {% for rental in rental_list %}
-                <a class="book-card">
+                <a href="{% url 'rentals:property-detail' rental.id %}" class="book-card">
                     <div class="book-card__cover">
                         <div class="book-card__book">
                             <div class="book-card__book-front">
@@ -32,10 +32,13 @@
                             {{ rental.property_name }}
                         </div>
                         <div class="book-card__author">
-                            By {{ rental.price }}
+                            $ {{ rental.price }}
                         </div>
                         <div class="book-card__author">
-                            ${{ rental.description }}
+                            By{{ rental.seller }}
+                        </div>
+                        <div class="book-card__author">
+                            {{ rental.description}}
                         </div>
                     </div>
                 </a>

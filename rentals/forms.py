@@ -6,8 +6,7 @@ from .models import Rental
 class property_form(forms.ModelForm):
     class Meta:
         model = Rental
-        fields = ['property_name','address_line1','address_line2','price','city','zip_code','state','country','description','property_image']
-
+        fields = ['property_name','address_line1','address_line2','price','city','zip_code','description','property_image']
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -18,8 +17,6 @@ class property_form(forms.ModelForm):
             Field('price', css_class='form-control'),
             Field('city', css_class='form-control'),
             Field('zip_code', css_class='form-control'),
-            Field('state', css_class='form-control'),
-            Field('country', css_class='form-control'),
             Field('description',css_class='form-control'),
             Field('property_image',css_class='form-control')
         )
