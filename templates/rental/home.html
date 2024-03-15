@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/rental.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container position-relative">
+    <a class="position-absolute upload-book" href='{% url "rentals:upload-property" %}'>Click to add new property</a>
+    <div class="books-header pt-4">
+        <h1>Rooms and Houses on rent</h2>
+            <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="custom-container">
+            <div class="card__container">
+                {% for rental in rental_list %}
+                <a href="{% url 'rentals:property-detail' rental.id %}" class="book-card">
+                    <div class="book-card__cover">
+                        <div class="book-card__book">
+                            <div class="book-card__book-front">
+                                <img class="book-card__img" src="{{ rental.property_image.url }}"
+                                    alt="property Cover" />
+                            </div>
+                            <div class="book-card__book-back"></div>
+                            <div class="book-card__book-side"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="book-card__title">
+                            {{ rental.property_name }}
+                        </div>
+                        <div class="book-card__author">
+                            $ {{ rental.price }}
+                        </div>
+                        <div class="book-card__author">
+                            By{{ rental.seller }}
+                        </div>
+                        <div class="book-card__author">
+                            {{ rental.description}}
+                        </div>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
