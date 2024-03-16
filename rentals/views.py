@@ -3,6 +3,8 @@ from .forms import property_form
 from django.contrib.auth.decorators import login_required
 from .models import Rental
 from django.contrib import messages
+from django.contrib.auth import get_user_model
+from notifications.signals import notify
 
 @login_required
 def rental_home(request):
@@ -24,6 +26,10 @@ def upload_property(request):
             upload_property_var=form.save(commit=False)
             upload_property_var.seller = request.user
             upload_property_var.save()
+            sender = get_user_model().objects.get(username=request.user)
+            receiver = get_user_model().objects.exclude(username=request.user)
+            description = f'<b>{upload_property_var.property_name}</b> (Property). Click <a href="/rentals/property-detail/{upload_property_var.id}">here</a> to view.'
+            notify.send(sender, recipient=receiver, verb='Upload', description=description)
             return redirect('rentals:home')
     else:
         form = property_form()
