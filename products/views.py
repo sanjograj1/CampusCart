@@ -8,6 +8,8 @@ from .models import Product
 from django.contrib.auth import get_user_model
 
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from decimal import Decimal
 
 
 @login_required
@@ -32,7 +34,11 @@ def home(request):
 
         products = Product.objects.all()
 
-    return render(request, "products/home.html", {"products": products, "form": form,'title':'Products'})
+    return render(
+        request,
+        "products/home.html",
+        {"products": products, "form": form, "title": "Products"},
+    )
 
 
 @login_required
@@ -48,7 +54,9 @@ def create_product(request):
             sender = get_user_model().objects.get(username=request.user)
             receiver = get_user_model().objects.exclude(username=request.user)
             description = f'<b>{product.title}</b> ({product.category}). Click <a href="/product/detail-product/{product.id}">here</a> to view.'
-            notify.send(sender, recipient=receiver, verb='Upload', description=description)
+            notify.send(
+                sender, recipient=receiver, verb="Upload", description=description
+            )
             return redirect("products:home")
     else:
         form = ProductForm()
@@ -60,11 +68,26 @@ def create_product(request):
 def detail_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
     is_interested = product.is_interested(request.user)
+    # get similer products based on category of product
+    similar_products = Product.objects.filter(category=product.category).exclude(
+        id=product.id
+    )[:4]
+    # see other product in same price range where price difference is less than 10%
+    same_price_products = Product.objects.filter(
+        price__gte=Decimal(product.price) * Decimal("0.8"),
+        price__lte=Decimal(product.price) * Decimal("6.4"),
+    ).exclude(id=product.id)[:4]
 
     return render(
         request,
         "products/product_detail.html",
-        {"product": product, "is_interested": is_interested,'title':product.title},
+        {
+            "product": product,
+            "is_interested": is_interested,
+            "title": product.title,
+            "similar_products": similar_products,
+            "same_price_products": same_price_products,
+        },
     )
 
 
@@ -72,14 +95,13 @@ def detail_product(request, pk):
 @login_required
 def interested_product(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    product.interested_users.add(request.user)
-    print("product", product.id)
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        "You have successfully added to interested users list !!",
-        extra_tags="success",
-    )
+    if request.user in product.interested_users.all():
+        product.interested_users.remove(request.user)
+        message = "You have been removed from the interested users list."
+    else:
+        product.interested_users.add(request.user)
+        message = "You have been added to the interested users list."
+    messages.success(request, message, extra_tags="success")
     return redirect("products:detail_product", pk=product.id)
 
 
@@ -87,22 +109,25 @@ def interested_product(request, pk):
 def edit_product(request, productid):
     my_product = get_object_or_404(Product, pk=productid)
     if my_product.user != request.user:
-        messages.success(request, "You don't have the access to the Product",extra_tags='danger')
-        return redirect('accounts:user-listing')
-    if request.method == 'POST':
-        if 'action' in request.POST:
-            form = ProductForm(request.POST,request.FILES, instance=my_product)
+        messages.success(
+            request, "You don't have the access to the Product", extra_tags="danger"
+        )
+        return redirect("accounts:user-listing")
+    if request.method == "POST":
+        if "action" in request.POST:
+            form = ProductForm(request.POST, request.FILES, instance=my_product)
             if form.is_valid():
                 book = form.save(commit=False)
                 book.save()
-                return redirect('accounts:user-listing')
+                return redirect("accounts:user-listing")
         else:
             my_product.delete()
-            messages.success(request, "Your Product has been deleted",extra_tags='danger')
-            return redirect('accounts:user-listing')
-    else:    
+            messages.success(
+                request, "Your Product has been deleted", extra_tags="danger"
+            )
+            return redirect("accounts:user-listing")
+    else:
         form = ProductForm(instance=my_product)
-    return render(request, 'products/edit_product.html',{
-        'form': form,
-        'title':'Edit Product'
-        })
+    return render(
+        request, "products/edit_product.html", {"form": form, "title": "Edit Product"}
+    )

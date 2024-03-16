@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/rental.css' %}" type="text/css" />
+{% endblock %}
+{% block content %}
+
+<div class="container">
+    <div class="books-header pt-4">
+        <h1> Edit your Property / Rentals</h2>
+            <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% for field in form %}
+                <div class="col-sm-6">
+                    {{ field|as_crispy_field }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="d-flex">
+                <button style="border-radius:2rem;" class=" mr-4 btn btn-success d-block mt-4" type="submit"
+                    name="action">Edit</button>
+                <a style="border-radius:2rem;" class="btn btn-danger d-block mt-4 text-light" data-toggle="modal"
+                    data-target="#deletemodelbook">Delete</a>
+                <div class="modal fade show aui-modal" id="deletemodelbook" tabindex="-1" aria-labelledby="modalLabel"
+                    aria-modal="true" role="dialog">
+                    <div class="modal-dialog modal-dialog-centered modal-sm">
+                        <div class="modal-content">
+                            <div class="modal-body p-0">
+                                <div class="text-center">
+                                    <p>Are you sure you want to delete this Property / Rental?</p>
+                                    <div class="mt-4">
+                                        <button class="btn btn-primary btn-round btn-sm mx-2" type="submit"
+                                            name="delete" data-toggle="modal"
+                                            data-target="#deletemodelbook">Yes</button>
+                                        <button class="btn btn-secondary btn-round btn-sm mx-2" data-dismiss="modal"
+                                            aria-label="Close">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

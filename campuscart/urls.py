@@ -14,6 +14,7 @@ urlpatterns = [
     path('events/', include('events.urls',namespace="events")),
     path('free/', include('freestuff.urls',namespace="freestuff")),
     path('lostandfound/', include('lostfound.urls',namespace="lostfound")),
+    path('rentals/',include('rentals.urls',namespace="rentals")),
 
     path('^inbox/notifications/', include(notifications.urls, namespace='notifications')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

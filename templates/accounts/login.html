@@ -1,4 +1,5 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <!doctype html>
 <html lang="en">
@@ -21,44 +22,55 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
 
 <body>
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show w-75" role="alert">
-    {{message}}
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-  {% endfor %}
-  {% endif %}
-  <div class="login-container">
-    <div class="logo-container text-center d-flex align-items-center flex-column justify-content-center">
-      <div class="logo">
-        <span class="campus">CAMPUS</span>
-        <span class="cart">CART</span>
-      </div>
+  <div class="logo-container mt-4 text-center d-flex align-items-center flex-column justify-content-center">
+    <div class="logo">
+      <span class="campus">CAMPUS</span>
+      <span class="cart">CART</span>
     </div>
-    <div class="login-container-box">
-      <div class="w-100">
-        <h2 class="text-center">Log Into Campus Cart</h2>
-        <form method="post">
-          {% csrf_token %}
-          <div class="form-group mb-2">
-            <label for="username" class="custom-label">Username</label>
-            <input type="text" name="username" class="custom-input form-control" id="username"
-              placeholder="Enter username">
-          </div>
-          <div class="form-group mb-2">
-            <label for="password" class="custom-label">Password</label>
-            <input type="password" name="password" class="custom-input form-control" id="password"
-              placeholder="Enter password">
-          </div>
-          <a class="d-block text-end forgot-password">Forgot Password</a>
-          <input type="submit" class="login-submit" />
-        </form>
-        <div class="or-tag"><span class="or-tag-span">or</span></div>
-        <a class="go-to-register" href="{% url 'accounts:register' %}">Create new account</a>
+  </div>
+  <div class="login-container d-flex align-items-center justify-content-center m-auto">
+    <div class="login-box">
+      <div class="login-container-box m-auto">
+        {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+          {{message}}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        <div class="w-100">
+          <h2 class="text-center">Log In</h2>
+          <form method="post">
+               {% csrf_token %}
+               <div class="row g-3">
+                  {% for field in form %}
+                  <div>
+                     {{ field|as_crispy_field }}
+                  </div>
+                  {% endfor %}
+               </div>
+               <input type="submit" class="login-submit" value="Log In" />
+            </form>
+          <div class="or-tag"><span class="or-tag-span">or</span></div>
+          <a class="go-to-register" href="{% url 'accounts:register' %}">Create new account</a>
+        </div>
+      </div>
+      <div class="campus-cart pt-4 d-flex flex-column justify-content-center align-items-center">
+        <div class="campus-cart-image-container">
+          <img src="{% static 'images/accounts/login-bg.png' %}" alt="Login Background">
+        </div>
+        <div class="welcome-text mt-2">
+          <h3 class="d-flex align-items-center justify-content-center">Welcome to Campus Cart <span
+              class="material-symbols-outlined ml-2">
+              waving_hand
+            </span></h3>
+        </div>
       </div>
     </div>
   </div>

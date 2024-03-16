@@ -37,3 +37,28 @@ def item_detail(request, itemid):
         'title':current_item.title,
         'item':current_item,
     })
+
+
+@login_required
+def edit_item(request, itemid):
+    my_item = get_object_or_404(FreeStuffItem, pk=itemid)
+    if my_item.seller != request.user:
+        messages.success(request, "You don't have the access to the Item",extra_tags='danger')
+        return redirect('accounts:user-listing')
+    if request.method == 'POST':
+        if 'action' in request.POST:
+            form = FreeItemForm(request.POST,request.FILES, instance=my_item)
+            if form.is_valid():
+                book = form.save(commit=False)
+                book.save()
+                return redirect('accounts:user-listing')
+        else:
+            my_item.delete()
+            messages.success(request, "Your Item has been deleted",extra_tags='danger')
+            return redirect('accounts:user-listing')
+    else:    
+        form = FreeItemForm(instance=my_item)
+    return render(request, 'freestuff/edit_item.html',{
+        'form': form,
+        'title':'Edit Item'
+        })    

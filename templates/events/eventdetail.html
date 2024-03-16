@@ -3,39 +3,25 @@
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/eventdetail.css' %}" type="text/css" />
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 {% endblock %}
 {% block content %}
 
     <section class="home">
+        <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
         <div class="content">
-            <h2>Exploring Explainable AI</h2>
-            <p>As AI systems become more prevalent in our daily lives, understanding their decision-making processes and ensuring transparency and accountability are crucial. This workshop aims to provide participants with a comprehensive overview of Explainable AI, its methods, challenges, and practical applications. Problem Statement: The lack of transparency in AI systems can lead to biased outcomes, ethical concerns, and limited user trust. Explainable AI offers a solution to these issues by providing insights into the decision-making processes of AI models.
-                The workshop will combine theoretical discussions and hands-on demonstrations to engage participants in understanding and applying Explainable AI methods. As a result, participants will gain a deeper understanding of the challenges and potential solutions in achieving explainability for AI systems.
-                
-            </p>
-            <p><i class="fas fa-map-marker-alt"></i> 300 Ouellette Avenue</p>
-            <p><i class="far fa-calendar-alt"></i> Sat, Sep 20, 10:00 AM EDT</p>
+            <h2>{{ event.title }}</h2>
+            <p>{{ event.description }}</p>
+            <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+            <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
+            <p>${{ event.price }}</p>
+            <p>Available Seats: {{ event.total_seats }}
         </div>
         <div class="wrapper-login">
             <h2>Register</h2>
-            <form action="#">
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
-                    <input type="text" required>    
-                    <label>Enter your First name</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="mail-outline"></ion-icon></span>
-                    <input type="text" required>    
-                    <label>Enter your Last name</label>
-                </div>
-                <div class="input-box">
-                    <span class="icon"><ion-icon name="lock-closed-outline"></ion-icon></span>
-                    <input type="mail" required>    
-                    <label>Enter your email</label>
-                    </div>
-                    <button type="submit" class="button">Get Tickets</button>
-            </form>
+                {% comment %} <a href="#">Seller Information</a> {% endcomment %}
+                <button type="submit" class="button">Contact Seller</button>
         </div>
     </section>
     {% endblock content %}

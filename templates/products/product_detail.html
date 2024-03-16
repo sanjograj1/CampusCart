@@ -6,27 +6,38 @@
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/product.css' %}" type="text/css" />
 {% endblock %}
-
 {% block content %}
 <div class="container">
   <div class="books-header pt-4">
-    <h1>Product Details</h2>
+    <h1>
+      Product Details</h2>
       <div class="books-header-underline"></div>
   </div>
   <div class="card mb-3 mt-4">
     <div class="d-flex card-inner">
       <div class="col-md-4 p-0">
-        <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.title }}">
+        <img src="{{ product.image.url }}" class="rounded-start w-100 h-100" alt="{{ product.title }}">
       </div>
       <div class="col-md-8">
-        <div class="card-body h-100 position-relative">
+        <div class="card-detail-body h-100 position-relative p-3">
           <h5 class="card-title">{{ product.title }}
           </h5>
+          <button class="btn btn-warning float-end" style="float:right" type="button" data-toggle="modal"
+            data-target="#similarproducts">See Other Products in Similar Price Range</button>
+          <br>
+          <br>
           {% if is_interested %}
-          <button class="btn btn-default float-end" style="float:right" disabled>Interested</button>
+          <a href="{% url 'products:interested_product' product.id %}"
+            class="btn btn-danger float-end d-flex align-items-center justify-content-center" style="float:right">Not
+            Interested <span class="material-symbols-outlined ml-1">
+              bookmark_remove
+            </span></a>
           {% else %}
-          <a href="{% url 'products:interested_product' product.id %}" class="btn btn-success float-end"
-            style="float:right">Interested ?</a>
+          <a href="{% url 'products:interested_product' product.id %}"
+            class="btn btn-success float-end d-flex align-items-center justify-content-center"
+            style="float:right">Interested <span class="material-symbols-outlined ml-1">
+              bookmark
+            </span></a>
           {% endif %}
           <p class="card-text">Price: ${{ product.price }}</p>
           <div class="aha-card-tags">
@@ -37,7 +48,8 @@
           <div class="seller-information position-absolute">
             <p>Seller Information</p>
             <div class="">
-              <b class="mr-4">{{ product.user.first_name }} {{ product.user.last_name }}</b>
+              <a href="{% url 'accounts:user-rating' product.user.username %}"><b class="mr-4">
+                  {{ product.user.get_full_name }}</b></a>
               <a class="contact-seller"
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>
@@ -49,4 +61,59 @@
     </div>
   </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="similarproducts" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Other Products in Similar Price Range</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="d-flex flex-wrap row">
+          {% for product in same_price_products %}
+          <div class="col-md-3">
+            <div class="card mb-4">
+              <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.title }}">
+              <div class="card-body">
+                <h5 class="card-title">{{ product.title }}</h5>
+                <p class="card-text">Price: ${{ product.price }}</p>
+                <a href="{% url 'products:detail_product' product.id %}" class="btn btn-primary">View Product</a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% if similar_products %}
+<div class="container mt-5">
+  <div class="books-header mb-4">
+    <h3>Similar Products</h3>
+    <div class="books-header-underline"></div>
+  </div>
+  <div class="row mt-2">
+    {% for product in similar_products %}
+    <div class="col-md-3">
+      <div class="card mb-4">
+        <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.title }}">
+        <div class="card-body">
+          <h5 class="card-title
+            ">{{ product.title }}</h5>
+          <p class="card-text">Price: ${{ product.price }}</p>
+          <a href="{% url 'products:detail_product' product.id %}" class="btn btn-primary">View Product</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
 {% endblock content %}
