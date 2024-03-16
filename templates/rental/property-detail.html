@@ -12,11 +12,12 @@
             <div class="rental-header-underline"></div>
     </div>
     <div class="mt-4">
-        <div class="indi-property-detail-container d-flex flex-column">
+        <div class="indi-property-detail-container d-flex justify-content-start">
             <div class="indi-property-image justify-content-center">
                 <img src="{{ rental.property_image.url }}" alt="Property Image" />
             </div>
-            <div class="indi-property-detail flex-column">
+            <div class="addition-property-detail"></div>
+            <!-- <div class="indi-property-detail flex-column">
                 <h1>Property Details</h1>
                 <div class="d-flex flex-column">
                     <p class="d-flex align-items-center justify-content-start"><span
@@ -30,7 +31,7 @@
                             <b>{{ rental.seller.get_full_name }}</b></a>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
