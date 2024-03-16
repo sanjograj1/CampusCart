@@ -166,3 +166,21 @@
 .upload-property:hover {
     color: #fff;
 }
+
+
+.input-group #div_id_sort_by {
+    flex: 0.5;
+}
+
+.header-underline {
+    border-style: solid;
+    border-color: #ffce00;
+    border-width: 2px;
+    border-bottom: none;
+    width: 70px;
+    animation-fill-mode: both;
+    animation-name: slidein;
+    opacity: 0;
+    animation-delay: .2s;
+    animation-duration: 1s;
+}
