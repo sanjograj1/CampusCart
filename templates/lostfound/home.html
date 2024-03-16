@@ -29,14 +29,15 @@
                     <div class="card-body">
                         <p class="cardd-sub-title">Location:</p>
                         <p class="card-info">"Near Toldo Health Center"</p>
-
-                        <button class="card-btn">View Details</button>
-                    </div>
+                        {% comment %} <a href="{% url 'detail' %}"> {% endcomment %}
+                            <button class="view-details-btn">View Details</button>
+                        {% comment %} </a> {% endcomment %}
+                                            </div>
                 </div>
                 <div class="option-button">
                     <button class="claim-btn">Claim</button>
                     <button class="message-btn">Message</button>
-                    <button class="view-details-btn">View Details</button>
+                        <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' %}'">View Details</button>
                 </div>
             </div>
         </div>
