@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404, redirect, render
-from .forms import property_form
+from .forms import property_form,PropertySearchForm
 from django.contrib.auth.decorators import login_required
 from .models import Rental
 from django.contrib import messages
@@ -8,11 +8,33 @@ from notifications.signals import notify
 
 @login_required
 def rental_home(request):
-    rental_list=Rental.objects.all()
+    if request.method =="GET":
+        form=PropertySearchForm(request.GET)
+        if form.is_valid():
+            search=form.cleaned_data['search']
+            sort = form.cleaned_data['sort_by']
+            rental_list=Rental.objects.all()
+            if search:
+                rental_list=rental_list.filter(address__icontains=search)
+            if sort:
+                if sort == 'Oldest':
+                    rental_list = rental_list.order_by('-created_at')
+                elif sort == 'Lowest Price':
+                    rental_list = rental_list.order_by('price')
+                elif sort == 'Highest Price':
+                    rental_list = rental_list.order_by('-price')
+                else:
+                    rental_list = rental_list.order_by('created_at')
+
+        return render(request,'rental/home.html',{'form':form,'rental_list':rental_list})
+    else:
+        rental_list=Rental.objects.all()
     return render(request,'rental/home.html',{
-        'title':'Rental',
+        'title': 'Rental',
+        'form':form,
         'rental_list':rental_list
     })
+
 
 
 @login_required
@@ -33,7 +55,7 @@ def upload_property(request):
             return redirect('rentals:home')
     else:
         form = property_form()
-    return render(request, 'rental/upload_property.html',{'title':'upload New Property','form':form})
+    return render(request, 'rental/upload_property.html',{'title':'Upload New Property','form':form})
 
 @login_required
 def edit_property(request,rentid):
@@ -63,4 +85,4 @@ def property_detail(request, rentid):
     # get same city rentals
     same_city_rentals = Rental.objects.exclude(pk=current_rental.id).filter(city=current_rental.city)
  
-    return render(request, 'rental/property-detail.html',{'title':f'{current_rental.property_name} details','same_city_rentals':same_city_rentals, 'rental' : current_rental})
+    return render(request, 'rental/property-detail.html',{'title':f'Edit {current_rental.property_name}','same_city_rentals':same_city_rentals, 'rental' : current_rental})
