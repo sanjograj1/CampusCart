@@ -2,6 +2,10 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="stylesheet" href="{% static 'css/rental.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
@@ -82,11 +86,13 @@
             </div>
             <div class="indi-property-detail flex-column">
                 <div class="d-flex flex-column">
-                    <p class="d-flex align-items-center justify-content-start h2"><span
+                    <p class="d-flex align-items-center justify-content-start h2 address"><span
                             class="material-symbols-outlined mr-1">
                             pin_drop
-                        </span> {{ rental.address }}</p>
-                    <span>{{rental.zip_code}}</span>
+                        </span> {{ rental.address }}, {{ rental.city }}, {{rental.zip_code}}</p>
+                    <div id="map" class="mb-4"></div>
+                    <h2 class="visually-hidden lat">{{ lat }}</h2>
+                    <h2 class="visually-hidden long">{{ long }}</h2>
                     <p>{{rental.description}}</p>
                     <div class="seller-information w-100">
                         <p class="mb-3"><b>Seller Information</b></p>
@@ -105,4 +111,47 @@
         </div>
     </div>
 </div>
+<script>
+
+
+    const map = L.map('map').setView([42.3043181, -83.0686139], 14);
+    let marker;
+    const isRetina = L.Browser.retina;
+    const myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+    const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+    const retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}";
+    map.attributionControl.setPrefix('Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a>')
+    L.tileLayer(isRetina ? retinaUrl : baseUrl, {
+        attribution: '<a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> contributors',
+        apiKey: myAPIKey,
+        maxZoom: 20,
+        id: 'osm-bright',
+    }).addTo(map);
+
+    // move zoom controls to bottom right
+    map.zoomControl.remove();
+    L.control.zoom({
+        position: 'bottomright'
+    }).addTo(map);
+
+
+    geocodeAddress()
+
+
+    function geocodeAddress() {
+        let lat = document.getElementsByClassName('lat')[0].textContent;
+        let long = document.getElementsByClassName('long')[0].textContent;
+        if (lat && long) {
+            if (marker) {
+                map.removeLayer(marker)
+            }
+            marker = L.marker(new L.LatLng(lat, long)).addTo(map);
+            map.panTo(new L.LatLng(lat, long));
+        }
+    }
+</script>
 {% endblock content %}
+has context menu
+
+
+has context menu

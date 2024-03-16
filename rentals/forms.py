@@ -30,7 +30,7 @@ SORT_BY_OPTIOS = [
 class PropertySearchForm(forms.Form):
     search=forms.CharField(max_length=250,required=False)
     sort_by = forms.ChoiceField(
-        choices=SORT_BY_OPTIOS, required=False, label="Category"
+        choices=SORT_BY_OPTIOS, required=False, label="Sort By"
     )
 
     

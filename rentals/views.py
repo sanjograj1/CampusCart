@@ -5,6 +5,7 @@ from .models import Rental
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
+import requests
 
 @login_required
 def rental_home(request):
@@ -81,8 +82,21 @@ def edit_property(request,rentid):
 @login_required
 def property_detail(request, rentid):
     current_rental = get_object_or_404(Rental, pk=rentid)
-    rental_list=Rental.objects.all()
-    # get same city rentals
-    same_city_rentals = Rental.objects.exclude(pk=current_rental.id).filter(city=current_rental.city)
+    myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+    url = f"https://api.geoapify.com/v1/geocode/search?text={current_rental.address} {current_rental.city} {current_rental.zip_code}&limit=1&apiKey={myAPIKey}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        result = data["features"][0]
+        latitude = result["geometry"]["coordinates"][1]
+        longitude = result["geometry"]["coordinates"][0]
  
-    return render(request, 'rental/property-detail.html',{'title':f'Edit {current_rental.property_name}','same_city_rentals':same_city_rentals, 'rental' : current_rental})
+        print(f"Latitude: {latitude}, Longitude: {longitude}")
+    else:
+        print(f"Request failed with status code {response.status_code}")
+    return render(request, 'rental/property-detail.html',{
+        'title':f'Edit {current_rental.property_name}',
+        'rental' : current_rental,
+        'lat':latitude,
+        'long': longitude
+    })
