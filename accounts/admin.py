@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile,UserComment, Contact, UserSession
+from .models import Profile,UserComment, Contact, UserSession,Report
 from django.contrib.admin import ModelAdmin
 from django.contrib.sessions.models import Session
 
@@ -17,3 +17,4 @@ admin.site.register(UserComment)
 admin.site.register(Contact)
 admin.site.register(Session, SessionAdmin)
 admin.site.register(UserSession)
+admin.site.register(Report)
