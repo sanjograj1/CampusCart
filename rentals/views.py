@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
 import requests
+from requests.structures import CaseInsensitiveDict
 
 @login_required
 def rental_home(request):
@@ -26,8 +27,6 @@ def rental_home(request):
                     rental_list = rental_list.order_by('-price')
                 else:
                     rental_list = rental_list.order_by('created_at')
-
-        return render(request,'rental/home.html',{'form':form,'rental_list':rental_list})
     else:
         rental_list=Rental.objects.all()
     return render(request,'rental/home.html',{
@@ -82,21 +81,40 @@ def edit_property(request,rentid):
 @login_required
 def property_detail(request, rentid):
     current_rental = get_object_or_404(Rental, pk=rentid)
-    myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+    myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
     url = f"https://api.geoapify.com/v1/geocode/search?text={current_rental.address} {current_rental.city} {current_rental.zip_code}&limit=1&apiKey={myAPIKey}"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
         result = data["features"][0]
-        latitude = result["geometry"]["coordinates"][1]
-        longitude = result["geometry"]["coordinates"][0]
+        userlatitude = result["geometry"]["coordinates"][1]
+        userlongitude = result["geometry"]["coordinates"][0]
  
-        print(f"Latitude: {latitude}, Longitude: {longitude}")
+        print(f"Latitude: {userlatitude}, Longitude: {userlongitude}")
     else:
         print(f"Request failed with status code {response.status_code}")
+    
+    urldistance = f"https://api.geoapify.com/v1/routematrix?apiKey={myAPIKey}"
+    headers = {"Content-Type": "application/json"}
+    if userlongitude and userlongitude:
+        source_location = [userlongitude,userlatitude]
+        data = f'{{"mode":"bus","sources":[{{"location":{source_location}}}],"targets":[{{"location":[-83.0387979, 42.31749]}},{{"location":[-83.06649144027972, 42.305201350000004]}}]}}'  
+        try:
+            resp = requests.post(urldistance, headers=headers, data=data)
+            json_resp = resp.json()
+            distance_values = [item['distance'] for sublist in json_resp['sources_to_targets'] for item in sublist]
+        except requests.exceptions.HTTPError as e:
+            print (e.response.text)
     return render(request, 'rental/property-detail.html',{
         'title':f'Edit {current_rental.property_name}',
         'rental' : current_rental,
-        'lat':latitude,
-        'long': longitude
+        'lat':userlatitude,
+        'long': userlongitude,
+        'maincampuslat': 42.305201350000004,
+        'maincampuslong':-83.06649144027972,
+        'maccampuslat': 42.31749,
+        'maccampuslong':-83.0387979,
+        'distance_values':distance_values,
+        'maincampusdistance':distance_values[1],
+        'maccampusdistance':distance_values[0]
     })
