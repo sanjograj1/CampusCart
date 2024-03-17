@@ -39,3 +39,15 @@ class UserSession(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.created_at}"
+
+# Report Models for User
+class Report(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    reported_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="reported_by"
+    )
+    report = models.TextField()
+    reported_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report for {self.user.username}"

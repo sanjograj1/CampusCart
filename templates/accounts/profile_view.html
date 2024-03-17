@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block content %}
+<div class="container">
+  {% if messages %}
+  {% for message in messages %}
+  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+    {{message}}
+  </div>
+  {% endfor %}
+  {% endif %}
+  <div class="row">
+    <div class="col">
+      <div class="card" >
+        <div class="card-header">
+          <h5 class="card-title">
+            <b>
+            {{user.get_full_name}}
+            </b>
+            Profile
+          </h5>
+        </div>
+        <div class="card-body">
+          {% if user.profile.profile_image %}
+          <img  id= "prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+          {% else %}
+          <img  id= "prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
+          {% endif %}
+          <hr/>
+          <br/>
+          <h6 class="card-subtitle mb-2 text-body-secondary" >
+            <span id= "prev_first_name" >{{user.get_full_name}}</span>
+          </h6>
+          <p class="card-text">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+            </svg>
+            <span id= "prev_address" >          
+            {{full_address}}
+            {% if full_address %}
+            <span class=" text-sm" id="currentStatus">{{full_address}}</span>
+            {% comment %} Google Map Directions Link {% endcomment %}
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{user_latitude}},{{user_longitude}}" target="_blank" class="badge text-bg-light">Get Directions on Google Maps</a>
+            {% else %}
+            <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
+            </span>
+            {% endif %} 
+          </p>
+          <span class="badge text-bg-light" id= "prev_phone_number" >{{user.profile.phone_number}}</span>
+          <span class="badge text-bg-light" id= "prev_email" >{{user.email}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="card" >
+        <div class="card-header">
+          <h5 class="card-title">
+          Report User
+            </h5>
+        </div>
+        <div class="card-body">
+          <form method="POST" action="">
+            {% csrf_token %}
+            {{ report_form|crispy }}
+            <button type="submit" class="btn btn-primary">Report</button>
+          </form>
+          </div>
+          </div>
+          </div>
+
+
+        
+          
+</div>
+{% endblock content %}
