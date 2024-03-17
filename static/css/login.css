@@ -279,7 +279,11 @@ input[type="file"]::file-selector-button {
   display: none;
 }
 
-.loader {
+.spinner {
+  --size: 30px;
+  --first-block-clr: #005bba;
+  --second-block-clr: #fed500;
+  --clr: #111;
   margin: 0 auto;
   position: fixed;
   z-index: 999;
@@ -293,61 +297,63 @@ input[type="file"]::file-selector-button {
   right: 0;
 }
 
-.loader:before {
-  content: "";
+.spinner::after,
+.spinner::before {
+  box-sizing: border-box;
   position: absolute;
-  bottom: 30px;
-  left: 50px;
-  height: 30px;
-  width: 30px;
-  border-radius: 50%;
-  background: #2a9d8f;
-  animation: loading-bounce 0.5s ease-in-out infinite alternate;
-}
-
-.loader:after {
   content: "";
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 7px;
-  width: 45px;
-  border-radius: 4px;
-  box-shadow: 0 5px 0 #f2f2f2, -35px 50px 0 #f2f2f2, -70px 95px 0 #f2f2f2;
-  animation: loading-step 1s ease-in-out infinite;
+  width: var(--size);
+  height: var(--size);
+  top: 50%;
+  animation: up 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+  left: 50%;
+  background: var(--first-block-clr);
 }
 
-@keyframes loading-bounce {
-  0% {
-    transform: scale(1, 0.7);
-  }
+.spinner::after {
+  background: var(--second-block-clr);
+  top: calc(50% - var(--size));
+  left: calc(50% - var(--size));
+  animation: down 2.4s cubic-bezier(0, 0, 0.24, 1.21) infinite;
+}
 
-  40% {
-    transform: scale(0.8, 1.2);
-  }
+@keyframes down {
 
-  60% {
-    transform: scale(1, 1);
-  }
-
+  0%,
   100% {
-    bottom: 140px;
+    transform: none;
+  }
+
+  25% {
+    transform: translateX(100%);
+  }
+
+  50% {
+    transform: translateX(100%) translateY(100%);
+  }
+
+  75% {
+    transform: translateY(100%);
   }
 }
 
-@keyframes loading-step {
-  0% {
-    box-shadow: 0 10px 0 rgba(0, 0, 0, 0),
-      0 10px 0 #f2f2f2,
-      -35px 50px 0 #f2f2f2,
-      -70px 90px 0 #f2f2f2;
+@keyframes up {
+
+  0%,
+  100% {
+    transform: none;
   }
 
-  100% {
-    box-shadow: 0 10px 0 #f2f2f2,
-      -35px 50px 0 #f2f2f2,
-      -70px 90px 0 #f2f2f2,
-      -70px 90px 0 rgba(0, 0, 0, 0);
+  25% {
+    transform: translateX(-100%);
+  }
+
+  50% {
+    transform: translateX(-100%) translateY(-100%);
+  }
+
+  75% {
+    transform: translateY(-100%);
   }
 }
 
