@@ -14,14 +14,17 @@ from .forms import (
     ProfileUpdateForm,
     UserCommentsForm,
     RegistrationForm,
-    LoginForm
+    LoginForm,
+    ReportForm
 )
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
 from rentals.models import Rental
+from events.models import Event
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
 
 
 # Create your views here.
@@ -49,6 +52,51 @@ def login(request):
         "title": "Login",
         "form":form
     })
+
+import json
+
+@login_required()
+def profile_view(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    try:
+        address_dict = user.profile.address
+        print("USER", address_dict)
+
+        address_dict = json.loads(address_dict)
+        full_address = address_dict.get("full_address")
+        user_latitude = address_dict.get("coordinates").get("latitude")
+        user_longitude = address_dict.get("coordinates").get("longitude")
+    except:
+        address_dict = None
+        full_address = "Addres Does not exist."
+        user_longitude=None
+        user_latitude=None
+
+    # add ReportForm and handel post request
+    if request.method == "POST":
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report = report_form.save(commit=False)
+            report.user = user
+            report.reported_by = request.user
+            report.save()
+            messages.success(request, "Report has been submitted")
+            return redirect("accounts:profile_view", username=username)
+    else:
+        report_form = ReportForm()
+
+    return render(
+        request,
+        "accounts/profile_view.html",
+        {
+            "user": user,
+            "address_dict": address_dict,
+            "full_address": full_address,
+            "user_latitude": user_latitude,
+            "user_longitude": user_longitude,
+            "report_form": report_form,
+        },
+    )
 
 
 def register(request):
@@ -104,6 +152,7 @@ def user_logout(request):
     return redirect("accounts:login")
 
 
+
 @login_required
 def profile(request):
     if request.method == "POST":
@@ -132,7 +181,7 @@ def profile(request):
         except:
             user_latitude = 40.71669
             user_longitude = -73.961614
-            full_address=""
+            full_address = ""
 
     return render(
         request,
@@ -146,6 +195,8 @@ def profile(request):
             "user_longitude": user_longitude,
         },
     )
+
+
 
 
 @login_required
@@ -164,11 +215,13 @@ def user_listing(request):
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
     user_products = Product.objects.filter(user=request.user)
     user_rentals = Rental.objects.filter(seller = request.user)
+    user_events = Event.objects.filter(organizer = request.user)
     return render(request, 'accounts/user_listing.html', {
         'user_books': user_books,
         'user_free_items': user_free_items,
         'user_products': user_products,
         'user_rentals' : user_rentals,
+        'user_events':user_events,
         'title': 'My Listings'
     })
 

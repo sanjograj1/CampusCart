@@ -200,3 +200,9 @@
   width: 200px;
   height: 200px;
 }
+
+
+#profile-map {
+  height: 400px;
+  z-index: 0;
+}
