@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, UserComment
+from .models import Profile, UserComment, Report
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
 from crispy_forms.layout import Layout, Submit, Field
@@ -137,4 +137,17 @@ class ContactForm(forms.Form):
             Field('email', css_class='form-control'),
             Field('phone_number', css_class='form-control'),
             Submit('submit', 'Submit', css_class='btn btn-primary')
+        )
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ["report"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field("report", css_class="form-control"),
+            Submit("submit", "Submit", css_class="btn btn-primary"),
         )
