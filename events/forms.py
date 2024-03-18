@@ -4,6 +4,18 @@ from crispy_forms.layout import Layout, Submit, Field
 
 from .models import Event
 
+EVENT_CATEGORY = [
+    ("", "All"),
+    ("Workshop", "Workshop"),
+    ("Concert", "Concert"),
+    ("Festival", "Festival"),
+    ("Exhibition", "Exhibition"),
+    ("Seminar", "Seminar"),
+    ("Sports", "Sports"),
+    ("Entertainment", "Entertainment"),
+    ("Other", "Other"),
+]
+
 class EventForm(forms.ModelForm):
     class Meta:
         model = Event
@@ -25,3 +37,8 @@ class EventForm(forms.ModelForm):
             Field('total_seats', css_class='form-control'),
             Field('image', css_class='form-control')
         )
+
+class EventFilterForm(forms.Form):
+    category = forms.ChoiceField(
+        choices=EVENT_CATEGORY, required=False, label="Category"
+    )
