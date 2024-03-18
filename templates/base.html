@@ -90,6 +90,10 @@
               <span class="material-symbols-outlined">
                 history
               </span>My Login History</a></li>
+          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:change-password" %}'>
+              <span class="material-symbols-outlined">
+                history
+              </span>Change Password</a></li>
           <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:change-theme" %}'>
               <span class="material-symbols-outlined">
                 palette
@@ -129,7 +133,7 @@
   <div class="wrapper display-none">
       <div class="spinner"></div>
    </div>
-  <footer>© 2024 <a href="/">Campus Cart</a> | <a href="{% url 'accounts:contactus' %}">Contact Us</a></footer>
+  <footer>©️ 2024 <a href="/">Campus Cart</a> | <a href="{% url 'accounts:contactus' %}">Contact Us</a></footer>
 </body>
 <script>
     const propertyContainer = document.querySelectorAll('.property-container');
