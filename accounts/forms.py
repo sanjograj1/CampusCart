@@ -100,15 +100,27 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone_number','address','profile_image']       
+        fields = [
+            "phone_number",
+            "address",
+            "profile_image",
+            "bio",
+            "user_class",
+            "course",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('phone_number', css_class='form-control'),
-            Field('address', css_class='form-control'),
-            Field('profile_image', css_class='form-control'),
+            Field("phone_number", css_class="form-control"),
+            Field("address", css_class="form-control"),
+            Field("profile_image", css_class="form-control"),
+            Field("bio", css_class="form-control", placeholder="Enter your bio"),
+            Field(
+                "user_class", css_class="form-control", placeholder="Enter your class"
+            ),
+            Field("course", css_class="form-control", placeholder="Enter your course"),
         )
 
 class UserCommentsForm(forms.ModelForm):
