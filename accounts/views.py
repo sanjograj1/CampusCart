@@ -217,16 +217,54 @@ def user_listing(request):
     user_books = Book.objects.filter(seller=request.user)
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
     user_products = Product.objects.filter(user=request.user)
-    user_rentals = Rental.objects.filter(seller = request.user)
-    user_events = Event.objects.filter(organizer = request.user)
-    return render(request, 'accounts/user_listing.html', {
-        'user_books': user_books,
-        'user_free_items': user_free_items,
-        'user_products': user_products,
-        'user_rentals' : user_rentals,
-        'user_events':user_events,
-        'title': 'My Listings'
-    })
+    user_rentals = Rental.objects.filter(seller=request.user)
+    user_events = Event.objects.filter(organizer=request.user)
+    return render(
+        request,
+        "accounts/user_listing.html",
+        {
+            "user_books": user_books,
+            "user_free_items": user_free_items,
+            "user_products": user_products,
+            "user_rentals": user_rentals,
+            "user_events": user_events,
+            "title": "My Listings",
+        },
+    )
+
+
+@login_required
+def toggle_sold_status(request, model, id):
+    if model == "book":
+        book = get_object_or_404(Book, pk=id)
+        book.is_sold = not book.is_sold
+        book.save()
+        return redirect("accounts:user-listing")
+    elif model == "freestuff":
+        free_item = get_object_or_404(FreeStuffItem, pk=id)
+        free_item.is_sold = not free_item.is_sold
+        free_item.save()
+
+    elif model == "product":
+        product = get_object_or_404(Product, pk=id)
+        product.is_sold = not product.is_sold
+        product.save()
+
+    elif model == "rental":
+        rental = get_object_or_404(Rental, pk=id)
+        rental.is_sold = not rental.is_sold
+        rental.save()
+
+    elif model == "event":
+        event = get_object_or_404(Event, pk=id)
+        event.is_sold = not event.is_sold
+        event.save()
+
+    else:
+        return HttpResponse("Invalid Request")
+    messages.success(request, "Status has been updated")
+    return redirect("accounts:user-listing")
+
 
 
 @login_required
