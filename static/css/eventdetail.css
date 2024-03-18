@@ -52,7 +52,7 @@
 }
 
 .wrapper-login h2{
-    font-size: 2em;
+    font-size: 1.8em;
     color: #fff;
     text-align: center;
 }
@@ -101,15 +101,21 @@
 }
 
 .wrapper-login .button{
-    width: 100%;
+    width: 50% !important;
     height: 50px;
+    margin: 0 auto;
+    display: block;
     border: none;
     outline: none;
     border-radius: 40px;
-    background: linear-gradient(90deg, #012541, #005595);
+    background: linear-gradient(90deg, #005595, #005595);
     box-shadow: 0 8px 10px rgba(0, 0, 0, 0.5);
     cursor: pointer;
     font-size: 1em;
     color: #fff;
     font-weight: 500;
+}
+
+.wrapper-login .button:hover{
+    color: #FFCE00;
 }
