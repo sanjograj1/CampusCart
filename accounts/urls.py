@@ -10,6 +10,11 @@ urlpatterns = [
     path("logout/", views.user_logout, name="logout"),
     path("profile/", views.profile, name="profile"),
     path("profile/listing/", views.user_listing, name="user-listing"),
+    path(
+        "profile/listing/edit/<str:model>/<int:id>/",
+        views.toggle_sold_status,
+        name="toggle-sold-status",
+    ),
     path("profile/rating/<username>", views.user_rating, name="user-rating"),
     path('notifications/', views.notifications_view, name='notifications'),
     path('contactus/', views.contactus, name='contactus'),
