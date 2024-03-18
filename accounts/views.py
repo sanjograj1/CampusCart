@@ -25,6 +25,8 @@ from events.models import Event
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
+from django.core.mail import send_mail
+
 
 
 # Create your views here.
@@ -254,20 +256,31 @@ def user_rating(request, username):
 
 @login_required
 def contactus(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            number = form.cleaned_data['phone_number']
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            number = form.cleaned_data["phone_number"]
 
             contact = Contact.objects.create(name=name, email=email, number=number)
+            contact.save()
+            # send email to user
+
+            send_mail(
+                "Contact Us",
+                "We have received your request, we will get in touch with you soon.",
+                settings.EMAIL_FROM,
+                [email],
+                fail_silently=False,
+            )
 
             messages.info(request, "We'll get in touch with you soon.")
-            return redirect('accounts:contactus')
+            return redirect("accounts:contactus")
     else:
         form = ContactForm()
-    return render(request, 'accounts/contactus.html', {'form': form})
+    return render(request, "accounts/contactus.html",{"form":form})
+
 
 
 @login_required

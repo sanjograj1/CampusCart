@@ -74,8 +74,8 @@ def detail_product(request, pk):
     )[:4]
     # see other product in same price range where price difference is less than 10%
     same_price_products = Product.objects.filter(
-        price__gte=Decimal(product.price) * Decimal("0.8"),
-        price__lte=Decimal(product.price) * Decimal("6.4"),
+        price__gte=Decimal(product.price) * Decimal("0.5"),
+        price__lte=Decimal(product.price) * Decimal("1.5"),
     ).exclude(id=product.id)[:4]
 
     return render(
