@@ -2,17 +2,34 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import get_user_model
 from django.shortcuts import redirect, render, get_object_or_404
 from notifications.signals import notify
+from django.utils import timezone
 
-from .forms import EventForm
+from .forms import EventForm, EventFilterForm
 from .models import Event
 
 @login_required
-# Create your views here.
 def eventshome(request):
-    events = Event.objects.all()
+    today = timezone.now()
+    two_weeks = today + timezone.timedelta(weeks=2)
+    upcomingevents = Event.objects.filter(date_and_time__range=[today, two_weeks])
+    
+    categories = Event.objects.values_list('category', flat=True).distinct()
+    if request.method == 'GET':
+        form = EventFilterForm(request.GET)
+        if form.is_valid():
+            all_categories = form.cleaned_data.get("category")
+            if all_categories:          
+                events = Event.objects.filter(category=all_categories)
+            else:
+                events = Event.objects.all()
+    else:
+        events = Event.objects.all()
+
     return render(request, 'events/eventshome.html',{
         'title': 'Events',
-        'events':events
+        'events': events,
+        'upcoming_events': upcomingevents,
+        'form': form,
     })
 
 @login_required

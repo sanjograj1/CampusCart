@@ -11,11 +11,25 @@
 {% block content %}
 
 <div class="container position-relative">
-    <a class="position-absolute upload-event" href='{% url "events:upload-event" %}'>Add an Event</a>
-    <div class="books-header pt-4">
-        <h1>Events</h2>
-            <div class="events-header-underline"></div>
-    </div>
+    <div class="container position-relative">
+        <div class="row">
+            <div class="col">
+                <div class="books-header pt-4">
+                    <h1>Events</h1>
+                    <div class="events-header-underline"></div>
+                </div>
+            </div>
+            <div class="col">
+                <form class="form-inline" action="" method="GET">
+                    <div class="form-group mx-sm-3 mb-2">
+                        {{ form.category }}
+                    </div>
+                    <button type="submit" class="btn btn-primary mb-2">Search</button>
+                </form>
+            </div>
+            <a class="position-absolute upload-event" href='{% url "events:upload-event" %}'>Add an Event</a>
+        </div>
+    </div>    
     <div class="mt-4">
         <div class="custom-container">
             <div class="card__container">
@@ -47,7 +61,7 @@
                                 <p class="info description">
                                     {{ event.description|truncatechars:60}}
                                 
-                                <span class="info-description"><a href="{% url 'events:event-detail' event.id %}"></a>more...</span>
+                                    <span class="indo description"><a href="{% url 'events:event-detail' event.id %}">view more</a></span>
                             </p>
                             </div>
                         </div>  
@@ -57,5 +71,51 @@
                 {% endfor %}
 </div>
 </div></div>
+<div class="container position-relative">
+    <div class="books-header pt-4">
+        <h2>Upcoming Events</h2>
+        <div class="events-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="custom-container">
+            <div class="card__container">
+                {% for event in upcoming_events %}
+                    <!-- Upcoming Event Card -->
+                    <div class="item-container">
+                        <!-- Event Image -->
+                        <div class="image-container">
+                            <img src="{{ event.image.url }}" alt="event image">
+                        </div>
+                        <!-- Event Body -->
+                        <div class="body-container">
+                            <div class="overlay"></div>
+                            <div class="event-info">
+                                <p class="title">{{ event.title }}</p>
+                                <div class="separator"></div>
+                                <p class="info">{{ event.category }}</p>
+                                <p class="price">${{ event.price}}</p>
+                                <div class="additional-info">
+                                    <p class="info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ event.location }}
+                                    </p>
+                                    <p class="info">
+                                        <i class="far fa-calendar-alt"></i>
+                                        {{ event.date_and_time }}
+                                    </p>
+                                    <p class="info description">
+                                        {{ event.description|truncatechars:60}}
+                                        <span class="indo description"><a href="{% url 'events:event-detail' event.id %}">view more</a></span>
+                                    </p>
+                                </div>
+                            </div>
+                            <!-- Buy Tickets Button -->
+                            <button class="action" onclick="window.location.href='{% url 'events:event-detail' event.id %}'">Buy Tickets</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>  
+    </div>
 </div>
 {% endblock content %}
