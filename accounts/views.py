@@ -26,6 +26,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
 from django.core.mail import send_mail
+from django.contrib.auth.forms import PasswordChangeForm
 
 
 
@@ -310,3 +311,18 @@ def change_theme(request):
     response.set_cookie('theme', next_theme, max_age=5*24*60*60)
     
     return response
+
+    # chnage password for user form
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("accounts:profile")
+        else:
+            messages.error(request, "Please correct the error below.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "accounts/change_password.html", {"form": form})

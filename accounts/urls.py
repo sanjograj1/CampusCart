@@ -15,4 +15,5 @@ urlpatterns = [
     path('contactus/', views.contactus, name='contactus'),
     path('login-history/', views.login_history, name='login-history'),
     path('change-theme/', views.change_theme, name='change-theme'),
+    path("change-password/", views.change_password, name="change-password")
 ]

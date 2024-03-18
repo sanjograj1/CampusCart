@@ -1,7 +1,11 @@
 from django import forms
 from .models import Profile, UserComment, Report
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    PasswordChangeForm,
+)
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.helper import FormHelper
 from PIL import Image
