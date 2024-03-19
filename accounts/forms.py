@@ -1,7 +1,11 @@
 from django import forms
-from .models import Profile, UserComment
+from .models import Profile, UserComment, Report
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm,AuthenticationForm
+from django.contrib.auth.forms import (
+    UserCreationForm,
+    AuthenticationForm,
+    PasswordChangeForm,
+)
 from crispy_forms.layout import Layout, Submit, Field
 from crispy_forms.helper import FormHelper
 from PIL import Image
@@ -100,15 +104,27 @@ class UserUpdateForm(forms.ModelForm):
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['phone_number','address','profile_image']       
+        fields = [
+            "phone_number",
+            "address",
+            "profile_image",
+            "bio",
+            "user_class",
+            "course",
+        ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('phone_number', css_class='form-control'),
-            Field('address', css_class='form-control'),
-            Field('profile_image', css_class='form-control'),
+            Field("phone_number", css_class="form-control"),
+            Field("address", css_class="form-control"),
+            Field("profile_image", css_class="form-control"),
+            Field("bio", css_class="form-control", placeholder="Enter your bio"),
+            Field(
+                "user_class", css_class="form-control", placeholder="Enter your class"
+            ),
+            Field("course", css_class="form-control", placeholder="Enter your course"),
         )
 
 class UserCommentsForm(forms.ModelForm):
@@ -137,4 +153,17 @@ class ContactForm(forms.Form):
             Field('email', css_class='form-control'),
             Field('phone_number', css_class='form-control'),
             Submit('submit', 'Submit', css_class='btn btn-primary')
+        )
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ["report"]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field("report", css_class="form-control"),
+            Submit("submit", "Submit", css_class="btn btn-primary"),
         )

@@ -8,20 +8,24 @@
 {% endblock %}
 {% block content %}
 
-    <section class="home">
-        <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
-        <div class="content">
-            <h2>{{ event.title }}</h2>
-            <p>{{ event.description }}</p>
-            <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-            <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
-            <p>${{ event.price }}</p>
-            <p>Available Seats: {{ event.total_seats }}
+<section class="home">
+    <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
+    <div class="content">
+        <h2>{{ event.title }}</h2>
+        <p>{{ event.description }}</p>
+        <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+        <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
+        <p>${{ event.price }}</p>
+        <p>Available Seats: {{ event.total_seats }}
+        <div>
+            {% if event.is_sold %}
+            <span class="badge badge-pill badge-danger">Sold</span>
+            {% endif %}
         </div>
-        <div class="wrapper-login">
-            <h2>Register</h2>
-                {% comment %} <a href="#">Seller Information</a> {% endcomment %}
-                <button type="submit" class="button">Contact Seller</button>
-        </div>
-    </section>
-    {% endblock content %}
+    </div>
+    <div class="wrapper-login">
+        <h2>Join the event</h2>
+        <button type="submit" class="button">Contact Organizer</button>
+    </div>
+</section>
+{% endblock content %}

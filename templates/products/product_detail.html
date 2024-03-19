@@ -10,7 +10,7 @@
 <div class="container">
   <div class="books-header pt-4">
     <h1>
-      Product Details</h2>
+      Product Details</h1>
       <div class="books-header-underline"></div>
   </div>
   <div class="card mb-3 mt-4">
@@ -46,10 +46,14 @@
           <p class="card-text">{{ product.description }}</p>
           <p class="card-text pb-2">Uploaded At : {{product.created_at}}
           <div class="seller-information position-absolute">
-            <p>Seller Information</p>
+          
+          <a href="{% url 'accounts:profile_view' product.user.username %}" class="text-link">Seller Information</a>
+        
+        <br></br>
+
             <div class="">
-              <a href="{% url 'accounts:user-rating' product.user.username %}"><b class="mr-4">
-                  {{ product.user.get_full_name }}</b></a>
+              <a href="{% url 'accounts:user-rating' product.user.username %}" class="btn btn-sm btn-primary"><b class="mr-4">
+                  My feedback </b></a>
               <a class="contact-seller"
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>

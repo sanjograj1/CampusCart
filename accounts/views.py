@@ -14,14 +14,20 @@ from .forms import (
     ProfileUpdateForm,
     UserCommentsForm,
     RegistrationForm,
-    LoginForm
+    LoginForm,
+    ReportForm
 )
 from books.models import Book
 from products.models import Product
 from freestuff.models import FreeStuffItem
 from rentals.models import Rental
+from events.models import Event
 from django.utils import timezone
 from datetime import timedelta
+from django.conf import settings
+from django.core.mail import send_mail
+from django.contrib.auth.forms import PasswordChangeForm
+
 
 
 # Create your views here.
@@ -49,6 +55,51 @@ def login(request):
         "title": "Login",
         "form":form
     })
+
+import json
+
+@login_required()
+def profile_view(request, username):
+    user = get_object_or_404(get_user_model(), username=username)
+    try:
+        address_dict = user.profile.address
+        print("USER", address_dict)
+
+        address_dict = json.loads(address_dict)
+        full_address = address_dict.get("full_address")
+        user_latitude = address_dict.get("coordinates").get("latitude")
+        user_longitude = address_dict.get("coordinates").get("longitude")
+    except:
+        address_dict = None
+        full_address = "Addres Does not exist."
+        user_longitude=None
+        user_latitude=None
+
+    # add ReportForm and handel post request
+    if request.method == "POST":
+        report_form = ReportForm(request.POST)
+        if report_form.is_valid():
+            report = report_form.save(commit=False)
+            report.user = user
+            report.reported_by = request.user
+            report.save()
+            messages.success(request, "Report has been submitted")
+            return redirect("accounts:profile_view", username=username)
+    else:
+        report_form = ReportForm()
+
+    return render(
+        request,
+        "accounts/profile_view.html",
+        {
+            "user": user,
+            "address_dict": address_dict,
+            "full_address": full_address,
+            "user_latitude": user_latitude,
+            "user_longitude": user_longitude,
+            "report_form": report_form,
+        },
+    )
 
 
 def register(request):
@@ -85,10 +136,16 @@ def home(request):
     viewed_books = Book.objects.filter(id__in=current_viewed_books)
     viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
 
+    current_viewed_properties = request.COOKIES.get('viewed_properties','')
+    current_viewed_properties = [int(rental) for rental in current_viewed_properties.split(',') if rental]
+    viewed_properties = Rental.objects.filter(id__in=current_viewed_properties)
+    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id),reverse=True)
+
     context = {
         "title": "Home",
         "products": products,
-        'viewed_books':viewed_books
+        'viewed_books':viewed_books,
+        'viewed_properties':viewed_properties
     }
     return render(request, "accounts/home.html", context)
 
@@ -102,6 +159,7 @@ def user_logout(request):
         extra_tags="success",
     )
     return redirect("accounts:login")
+
 
 
 @login_required
@@ -132,7 +190,7 @@ def profile(request):
         except:
             user_latitude = 40.71669
             user_longitude = -73.961614
-            full_address=""
+            full_address = ""
 
     return render(
         request,
@@ -146,6 +204,8 @@ def profile(request):
             "user_longitude": user_longitude,
         },
     )
+
+
 
 
 @login_required
@@ -163,14 +223,54 @@ def user_listing(request):
     user_books = Book.objects.filter(seller=request.user)
     user_free_items = FreeStuffItem.objects.filter(seller=request.user)
     user_products = Product.objects.filter(user=request.user)
-    user_rentals = Rental.objects.filter(seller = request.user)
-    return render(request, 'accounts/user_listing.html', {
-        'user_books': user_books,
-        'user_free_items': user_free_items,
-        'user_products': user_products,
-        'user_rentals' : user_rentals,
-        'title': 'My Listings'
-    })
+    user_rentals = Rental.objects.filter(seller=request.user)
+    user_events = Event.objects.filter(organizer=request.user)
+    return render(
+        request,
+        "accounts/user_listing.html",
+        {
+            "user_books": user_books,
+            "user_free_items": user_free_items,
+            "user_products": user_products,
+            "user_rentals": user_rentals,
+            "user_events": user_events,
+            "title": "My Listings",
+        },
+    )
+
+
+@login_required
+def toggle_sold_status(request, model, id):
+    if model == "book":
+        book = get_object_or_404(Book, pk=id)
+        book.is_sold = not book.is_sold
+        book.save()
+        return redirect("accounts:user-listing")
+    elif model == "freestuff":
+        free_item = get_object_or_404(FreeStuffItem, pk=id)
+        free_item.is_sold = not free_item.is_sold
+        free_item.save()
+
+    elif model == "product":
+        product = get_object_or_404(Product, pk=id)
+        product.is_sold = not product.is_sold
+        product.save()
+
+    elif model == "rental":
+        rental = get_object_or_404(Rental, pk=id)
+        rental.is_sold = not rental.is_sold
+        rental.save()
+
+    elif model == "event":
+        event = get_object_or_404(Event, pk=id)
+        event.is_sold = not event.is_sold
+        event.save()
+
+    else:
+        return HttpResponse("Invalid Request")
+    messages.success(request, "Status has been updated")
+    return redirect("accounts:user-listing")
+
 
 
 @login_required
@@ -201,20 +301,31 @@ def user_rating(request, username):
 
 @login_required
 def contactus(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            number = form.cleaned_data['phone_number']
+            name = form.cleaned_data["name"]
+            email = form.cleaned_data["email"]
+            number = form.cleaned_data["phone_number"]
 
             contact = Contact.objects.create(name=name, email=email, number=number)
+            contact.save()
+            # send email to user
+
+            send_mail(
+                "Contact Us",
+                "We have received your request, we will get in touch with you soon.",
+                settings.EMAIL_FROM,
+                [email],
+                fail_silently=False,
+            )
 
             messages.info(request, "We'll get in touch with you soon.")
-            return redirect('accounts:contactus')
+            return redirect("accounts:contactus")
     else:
         form = ContactForm()
-    return render(request, 'accounts/contactus.html', {'form': form})
+    return render(request, "accounts/contactus.html",{"form":form})
+
 
 
 @login_required
@@ -244,3 +355,18 @@ def change_theme(request):
     response.set_cookie('theme', next_theme, max_age=5*24*60*60)
     
     return response
+
+    # chnage password for user form
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = PasswordChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            messages.success(request, "Your password was successfully updated!")
+            return redirect("accounts:profile")
+        else:
+            messages.error(request, "Please correct the error below.")
+    else:
+        form = PasswordChangeForm(request.user)
+    return render(request, "accounts/change_password.html", {"form": form})

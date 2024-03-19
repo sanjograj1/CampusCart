@@ -22,6 +22,7 @@ class Product(models.Model):
     interested_users = models.ManyToManyField(User, related_name="interested_products")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_sold = models.BooleanField(default=False)
 
     # check product is interested by user or not
     def is_interested(self, user):

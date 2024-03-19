@@ -10,7 +10,7 @@
 
 <div class="container">
     <div class="books-header pt-4">
-        <h1>{{ book.title }}</h2>
+        <h1>{{ book.title }}</h1>
             <div class="books-header-underline"></div>
     </div>
     <div class="mt-4">
@@ -21,6 +21,11 @@
             <div class="book-information one-half position-relative">
                 <h4>By {{ book.author }} (Author)</h4>
                 <span>${{ book.price }}</span>
+                <div>
+                    {% if book.is_sold %}
+                    <span class="badge badge-pill badge-danger">Sold</span>
+                    {% endif %}
+                </div>
                 <p class="book-description">{{ book.description }}</p>
                 <div class="position-absolute seller-information w-100">
                     <p>Seller Information</p>
