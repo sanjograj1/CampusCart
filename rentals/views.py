@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import PropertyForm, PropertySearchForm
 from django.contrib.auth.decorators import login_required
@@ -83,6 +84,13 @@ def edit_property(request, rentid):
 @login_required
 def property_detail(request, rentid):
     current_rental = get_object_or_404(Rental, pk=rentid)
+    current_viewed_properties = request.COOKIES.get('viewed_properties','')
+    current_viewed_properties = [int(book) for book in current_viewed_properties.split(',') if book]
+    if rentid not in current_viewed_properties:
+        current_viewed_properties.append(rentid)
+
+    current_viewed_properties_str = ','.join(map(str, current_viewed_properties)) 
+    response = HttpResponse("Viewed Properties")    
     myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
     url = f"https://api.geoapify.com/v1/geocode/search?text={current_rental.address} {current_rental.city} {current_rental.zip_code}&limit=1&apiKey={myAPIKey}"
     response = requests.get(url)
@@ -107,7 +115,7 @@ def property_detail(request, rentid):
             distance_values = [item['distance'] for sublist in json_resp['sources_to_targets'] for item in sublist]
         except requests.exceptions.HTTPError as e:
             print(e.response.text)
-    return render(request, 'rental/property-detail.html', {
+    response = render(request, 'rental/property-detail.html', {
         'title': f'Edit {current_rental.property_name}',
         'rental': current_rental,
         'lat': userlatitude,
@@ -120,3 +128,5 @@ def property_detail(request, rentid):
         'maincampusdistance': distance_values[1],
         'maccampusdistance': distance_values[0]
     })
+    response.set_cookie('viewed_properties', current_viewed_properties_str, max_age=36000)
+    return response

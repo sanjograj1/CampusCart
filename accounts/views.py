@@ -136,10 +136,16 @@ def home(request):
     viewed_books = Book.objects.filter(id__in=current_viewed_books)
     viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
 
+    current_viewed_properties = request.COOKIES.get('viewed_properties','')
+    current_viewed_properties = [int(rental) for rental in current_viewed_properties.split(',') if rental]
+    viewed_properties = Rental.objects.filter(id__in=current_viewed_properties)
+    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id),reverse=True)
+
     context = {
         "title": "Home",
         "products": products,
-        'viewed_books':viewed_books
+        'viewed_books':viewed_books,
+        'viewed_properties':viewed_properties
     }
     return render(request, "accounts/home.html", context)
 
