@@ -31,8 +31,8 @@
                             <div class="book-card__book-side"></div>
                         </div>
                     </div>
-                    <div>
-                        <div class="book-card__title">
+                    <div class="position-relative">
+                        <div class="book-card__title my-2">
                             {{ book.title }}
                         </div>
                         <div class="book-card__author">
@@ -40,6 +40,11 @@
                         </div>
                         <div class="book-card__author">
                             ${{ book.price }}
+                        </div>
+                        <div class="position-absolute right-0 bottom-0">
+                            {% if book.is_sold %}
+                            <span class="badge badge-pill badge-danger">Sold</span>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
