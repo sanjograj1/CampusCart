@@ -94,6 +94,11 @@
                             class="material-symbols-outlined mr-1">
                             pin_drop
                         </span> {{ rental.address }}, {{ rental.city }}, {{rental.zip_code}}</p>
+                    <div>
+                        {% if rental.is_sold %}
+                        <span class="badge badge-pill badge-danger">Sold</span>
+                        {% endif %}
+                    </div>
                     <p><em>Distance from the Main Campus - {{ maincampusdistance }} meters</em></p>
                     <p><em>Distance from the MAC Campus - {{ maccampusdistance }} meters</em></p>
                     <div id="map" class="mb-4"></div>

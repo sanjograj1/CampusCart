@@ -20,6 +20,11 @@
                 <img class="mw-100 h-auto" src="{{ item.item_image.url }}" alt="{{ item.title }}">
             </div>
             <div class="item-information one-half position-relative">
+                <div>
+                    {% if item.is_sold %}
+                    <span class="badge badge-pill badge-danger">Sold</span>
+                    {% endif %}
+                </div>
                 <h6>Quantity : {{ item.quantity }}</h6>
                 <ul class="aui-tag-list">
                     <li class="aui-tag-item font-italic">{{ item.condition }}</li>
