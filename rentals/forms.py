@@ -1,12 +1,15 @@
 from django import forms
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Layout, Submit, Field
+from crispy_forms.layout import Layout, Field
 from .models import Rental
 
-class property_form(forms.ModelForm):
+
+class PropertyForm(forms.ModelForm):
     class Meta:
         model = Rental
-        fields = ['property_name','address','price','city','zip_code','description','property_image']
+        fields = ['property_name', 'address', 'price', 'city', 'zip_code', 'description', 'property_image', 'bedrooms', 'bathrooms', 'furnished',
+                  'agreement', 'appliances', 'description', 'parking']
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -16,23 +19,29 @@ class property_form(forms.ModelForm):
             Field('price', css_class='form-control'),
             Field('city', css_class='form-control'),
             Field('zip_code', css_class='form-control'),
-            Field('description',css_class='form-control'),
-            Field('property_image',css_class='form-control')
+            Field('description', css_class='form-control'),
+            Field('property_image', css_class='form-control'),
+            Field('bedrooms', css_class='form-control'),
+            Field('bathrooms', css_class='form-control'),
+            Field('furnished', css_class='form-control'),
+            Field('agreement', css_class='form-control'),
+            Field('appliances', css_class='form-control'),
+            Field('description', css_class='form-control'),
+            Field('parking', css_class='form-control')
         )
+        self.fields['address'].help_text = 'Please provide the complete address'
+        self.fields['agreement'].help_text = 'Please provide the lease in months'
 
-SORT_BY_OPTIOS = [
-    ('Newest','Newest'),
-    ('Oldest','Oldest'),
-    ('Lowest Price','Lower Price'),
-    ('Highest Price','Highest Price'),
-]
+
 
 class PropertySearchForm(forms.Form):
-    search=forms.CharField(max_length=250,required=False)
+    SORT_BY_OPTIONS = [
+        ('Newest', 'Newest'),
+        ('Oldest', 'Oldest'),
+        ('Lowest Price', 'Lower Price'),
+        ('Highest Price', 'Highest Price'),
+    ]
+    search = forms.CharField(max_length=250, required=False)
     sort_by = forms.ChoiceField(
-        choices=SORT_BY_OPTIOS, required=False, label="Sort By"
+        choices=SORT_BY_OPTIONS, required=False, label="Sort By"
     )
-
-    
-
-

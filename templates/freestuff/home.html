@@ -12,7 +12,7 @@
 <div class="container position-relative">
     <a class="position-absolute upload-item" href='{% url "freestuff:upload-item" %}'>Upload your free Item</a>
     <div class="free-item-header pt-4">
-        <h1>Free Items</h2>
+        <h1>Free Items</h1>
             <div class="free-item-header-underline"></div>
     </div>
     <div class="mt-4">
@@ -23,6 +23,11 @@
                     <img src="{{ item.item_image.url }}" alt="image" class="card__img">
 
                     <div class="card__data">
+                        <div>
+                            {% if item.is_sold %}
+                            <span class="badge badge-pill badge-danger">Sold</span>
+                            {% endif %}
+                        </div>
                         <span class="card__description">{{ item.condition }}</span>
                         <h2 class="card__title">{{ item.title }}</h2>
                         <span class="card__description">{{ item.category }}</span>

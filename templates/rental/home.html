@@ -11,7 +11,7 @@
     <a class="position-absolute upload-property" href='{% url "rentals:upload-property" %}'>Click to add new
         property</a>
     <div class="books-header pt-4">
-        <h1>Rooms and Houses on rent</h2>
+        <h1>Rooms and Houses on rent</h1>
             <div class="header-underline"></div>
     </div>
     <div class="mt-4 mb-3">
@@ -41,10 +41,23 @@
                     {{ rental.address }}
                 </div>
                 <div><span>{{ rental.created_at }}</span> | <span>{{ rental.city }}</span></div>
+                <div>
+                    {% if rental.is_sold %}
+                    <span class="badge badge-pill badge-danger">Sold</span>
+                    {% endif %}
+                </div>
             </div>
         </a>
         {% endfor %}
     </div>
 </div>
 </div>
+<script>
+    const propertyContainer = document.querySelectorAll('.property-container');
+    propertyContainer.forEach(element => {
+        element.addEventListener('click', (e) => {
+            document.querySelector('.wrapper').classList.remove('display-none');
+        })
+    });
+</script>
 {% endblock content %}
