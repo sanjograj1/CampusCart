@@ -3,22 +3,23 @@
 {% load static %}
 {% block content %}
 <div class="container">
-  <h1>Sell Products</h1>
-  <div class="card">
-    <div class="card-body">
-      <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <div class="row g-3">
-          {% for field in form %}
-          <div class="col-sm-6">
-            {{ field|as_crispy_field }}
-          </div>
-          {% endfor %}
+  <div class="pt-4">
+    <h1>Upload your Product</h1>
+    <div class="header-underline"></div>
+  </div>
+  <div class="mt-4">
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row g-3">
+        {% for field in form %}
+        <div class="col-sm-6">
+          {{ field|as_crispy_field }}
         </div>
-        <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action">Create
-          Product</button>
-      </form>
-    </div>
+        {% endfor %}
+      </div>
+      <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action">Create
+        Product</button>
+    </form>
   </div>
 </div>
 {% endblock content %}

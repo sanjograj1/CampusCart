@@ -161,7 +161,7 @@ input[type="file"]::file-selector-button {
 }
 
 .logo {
-  font-family: 'Arial', sans-serif;
+  font-family: Rubik;
   font-size: 32px;
   color: #333;
   display: inline-block;
