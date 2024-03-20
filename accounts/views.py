@@ -62,26 +62,37 @@ import json
 def profile_view(request, username):
     
     user = get_object_or_404(get_user_model(), username=username)
+    comments = UserComment.objects.filter(user=user).order_by('-commented_date')
     address_dict = user.profile.address
     try:
         address_dict = user.profile.address
-        print("USER", address_dict)
     except:
         address_dict = "Address does not exist"
-
-    # add ReportForm and handel post request
+        
     if request.method == "POST":
-        report_form = ReportForm(request.POST)
-        if report_form.is_valid():
-            report = report_form.save(commit=False)
-            report.user = user
-            report.reported_by = request.user
-            report.save()
-            messages.success(request, "Report has been submitted")
-            return redirect("accounts:profile_view", username=username)
+        if 'report' in request.POST:
+            report_form = ReportForm(request.POST)
+            if report_form.is_valid():
+                report = report_form.save(commit=False)
+                report.user = user
+                report.reported_by = request.user
+                report.save()
+                messages.success(request, "Report has been submitted")
+                return redirect("accounts:profile_view", username=username)
+        else:
+            comment_form = UserCommentsForm(request.POST)
+            if comment_form.is_valid():
+                form = comment_form.save(commit=False)
+                form.commented_by = request.user
+                form.user = user
+                form.save()
+                description = f'{request.user} added a new comnent on your profile Click <a href="/profile/rating/{user.username}">here</a> to view.'
+                notify.send(request.user, recipient=user, verb='Comment', description=description)
+                messages.success(request, "Your comment has been added")
+                return redirect("accounts:profile_view", username=username)  
     else:
         report_form = ReportForm()
-
+        comment_form = UserCommentsForm()
     return render(
         request,
         "accounts/profile_view.html",
@@ -89,6 +100,10 @@ def profile_view(request, username):
             "user": user,
             "address_dict": address_dict,
             "report_form": report_form,
+            'comments':comments,
+            'current_user': user,
+            'title': f'{user.username} Rating',
+            'comment_form':comment_form
         },
     )
 

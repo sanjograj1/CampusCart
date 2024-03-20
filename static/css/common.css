@@ -199,6 +199,10 @@
 #prev_profie_img {
   width: 200px;
   height: 200px;
+  object-fit: cover;
+  aspect-ratio: 1;
+  border-radius: 100vw;
+  border: 5px solid white;
 }
 
 

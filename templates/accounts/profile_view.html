@@ -1,6 +1,11 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
+{% endblock %}
 {% block content %}
 <div class="container">
   {% if messages %}
@@ -12,71 +17,114 @@
   {% endif %}
   <div class="row">
     <div class="col">
-      <div class="card" >
-        <div class="card-header">
-          <h5 class="card-title">
-            <b>
-            {{user.get_full_name}}
-            </b>
-            Profile
-          </h5>
+      <div class="card">
+        <div class="pt-4 pl-4">
+          {% if current_user == request.user %}
+          <h1>My Profile</h1>
+          {% else %}
+          <h1>{{ current_user.get_full_name }}'s Profile</h1>
+          {% endif %}
+          <div class="header-underline"></div>
         </div>
         <div class="card-body">
           {% if user.profile.profile_image %}
-          <img  id= "prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+          <img id="prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
           {% else %}
-          <img  id= "prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
+          <img id="prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
           {% endif %}
-          <hr/>
-          <br/>
-          <h6 class="card-subtitle mb-2 text-body-secondary" >
-            <span id= "prev_first_name" >{{user.get_full_name}}</span>
-          </h6>
-          <p class="card-text">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
+          <p class="card-text mt-4">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
             </svg>
-            <span id= "prev_address" >          
-            My address is -> {{address_dict}}
-            {% if address_dict %}
-            <span class=" text-sm" id="currentStatus">{{full_address}}</span>
-            {% comment %} Google Map Directions Link {% endcomment %}
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_dict|urlencode }}" target="_blank" class="badge text-bg-light" style="color: blue;">Get Directions on Google Maps</a>
-            {% else %}
-            <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
+            <span id="prev_address">
+              My address is -> {{address_dict}}
+              {% if address_dict %}
+              <span class=" text-sm" id="currentStatus">{{full_address}}</span>
+              {% comment %} Google Map Directions Link {% endcomment %}
+              <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_dict|urlencode }}" target="_blank"
+                class="badge text-bg-light" style="color: blue;">Get Directions on Google Maps</a>
+              {% else %}
+              <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
             </span>
-            {% endif %} 
+            {% endif %}
           </p>
-          You can reach me at -> <span class="badge text-bg-light" id= "prev_phone_number" >{{user.profile.phone_number}}</span><br>
-          My email id is -> <span class="badge text-bg-light" id= "prev_email" >{{user.email}}</span><br>
-          Something about me -> <span class="badge text-bg-light" id= "bio" >{{user.profile.bio}}</span><br>
-          My class and Course -> <span class="badge text-bg-light" id= "user_class" >{{user.profile.user_class}}</span>
-          <span class="badge text-bg-light" id= "course" >{{user.profile.course}}</span>
+          You can reach me at -> <span class="badge text-bg-light"
+            id="prev_phone_number">{{user.profile.phone_number}}</span><br>
+          My email id is -> <span class="badge text-bg-light" id="prev_email">{{user.email}}</span><br>
+          Something about me -> <span class="badge text-bg-light" id="bio">{{user.profile.bio}}</span><br>
+          My class and Course -> <span class="badge text-bg-light" id="user_class">{{user.profile.user_class}}</span>
+          <span class="badge text-bg-light" id="course">{{user.profile.course}}</span>
         </div>
       </div>
     </div>
   </div>
-
-  <div class="row">
+  <div class="mt-4">
+    {% if comments %}
+    {% for comment in comments %}
+    <div class="notification-box d-flex align-items-center">
+      <div class="notification-user-pic-container">
+        <img src="{{ comment.commented_by.profile.profile_image.url }}" class="profile-pic" alt="Profile Pic" />
+      </div>
+      <div class="notification-description">
+        <div>
+          <b>{{ comment.comment }}</b>
+        </div>
+        <p>Commented By : {{ comment.commented_by.first_name }} {{ comment.commented_by.last_name }}</p>
+        <div>{{ comment.commented_date }}</div>
+      </div>
+    </div>
+    {% endfor %}
+    {% elif current_user == request.user %}
+    <h2 class="text-center mt-4">You don't have any Feedback</h2>
+    {% else %}
+    <h2 class="text-center mt-4">No Feedback for the current user</h2>
+    {% endif %}
+    {% if current_user != request.user %}
+    <h3 class="mt-4">Add your comment</h3>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row g-3">
+        {% for field in comment_form %}
+        <div class="col-sm-6">
+          {{ field|as_crispy_field }}
+        </div>
+        {% endfor %}
+      </div>
+      <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit"
+        name="comment">Comment</button>
+    </form>
+    {% endif %}
+  </div>
+  {% if current_user != request.user %}
+  <div class="row mt-4">
     <div class="col">
-      <div class="card" >
+      <div class="card">
         <div class="card-header">
           <h5 class="card-title">
-          Report User
-            </h5>
+            Report User
+          </h5>
         </div>
         <div class="card-body">
-          <form method="POST" action="">
+          <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-            {{ report_form|crispy }}
-            <button type="submit" class="btn btn-primary">Report</button>
+            <div class="row g-3">
+              {% for field in report_form %}
+              <div class="col-sm-6">
+                {{ field|as_crispy_field }}
+              </div>
+              {% endfor %}
+            </div>
+            <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit"
+              name="report">Report</button>
           </form>
-          </div>
-          </div>
-          </div>
+        </div>
+      </div>
+    </div>
 
 
-        
-          
-</div>
-{% endblock content %}
+
+
+  </div>
+  {% endif %}
+  {% endblock content %}
