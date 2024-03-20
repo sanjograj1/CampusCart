@@ -63,11 +63,6 @@ def profile_view(request, username):
     
     user = get_object_or_404(get_user_model(), username=username)
     comments = UserComment.objects.filter(user=user).order_by('-commented_date')
-    address_dict = user.profile.address
-    try:
-        address_dict = user.profile.address
-    except:
-        address_dict = "Address does not exist"
         
     if request.method == "POST":
         if 'report' in request.POST:
@@ -78,7 +73,7 @@ def profile_view(request, username):
                 report.reported_by = request.user
                 report.save()
                 messages.success(request, "Report has been submitted")
-                return redirect("accounts:profile_view", username=username)
+                return redirect("accounts:profile-view", username=username)
         else:
             comment_form = UserCommentsForm(request.POST)
             if comment_form.is_valid():
@@ -89,7 +84,7 @@ def profile_view(request, username):
                 description = f'{request.user} added a new comnent on your profile Click <a href="/profile/rating/{user.username}">here</a> to view.'
                 notify.send(request.user, recipient=user, verb='Comment', description=description)
                 messages.success(request, "Your comment has been added")
-                return redirect("accounts:profile_view", username=username)  
+                return redirect("accounts:profile-view", username=username)  
     else:
         report_form = ReportForm()
         comment_form = UserCommentsForm()
@@ -98,7 +93,6 @@ def profile_view(request, username):
         "accounts/profile_view.html",
         {
             "user": user,
-            "address_dict": address_dict,
             "report_form": report_form,
             'comments':comments,
             'current_user': user,
