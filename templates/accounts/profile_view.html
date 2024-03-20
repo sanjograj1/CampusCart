@@ -37,18 +37,21 @@
               <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
             </svg>
             <span id= "prev_address" >          
-            {{full_address}}
-            {% if full_address %}
+            My address is -> {{address_dict}}
+            {% if address_dict %}
             <span class=" text-sm" id="currentStatus">{{full_address}}</span>
             {% comment %} Google Map Directions Link {% endcomment %}
-            <a href="https://www.google.com/maps/dir/?api=1&destination={{user_latitude}},{{user_longitude}}" target="_blank" class="badge text-bg-light">Get Directions on Google Maps</a>
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_dict|urlencode }}" target="_blank" class="badge text-bg-light" style="color: blue;">Get Directions on Google Maps</a>
             {% else %}
             <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
             </span>
             {% endif %} 
           </p>
-          <span class="badge text-bg-light" id= "prev_phone_number" >{{user.profile.phone_number}}</span>
-          <span class="badge text-bg-light" id= "prev_email" >{{user.email}}</span>
+          You can reach me at -> <span class="badge text-bg-light" id= "prev_phone_number" >{{user.profile.phone_number}}</span><br>
+          My email id is -> <span class="badge text-bg-light" id= "prev_email" >{{user.email}}</span><br>
+          Something about me -> <span class="badge text-bg-light" id= "bio" >{{user.profile.bio}}</span><br>
+          My class and Course -> <span class="badge text-bg-light" id= "user_class" >{{user.profile.user_class}}</span>
+          <span class="badge text-bg-light" id= "course" >{{user.profile.course}}</span>
         </div>
       </div>
     </div>
