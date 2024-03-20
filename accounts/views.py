@@ -60,20 +60,14 @@ import json
 
 @login_required()
 def profile_view(request, username):
+    
     user = get_object_or_404(get_user_model(), username=username)
+    address_dict = user.profile.address
     try:
         address_dict = user.profile.address
         print("USER", address_dict)
-
-        address_dict = json.loads(address_dict)
-        full_address = address_dict.get("full_address")
-        user_latitude = address_dict.get("coordinates").get("latitude")
-        user_longitude = address_dict.get("coordinates").get("longitude")
     except:
-        address_dict = None
-        full_address = "Addres Does not exist."
-        user_longitude=None
-        user_latitude=None
+        address_dict = "Address does not exist"
 
     # add ReportForm and handel post request
     if request.method == "POST":
@@ -94,9 +88,6 @@ def profile_view(request, username):
         {
             "user": user,
             "address_dict": address_dict,
-            "full_address": full_address,
-            "user_latitude": user_latitude,
-            "user_longitude": user_longitude,
             "report_form": report_form,
         },
     )
