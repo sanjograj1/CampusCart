@@ -26,9 +26,12 @@
 }
 
 .post-date {
-    justify-content: right;
+    justify-content: center;
 }
 
+item-category{
+    justify-content: right;
+}
 .card-desc {
     margin-top: 10px;
     display: flex;
