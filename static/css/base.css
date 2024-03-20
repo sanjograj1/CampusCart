@@ -311,6 +311,14 @@ footer a:hover {
     bottom: 0;
 }
 
+.top-0 {
+    top: 0;
+}
+
+.left-0 {
+    left: 0;
+}
+
 
 .upload-btn {
     border: none;
@@ -350,4 +358,25 @@ footer a:hover {
         transform: translateZ(0);
         opacity: 1;
     }
+}
+
+
+.profile-detail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.profile-about {
+    filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 0.2rem 0.4rem);
+    color: black;
+    border-radius: 8px;
+    border: 0.1rem solid rgb(236, 236, 238);
+    background: rgb(255, 255, 255);
+    gap: 5px;
+}
+
+.profile-about span {
+    font-weight: 500;
+    text-decoration: underline;
 }

@@ -38,7 +38,7 @@
                             href="MSTeams:/l/chat/0/0?users={{ book.seller.email }}&message=Is it available">Contact
                             Seller</a>
                         <div>
-                            <a href="{% url 'accounts:user-rating' item.seller.username %}">
+                            <a href="{% url 'accounts:profile-view' item.seller.username %}">
                                 <b>{{ item.seller.first_name }} {{ item.seller.last_name }}</b></a>
                         </div>
                     </div>

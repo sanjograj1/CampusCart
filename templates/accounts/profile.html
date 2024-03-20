@@ -15,8 +15,7 @@
     <div class="col-7">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title
-          ">Update Profile</h5>
+          <h4 class="card-title mb-0">Update Profile</h4>
         </div>
         <div class="card-body">
           <form method="POST" enctype="multipart/form-data" id="user_profile_form">
@@ -42,26 +41,21 @@
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">Preview Profile</h5>
-
+          <h4 class="card-title mb-0">Preview Profile</h4>
         </div>
-
         <div class="card-body">
           <img id="prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
           <hr />
           <h6 class="card-subtitle mb-2 text-body-secondary">
             <span id="prev_first_name">[First Name]</span> <span id="prev_last_name">[Last Name]</span>
             (<span id="prev_username">[username]</span>)
-
           </h6>
           <p class="card-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
               class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
               <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-            </svg> <span id="prev_address">[Address]</span>
+            </svg> <span id="prev_address"></span>
           </p>
           <div id="profile-map" class="mb-4"></div>
-          <span class="badge text-bg-light" id="prev_phone_number">[Phone Number]</span>
-          <span class="badge text-bg-light" id="prev_email">[Phone Number]</span>
         </div>
       </div>
     </div>
@@ -77,9 +71,7 @@
   let prev_last_name = document.getElementById('prev_last_name');
   let prev_username = document.getElementById('prev_username');
   let prev_address = document.getElementById('prev_address');
-  let prev_phone_number = document.getElementById('prev_phone_number');
   let prev_profie_img = document.getElementById('prev_profie_img');
-  let prev_email = document.getElementById('prev_email');
 
 
   const map = L.map('profile-map').setView([42.3043181, -83.0686139], 14);
@@ -136,12 +128,6 @@
     }
     if (form.username.value !== '') {
       prev_username.innerHTML = form.username.value;
-    }
-    if (form.phone_number.value !== '') {
-      prev_phone_number.innerHTML = form.phone_number.value;
-    }
-    if (form.email.value !== '') {
-      prev_email.innerHTML = form.email.value;
     }
     if (form.address.value !== '') {
       prev_address.innerHTML = form.address.value;

@@ -117,7 +117,7 @@
                                     href="MSTeams:/l/chat/0/0?users={{ rental.seller.email }}&message=Is it Available?">Contact
                                     Seller</a>
                                 <div>
-                                    <a href="{% url 'accounts:user-rating' rental.seller.username %}">
+                                    <a href="{% url 'accounts:profile-view' rental.seller.username %}">
                                         <b>{{ rental.seller.get_full_name }}</b></a>
                                 </div>
                             </div>
