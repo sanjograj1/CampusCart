@@ -11,10 +11,9 @@
     <div class="product-imgs">
       <div class="img-display">
         <div class="img-showcase">
-          <img
-            src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg"
-            alt="shoe image">
-          <img
+          
+          <img src="{{ post.image.url }}" alt="post image">
+          {% comment %} <img
             src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg"
             alt="shoe image">
           <img
@@ -22,10 +21,10 @@
             alt="shoe image">
           <img
             src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"
-            alt="shoe image">
+            alt="shoe image"> {% endcomment %}
         </div>
       </div>
-      <div class="img-select">
+      {% comment %} <div class="img-select">
         <div class="img-item">
           <a href="#" data-id="1">
             <img
@@ -54,11 +53,11 @@
               alt="shoe image">
           </a>
         </div>
-      </div>
+      </div> {% endcomment %}
     </div>
     <!-- card right -->
     <div class="product-content">
-      <h2 class="product-title">Pair of Shoes</h2>
+      <h2 class="product-title">{{ post.title }}</h2>
       <!-- <a href = "#" class = "product-link">visit nike store</a> -->
       <!-- <div class = "product-rating">
               <i class = "fas fa-star"></i>
@@ -73,19 +72,19 @@
               <p class = "last-price">Old Price: <span>$257.00</span></p>
             </div> -->
 
-      <label for="date">Date Posted:</label>
+      <label for="date">{{ post.post_date }}</label>
 
       <input type="date" id="start" name="trip-start" value="2018-07-22" />
 
       <div class="product-detail">
         <h2>About this item: </h2>
-        <p>I found this pair of shoes in dnasjdn dasj dijas d dsja diasj d asijd asd asd</p>
-        <p>P.S : I will need to see proof for this, if this cycle belongs to you</p>
+        <p>{{ post.product_description }}</p>
+        {% comment %} <p>P.S : I will need to see proof for this, if this cycle belongs to you</p> {% endcomment %}
 
 
 
         <ul>
-          <li>Landmark where found/lost: <span>Toldo Health Center</span></li>
+          <li>Landmark where found/lost: <span>{{ post.location }}</span></li>
           <!-- <li>Available: <span>in stock</span></li>
                 <li>Category: <span>Shoes</span></li>
                 <li>Shipping Area: <span>All over the world</span></li>

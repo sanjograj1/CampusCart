@@ -3,46 +3,65 @@
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/lostfound.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+
 {% endblock %}
 {% block content %}
+
 <div class="container">
     <div class="user-options">
-        <div class="search-box">
+        {% comment %} <div class="search-box">
             <button class="btn-search"><i class="fas fa-search"></i></button>
             <input type="text" class="input-search" placeholder="Type to Search...">
+        </div> {% endcomment %}
+        <div class="books-header pt-4">
+            <h1>Lost and Found Items</h2>
+                <div class="books-header-underline"></div>
         </div>
+        <a class="upload-item" href='{% url "lostfound:upload" %}'>Post</a>
+
     </div>
     <div class="card-display justify-content-between">
         <div class="listing">
+
+            {% for post in posts %}
+
             <div class="card-details">
                 <div class="card-header">
-                    <div class="item-title">Bicycle</div>
-                    <div class="post-date">2024-01-01</div>
+                    <div class="item-title">{{ post.title }}</div>
+                    <div class="post-date">{{ post.post_date }}</div>
+                    <div class="item-category">{{ post.category }}</div>
+
                 </div>
             </div>
-            <div class="card-desc">It's a yellow color bike, it a old model with refurbished pedals</div>
+            <div class="card-desc">{{ post.product_description }}</div>
 
             <div class="card-main-body">
                 <div class="card">
-                    <img src="https://img.freepik.com/free-photo/white-bicycle-standing-park-morning-fitness-loneliness_1153-6768.jpg?size=626&ext=jpg"
-                        class="card-img" alt="">
+                    
+                    <img src="{{ post.image.url }}" alt="post image">
+                    
+                    {% comment %} <img src="https://img.freepik.com/free-photo/white-bicycle-standing-park-morning-fitness-loneliness_1153-6768.jpg?size=626&ext=jpg"
+                        class="card-img" alt=""> {% endcomment %}
+                    
                     <div class="card-body">
-                        <p class="cardd-sub-title">Location:</p>
-                        <p class="card-info">"Near Toldo Health Center"</p>
+                        <p class="cardd-sub-title">Location</p>
+                        <p class="card-info">{{ post.location }}</p>
                         {% comment %} <a href="{% url 'detail' %}"> {% endcomment %}
-                            <button class="view-details-btn">View Details</button>
+                            <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' post_id=post.id %}'">View Details</button>
                         {% comment %} </a> {% endcomment %}
-                                            </div>
+                    </div>
                 </div>
                 <div class="option-button">
                     <button class="claim-btn">Claim</button>
                     <button class="message-btn">Message</button>
-                        <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' %}'">View Details</button>
                 </div>
             </div>
+            {% endfor %}
+
         </div>
 
-        <div class="listing">
+        {% comment %} <div class="listing">
             <div class="card-details">
                 <div class="card-header">
                     <div class="item-title">HC Verma: Volume 1</div>
@@ -69,7 +88,7 @@
                     <button class="view-details-btn">View Details</button>
                 </div>
             </div>
-        </div>
+        </div> {% endcomment %}
     </div>
 </div>
 {% endblock content %}
