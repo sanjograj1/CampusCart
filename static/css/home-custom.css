@@ -42,16 +42,16 @@
     left: 20px;
     --parallax-speed: 5;
     color: #FFCE00;
-    text-shadow: 7px 7px 1px #005595,
-        15px 15px 1px #a37c13;
+    text-shadow: 7px 7px 1px #a37c13,
+        15px 15px 1px #005595;
 }
 
 @media screen and (max-width: 992px) {
     .home-container>h1 {
         font-size: 60px;
         top: 40px;
-        text-shadow: 5px 5px 1px #005595,
-            11px 11px 1px #a37c13;
+        text-shadow: 5px 5px 1px #a37c13,
+            11px 11px 1px #005595;
     }
 }
 
@@ -59,8 +59,8 @@
     .home-container>h1 {
         font-size: 40px;
         top: 30px;
-        text-shadow: 3px 3px 1px #005595,
-            7px 7px 1px #a37c13;
+        text-shadow: 3px 3px 1px #a37c13,
+            7px 7px 1px #005595;
     }
 }
 
@@ -68,8 +68,8 @@
     .home-container>h1 {
         font-size: 24px;
         top: 15px;
-        text-shadow: 1px 1px 1px #005595,
-            4px 4px 1px #a37c13;
+        text-shadow: 1px 1px 1px #a37c13,
+            4px 4px 1px #005595;
     }
 }
 
@@ -134,7 +134,7 @@
 
 .underline {
     border-style: solid;
-    border-color: #ffce00;
+    border-color: #005595;
     border-width: 3px;
     border-bottom: none;
     width: 150px;
@@ -175,7 +175,7 @@
 .avatar:hover {
     scale: 2;
     z-index: 2;
-    border-color: #005595;
+    border-color: #ffce00;
 }
 
 @supports selector(:has(+ *)) {
