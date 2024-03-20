@@ -30,7 +30,10 @@ class UserComment(models.Model):
 class Contact(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=70)
-    number = models.IntegerField()
+    number = models.CharField(
+        "Phone Number", max_length=15, help_text="Enter your number  "
+    )
+    message = models.TextField()
 
     def _str_(self):
         return self.name
