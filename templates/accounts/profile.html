@@ -1,31 +1,18 @@
 {% extends "base.html" %}
 {% load crispy_forms_tags %}
 {% load static %}
+{% block head %}
+{{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+{% endblock %}
 {% block content %}
-<link href="https://api.mapbox.com/mapbox-assembly/v1.3.0/assembly.min.css" rel="stylesheet">
-<script id="search-js" defer="" src="https://api.mapbox.com/search-js/v1.0.0-beta.18/web.js"></script>
-  <link href="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.css" rel="stylesheet">
-  <script src="https://api.mapbox.com/mapbox-gl-js/v2.15.0/mapbox-gl.js"></script>
-  <style>
-    #map {  width: 100%;height: 300px; }
-  </style>
-
-
-
-
-
-
-
 <div class="container">
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-    {{message}}
-  </div>
-  {% endfor %}
-  {% endif %}
-    <div class="row">
-    <div class="col">
+  <div class="row">
+    <div class="col-7">
       <div class="card">
         <div class="card-header">
           <h5 class="card-title
@@ -41,18 +28,9 @@
               </div>
               {% endfor %}
               {% for field in profile_form %}
-
-                 {% if field.name == "address" %}
-                 <br>
-            <div id="map"></div>
-            <input type="hidden" name="address" id="addressDict" value="">
-            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-
-            {% else %}
-            {{ field|as_crispy_field }}
-            {% endif %}
-         
-              
+              <div class="col-9">
+                {{ field|as_crispy_field }}
+              </div>
               {% endfor %}
             </div>
             <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="action"> Update
@@ -60,125 +38,123 @@
           </form>
         </div>
       </div>
-    </div><div class="col">
-    <div class="card" >
+    </div>
+    <div class="col">
+      <div class="card">
         <div class="card-header">
           <h5 class="card-title">Preview Profile</h5>
 
-          </div>
-    
-        <div class="card-body">
-        {% if user.profile.profile_image %}
-          <img  id= "prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
-          {% else %}
-          <img  id= "prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
-          {% endif %}
-        <hr/>
-          <h6 class="card-subtitle mb-2 text-body-secondary" >
-          <span id= "prev_first_name" >[First Name]</span> <span id= "prev_last_name" >[Last Name]</span>
-          (<span id= "prev_username" >[username]</span>)
-          
-          </h6>
-          <p class="card-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-  <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6"/>
-</svg> <span id= "prev_address" >          
-  {% if full_address %}
-    <span class=" text-sm" id="currentStatus">{{full_address}}</span>
+        </div>
 
-  
-  {% else %}
-  <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
-</span>
-{% endif %} 
-</p>
-        <span class="badge text-bg-light" id= "prev_phone_number" >[Phone Number]</span>
-        <span class="badge text-bg-light" id= "prev_email" >[Email]</span>
+        <div class="card-body">
+          <img id="prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+          <hr />
+          <h6 class="card-subtitle mb-2 text-body-secondary">
+            <span id="prev_first_name">[First Name]</span> <span id="prev_last_name">[Last Name]</span>
+            (<span id="prev_username">[username]</span>)
+
+          </h6>
+          <p class="card-text"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
+              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
+            </svg> <span id="prev_address">[Address]</span>
+          </p>
+          <div id="profile-map" class="mb-4"></div>
+          <span class="badge text-bg-light" id="prev_phone_number">[Phone Number]</span>
+          <span class="badge text-bg-light" id="prev_email">[Phone Number]</span>
         </div>
       </div>
     </div>
 
-      
+
   </div>
 </div>
 
-
 <script>
-//track th changes in form and update the preview
-let form= document.getElementById('user_profile_form');
-let prev_first_name= document.getElementById('prev_first_name');
-let prev_last_name= document.getElementById('prev_last_name');
-let prev_username= document.getElementById('prev_username');
-let prev_address= document.getElementById('prev_address');
-let prev_phone_number= document.getElementById('prev_phone_number');
-let prev_profie_img= document.getElementById('prev_profie_img');
-let prev_email= document.getElementById('prev_email');
+  //track th changes in form and update the preview
+  let form = document.getElementById('user_profile_form');
+  let prev_first_name = document.getElementById('prev_first_name');
+  let prev_last_name = document.getElementById('prev_last_name');
+  let prev_username = document.getElementById('prev_username');
+  let prev_address = document.getElementById('prev_address');
+  let prev_phone_number = document.getElementById('prev_phone_number');
+  let prev_profie_img = document.getElementById('prev_profie_img');
+  let prev_email = document.getElementById('prev_email');
 
 
+  const map = L.map('profile-map').setView([42.3043181, -83.0686139], 14);
+  let marker;
+  const isRetina = L.Browser.retina;
+  const myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+  const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+  const retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}";
+  map.attributionControl.setPrefix('Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a>')
+  L.tileLayer(isRetina ? retinaUrl : baseUrl, {
+    attribution: '<a href="https://openmaptiles.org/" target="_blank">©️ OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">©️ OpenStreetMap</a> contributors',
+    apiKey: myAPIKey,
+    maxZoom: 20,
+    id: 'osm-bright',
+  }).addTo(map);
 
-function updatePreview(){
+  // move zoom controls to bottom right
+  map.zoomControl.remove();
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
 
-  if (form.first_name.value !== '') {
-    prev_first_name.innerHTML = form.first_name.value;
+
+  geocodeAddress()
+
+
+  function geocodeAddress() {
+    let address = document.getElementById("id_address").value;
+    if (address) {
+      // address = `${address}, Windsor, Canada`
+      const geocodingUrl = `https://api.geoapify.com/v1/geocode/search?text=${encodeURIComponent(address)}&apiKey=${myAPIKey}`;
+
+      fetch(geocodingUrl).then(result => result.json())
+        .then(featureCollection => {
+          const foundAddress = featureCollection?.features[0];
+          if (foundAddress) {
+            if (marker) {
+              map.removeLayer(marker)
+            }
+            marker = L.marker(new L.LatLng(foundAddress.properties.lat, foundAddress.properties.lon)).addTo(map);
+            map.panTo(new L.LatLng(foundAddress.properties.lat, foundAddress.properties.lon));
+          }
+        });
+    }
   }
-  if (form.last_name.value !== '') {
-    prev_last_name.innerHTML = form.last_name.value;
-  }
-  if (form.username.value !== '') {
-    prev_username.innerHTML = form.username.value;
-  }
-  if (form.phone_number.value !== '') {
-    prev_phone_number.innerHTML = form.phone_number.value;
-  }
-  if (form.email.value !== '') {
-    prev_email.innerHTML = form.email.value;
-  }
-}
-updatePreview();
-form.addEventListener('input', function(e){
-updatePreview();
-  prev_profie_img.src= URL.createObjectURL(form.profile_image.files[0]);
-});
 
 
-
+  function updatePreview() {
+    if (form.first_name.value !== '') {
+      prev_first_name.innerHTML = form.first_name.value;
+    }
+    if (form.last_name.value !== '') {
+      prev_last_name.innerHTML = form.last_name.value;
+    }
+    if (form.username.value !== '') {
+      prev_username.innerHTML = form.username.value;
+    }
+    if (form.phone_number.value !== '') {
+      prev_phone_number.innerHTML = form.phone_number.value;
+    }
+    if (form.email.value !== '') {
+      prev_email.innerHTML = form.email.value;
+    }
+    if (form.address.value !== '') {
+      prev_address.innerHTML = form.address.value;
+      geocodeAddress()
+    }
+  }
+  updatePreview();
+  form.addEventListener('input', function (e) {
+    updatePreview();
+    if (e.target.name == 'profile_image')
+      prev_profie_img.src = URL.createObjectURL(form.profile_image.files[0]);
+  });
 </script>
 
- <script>
-    const ACCESS_TOKEN = 'pk.eyJ1IjoiYWRtaW5lcmVmaCIsImEiOiJjbHNxMHA3Nzgwd2d2Mmtuem9vZXplcGNnIn0.UszWUOoih3vGKZeZlnn35g';
-     
-    let currentStatus=document.getElementById('currentStatus');
-    let addressDict=document.getElementById('addressDict');
-    mapboxgl.accessToken = ACCESS_TOKEN;
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [{{user_longitude}}, {{user_latitude}}],
-      zoom: 8.8
-    });
-     
-    const searchJS = document.getElementById('search-js');
-    searchJS.onload = function () {
-      const searchBox = new MapboxSearchBox();
-      console.log("",searchBox);
-      searchBox.accessToken = ACCESS_TOKEN;
-      searchBox.options = {
-      types: 'address,poi',
-      proximity: [{{user_longitude}}, {{user_latitude}}]
-      //current location
 
-    };
-    searchBox.marker = true;
-    searchBox.mapboxgl = mapboxgl;
-    map.addControl(searchBox);
-    searchBox.addEventListener('retrieve', (event) => {
-      const featureCollection = event.detail;
-      const feature = featureCollection.features[0];
-      console.log(feature)
-      currentStatus.innerHTML = `<b>Selected Address</b> : ${feature.properties.full_address}`;
-      addressDict.value=JSON.stringify(feature.properties);
-
-    
-    });
-    };
-  </script>
 {% endblock content %}
