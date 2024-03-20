@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, UserComment, Report
+from .models import Profile, UserComment, Report, Contact
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm,
@@ -140,19 +140,19 @@ class UserCommentsForm(forms.ModelForm):
         )         
 
 
-class ContactForm(forms.Form):
-    name = forms.CharField(max_length=100, label='Name')
-    email = forms.EmailField(label='Email')
-    phone_number = forms.CharField(max_length=15, label='Phone Number')
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ["name", "email", "number", "message"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            Field('name', css_class='form-control'),
-            Field('email', css_class='form-control'),
-            Field('phone_number', css_class='form-control'),
-            Submit('submit', 'Submit', css_class='btn btn-primary')
+            Field("name", css_class="form-control"),
+            Field("email", css_class="form-control"),
+            Field("number", css_class="form-control"),
+            Submit("submit", "Submit", css_class="btn btn-primary"),
         )
 
 class ReportForm(forms.ModelForm):
