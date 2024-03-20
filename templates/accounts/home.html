@@ -2,7 +2,11 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/home.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/home-custom.css' %}" type="text/css" />
+{% endif %}
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/rental.css' %}" type="text/css" />
 {% endblock %}
@@ -184,5 +188,20 @@
     </div>
   </div>
   {% endif %}
+  <section class="d-flex align-items-center justify-content-center flex-column bg-white mt-4">
+    <div class="text-center founders mt-4 mb-4">
+      <h6>MEET THE TEAM</h6>
+      <h2>THE FOUNDERS</h2>
+    </div>
+    <div class="avatars mt-5 mb-5">
+      <img class="avatar" src="{% static 'images/founders/haard.jpeg' %}" alt="Haard Mitul Mehta">
+      <img class="avatar" src="{% static 'images/founders/janvi.jpeg' %}" alt="Janvi Chabbra">
+      <img class="avatar" src="{% static 'images/founders/kajal.jpeg' %}" alt="Kajal Singh">
+      <img class="avatar" src="{% static 'images/founders/karan.jpeg' %}" alt="Karan Mahajan">
+      <img class="avatar" src="{% static 'images/founders/niharika.jpeg' %}" alt="Niharika Khurana">
+      <img class="avatar" src="{% static 'images/founders/sanjog.jpeg' %}" alt="Sanjograj Singh Ahuja">
+      <img class="avatar" src="{% static 'images/founders/suril.jpg' %}" alt="Suril Dipakkumar Shukla">
+    </div>
+  </section>
 </div>
 {% endblock content %}

@@ -2,18 +2,14 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
-{% if theme == 'primary' %}
 <link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
-{% else %}
-<link rel="stylesheet" href="{% static 'css/free-custom.css' %}" type="text/css" />
-{% endif %}
 {% endblock %}
 {% block content %}
 <div class="container position-relative">
-    <a class="position-absolute upload-item" href='{% url "freestuff:upload-item" %}'>Upload your free Item</a>
-    <div class="free-item-header pt-4">
+    <a class="position-absolute upload-btn" href='{% url "freestuff:upload-item" %}'>Upload your free Item</a>
+    <div class="pt-4">
         <h1>Free Items</h1>
-            <div class="free-item-header-underline"></div>
+            <div class="header-underline"></div>
     </div>
     <div class="mt-4">
         <div class="custom-container">

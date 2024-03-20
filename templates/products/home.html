@@ -2,17 +2,16 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
-<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/product.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="container position-relative">
-  <a class="position-absolute upload-book" href='{% url "products:sell" %}'>Upload your Product</a>
-  <div class="books-header pt-4">
+  <a class="position-absolute upload-btn" href='{% url "products:sell" %}'>Upload your Product</a>
+  <div class="pt-4">
     <h1>All Products</h1>
-      <div class="books-header-underline"></div>
+      <div class="header-underline"></div>
   </div>
   <div class="mt-4">
     <div>
