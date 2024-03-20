@@ -41,6 +41,11 @@
             </h3>
             <h6>{{ product.price }}</h6>
             <p class="card-hover__text">{{ product.description }}</p>
+            <div>
+              {% if product.is_sold %}
+              <span class="badge badge-pill badge-danger">Sold</span>
+              {% endif %}
+            </div>
             <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
               <span>View Details</span>
               <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

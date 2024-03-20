@@ -8,13 +8,6 @@
 {% endblock %}
 {% block content %}
 <div class="container">
-  {% if messages %}
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-    {{message}}
-  </div>
-  {% endfor %}
-  {% endif %}
   <div class="row">
     <div class="col">
       <div class="card">
@@ -32,81 +25,101 @@
           {% else %}
           <img id="prev_profie_img" src="{% static 'images/default.png' %}" class="circle" alt="Profile Image">
           {% endif %}
-          <p class="card-text mt-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-              class="bi bi-geo-alt-fill" viewBox="0 0 16 16">
-              <path d="M8 16s6-5.686 6-10A6 6 0 0 0 2 6c0 4.314 6 10 6 10m0-7a3 3 0 1 1 0-6 3 3 0 0 1 0 6" />
-            </svg>
-            <span id="prev_address">
-              My address is -> {{address_dict}}
-              {% if address_dict %}
-              <span class=" text-sm" id="currentStatus">{{full_address}}</span>
-              {% comment %} Google Map Directions Link {% endcomment %}
-              <a href="https://www.google.com/maps/dir/?api=1&destination={{ address_dict|urlencode }}" target="_blank"
-                class="badge text-bg-light" style="color: blue;">Get Directions on Google Maps</a>
-              {% else %}
-              <span class=" text-sm" id="currentStatus">Click on the map to select your address</span>
+          <p class="card-text mt-4 profile-detail">
+            <span class="material-symbols-outlined">
+              home
             </span>
+            <span>Address</span>
+            {% if user.profile.address %}
+            <span><b>{{user.profile.address}}</b></span>
+            <a href="https://www.google.com/maps/dir/?api=1&destination={{ user.profile.address|urlencode }}"
+              target="_blank" class="badge text-bg-light" style="color: blue;">Get Directions on Google Maps</a>
+            {% else %}
+            <span><b>Address Not Provided</span></b>
             {% endif %}
           </p>
-          You can reach me at -> <span class="badge text-bg-light"
-            id="prev_phone_number">{{user.profile.phone_number}}</span><br>
-          My email id is -> <span class="badge text-bg-light" id="prev_email">{{user.email}}</span><br>
-          Something about me -> <span class="badge text-bg-light" id="bio">{{user.profile.bio}}</span><br>
-          My class and Course -> <span class="badge text-bg-light" id="user_class">{{user.profile.user_class}}</span>
-          <span class="badge text-bg-light" id="course">{{user.profile.course}}</span>
+          <p>
+            <span class="material-symbols-outlined">
+              call
+            </span>
+            <span>Mobile</span>
+            <span><b>{{user.profile.phone_number}}</b></span>
+          </p>
+          <p class="profile-detail">
+            <span class="material-symbols-outlined">
+              mail
+            </span>
+            <span>Email</span>
+            <span><b>{{user.email}}</b></span>
+          </p>
+          <p class="profile-detail">
+            <span class="material-symbols-outlined">
+              school
+            </span>
+            <span>Course</span>
+            <span><b>{{user.profile.course}}</b></span>
+          </p>
+          <div class="profile-about d-flex flex-column p-4 mb-4">
+            {% if current_user == request.user %}
+            <span>About Me</span>
+            {% else %}
+            <span>About {{ user.get_full_name }}</span>
+            {% endif %}
+            <p class="mb-0">{{user.profile.bio}}</p>
+          </div>
+          <div class="mt-4">
+            <hr>
+            {% if comments %}
+            <h3>Feedback</h3>
+            {% for comment in comments %}
+            <div class="notification-box d-flex align-items-center">
+              <div class="notification-user-pic-container">
+                <img src="{{ comment.commented_by.profile.profile_image.url }}" class="profile-pic" alt="Profile Pic" />
+              </div>
+              <div class="notification-description">
+                <div>
+                  <b>{{ comment.comment }}</b>
+                </div>
+                <p>Commented By : {{ comment.commented_by.get_full_name }}</p>
+                <div>{{ comment.commented_date }}</div>
+              </div>
+            </div>
+            {% endfor %}
+            {% elif current_user == request.user %}
+            <h2 class="text-center mt-4">You don't have any Feedback</h2>
+            {% else %}
+            <h2 class="text-center mt-4">No Feedback for the current user</h2>
+            {% endif %}
+            {% if current_user != request.user %}
+            <h5 class="mt-4">Add your comment</h5>
+            <form method="POST" enctype="multipart/form-data">
+              {% csrf_token %}
+              <div class="row g-3">
+                {% for field in comment_form %}
+                <div class="col-sm-6">
+                  {{ field|as_crispy_field }}
+                </div>
+                {% endfor %}
+              </div>
+              <input style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit" name="comment" />
+            </form>
+            {% endif %}
+          </div>
         </div>
       </div>
     </div>
-  </div>
-  <div class="mt-4">
-    {% if comments %}
-    {% for comment in comments %}
-    <div class="notification-box d-flex align-items-center">
-      <div class="notification-user-pic-container">
-        <img src="{{ comment.commented_by.profile.profile_image.url }}" class="profile-pic" alt="Profile Pic" />
-      </div>
-      <div class="notification-description">
-        <div>
-          <b>{{ comment.comment }}</b>
-        </div>
-        <p>Commented By : {{ comment.commented_by.first_name }} {{ comment.commented_by.last_name }}</p>
-        <div>{{ comment.commented_date }}</div>
-      </div>
-    </div>
-    {% endfor %}
-    {% elif current_user == request.user %}
-    <h2 class="text-center mt-4">You don't have any Feedback</h2>
-    {% else %}
-    <h2 class="text-center mt-4">No Feedback for the current user</h2>
-    {% endif %}
-    {% if current_user != request.user %}
-    <h3 class="mt-4">Add your comment</h3>
-    <form method="POST" enctype="multipart/form-data">
-      {% csrf_token %}
-      <div class="row g-3">
-        {% for field in comment_form %}
-        <div class="col-sm-6">
-          {{ field|as_crispy_field }}
-        </div>
-        {% endfor %}
-      </div>
-      <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit"
-        name="comment">Comment</button>
-    </form>
-    {% endif %}
   </div>
   {% if current_user != request.user %}
   <div class="row mt-4">
     <div class="col">
       <div class="card">
         <div class="card-header">
-          <h5 class="card-title">
+          <h4 class="card-title mb-0">
             Report User
-          </h5>
+          </h4>
         </div>
         <div class="card-body">
-          <form method="POST" enctype="multipart/form-data">
+          <form method="POST">
             {% csrf_token %}
             <div class="row g-3">
               {% for field in report_form %}
@@ -115,16 +128,12 @@
               </div>
               {% endfor %}
             </div>
-            <button style="border-radius:2rem;" class="btn btn-success d-block mt-4" type="submit"
-              name="report">Report</button>
+            <input style="border-radius:2rem;" class="btn btn-danger d-block mt-4" type="submit" name="report" />
           </form>
         </div>
       </div>
     </div>
-
-
-
-
   </div>
   {% endif %}
-  {% endblock content %}
+</div>
+{% endblock content %}
