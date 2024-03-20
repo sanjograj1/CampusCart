@@ -126,6 +126,7 @@ class ProfileUpdateForm(forms.ModelForm):
             ),
             Field("course", css_class="form-control", placeholder="Enter your course"),
         )
+        self.fields['address'].help_text = 'Please enter your complete address'
 
 class UserCommentsForm(forms.ModelForm):
     class Meta:

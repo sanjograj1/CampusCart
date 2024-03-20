@@ -9,7 +9,7 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="container position-relative">
-  <a class="position-absolute upload-book" href='{% url "products:sell" %}'>Upload your Product</a>
+  <a class="position-absolute upload-btn" href='{% url "products:sell" %}'>Upload your Product</a>
   <div class="books-header pt-4">
     <h1>All Products</h2>
       <div class="books-header-underline"></div>
@@ -41,6 +41,11 @@
             </h3>
             <h6>{{ product.price }}</h6>
             <p class="card-hover__text">{{ product.description }}</p>
+            <div>
+              {% if product.is_sold %}
+              <span class="badge badge-pill badge-danger">Sold</span>
+              {% endif %}
+            </div>
             <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
               <span>View Details</span>
               <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
