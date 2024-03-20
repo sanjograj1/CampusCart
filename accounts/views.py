@@ -295,12 +295,9 @@ def contactus(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-            name = form.cleaned_data["name"]
-            email = form.cleaned_data["email"]
-            number = form.cleaned_data["phone_number"]
 
-            contact = Contact.objects.create(name=name, email=email, number=number)
-            contact.save()
+            form.save()
+            email = form.cleaned_data.get("email")
             # send email to user
 
             send_mail(
@@ -314,8 +311,8 @@ def contactus(request):
             messages.info(request, "We'll get in touch with you soon.")
             return redirect("accounts:contactus")
     else:
-        form = ContactForm()
-    return render(request, "accounts/contactus.html",{"form":form})
+        form = ContactForm(initial={"email": request.user.email,"name":request.user.first_name,"number":request.user.profile.phone_number})
+    return render(request, "accounts/contactus.html", {"form": form})
 
 
 
