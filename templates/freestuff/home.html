@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
 {{ block.super }}
@@ -9,7 +10,18 @@
     <a class="position-absolute upload-btn" href='{% url "freestuff:upload-item" %}'>Upload your free Item</a>
     <div class="pt-4">
         <h1>Free Items</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
+    </div>
+    <div class="mt-4 mb-3">
+        <div>
+            <form class="d-flex">
+                <div class="input-group align-items-end justify-content-end">
+                    {{ form|crispy }}
+                    <button class="btn" type="submit">Search</button>
+                    <a href="{% url 'freestuff:home' %}" class="text-link float-end">Reset</a>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="mt-4">
         <div class="custom-container">
