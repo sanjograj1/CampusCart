@@ -24,21 +24,22 @@ class ProfileForm(forms.ModelForm):
             Field('phone_number', css_class='form-control'),
             Field('address', css_class='form-control'),
             Field('profile_image', css_class='form-control'),
-        )    
+        )
 
     def save(self):
-        super.save()  
+        super.save()
 
         img = Image.open(self.profile_image.path)
         if img.height > 400 and img.width > 400:
-            output_size = (400,400)
+            output_size = (400, 400)
             img.thumbnail(output_size)
             img.save(self.profile_image.path)
 
+
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(label="Username",max_length=150,widget=forms.TextInput(attrs={'autofocus': True}))
-    password = forms.CharField(label="Password",strip=False,widget=forms.PasswordInput)
-    
+    username = forms.CharField(label="Username", max_length=150, widget=forms.TextInput(attrs={'autofocus': True}))
+    password = forms.CharField(label="Password", strip=False, widget=forms.PasswordInput)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -46,6 +47,7 @@ class LoginForm(AuthenticationForm):
             Field('username', css_class='form-control'),
             Field('password', css_class='form-control'),
         )
+
 
 class RegistrationForm(UserCreationForm):
     class Meta:
@@ -64,9 +66,8 @@ class RegistrationForm(UserCreationForm):
         if not email.endswith(settings.EMAIL_VERIFY):
             raise forms.ValidationError(f'Please enter a {settings.EMAIL_VERIFY} mail')
         elif get_user_model().objects.filter(email=email).exists():
-                raise forms.ValidationError('Email already exists! Please try a different email.')
+            raise forms.ValidationError('Email already exists! Please try a different email.')
         return email
-    
 
     def clean(self):
         cleaned_data = super().clean()
@@ -95,11 +96,12 @@ class UserUpdateForm(forms.ModelForm):
             Field('email', css_class='form-control'),
             Field('first_name', css_class='form-control'),
             Field('last_name', css_class='form-control'),
-        ) 
-        self.fields['username'].disabled = True 
+        )
+        self.fields['username'].disabled = True
         self.fields['email'].disabled = True
         self.fields['username'].help_text = 'Cannot Change Username again'
         self.fields['email'].help_text = 'Cannot Change Email again'
+
 
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
@@ -128,17 +130,18 @@ class ProfileUpdateForm(forms.ModelForm):
         )
         self.fields['address'].help_text = 'Please enter your complete address'
 
+
 class UserCommentsForm(forms.ModelForm):
     class Meta:
         model = UserComment
-        fields = ['comment']  
+        fields = ['comment']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Field('comment', css_class='form-control'),
-        )         
+        )
 
 
 class ContactForm(forms.ModelForm):
@@ -155,6 +158,7 @@ class ContactForm(forms.ModelForm):
             Field("number", css_class="form-control"),
             Submit("submit", "Submit", css_class="btn btn-primary"),
         )
+
 
 class ReportForm(forms.ModelForm):
     class Meta:

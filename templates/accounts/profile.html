@@ -11,9 +11,9 @@
 {% endblock %}
 {% block content %}
 <div class="container position-relative">
-  <a class="position-absolute upload-btn" href='{% url "accounts:profile-view" request.user %}'>Upload your Book</a>
+  <a class="position-absolute upload-btn" href='{% url "accounts:profile-view" request.user %}'>View your profile</a>
   <div class="row pt-5">
-    <div class="col-7">
+    <div class="col-7 pt-4">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title mb-0">Update Profile</h4>
@@ -39,7 +39,7 @@
         </div>
       </div>
     </div>
-    <div class="col">
+    <div class="col pt-4">
       <div class="card">
         <div class="card-header">
           <h4 class="card-title mb-0">Preview Profile</h4>
