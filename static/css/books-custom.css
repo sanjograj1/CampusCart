@@ -228,3 +228,46 @@ main {
 .dropdown-item {
     gap: 10px;
 }
+
+.input-group {
+    gap: 25px;
+}
+
+.input-group .form-group {
+    margin-bottom: 0;
+}
+
+.input-group #div_id_category,
+.input-group #div_id_name {
+    flex: 0.5;
+}
+
+.input-group #div_id_price {
+    flex: 0.2;
+}
+
+.input-group .btn {
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    right: 0;
+    background-color: #005596;
+    color: #fff;
+    height: max-content;
+}
+
+.input-group .btn:hover {
+    color: #FFCE00;
+}
+
+.input-group a {
+    box-shadow: none;
+    font-size: 1rem;
+    line-height: 1.375rem;
+    padding: 10px 20px;
+    font-weight: 500;
+    color: #f8f9fa !important;
+    background-color: #C10E21;
+    border-color: #C10E21;
+    border-radius: 6px;
+}
