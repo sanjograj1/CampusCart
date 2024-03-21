@@ -12,55 +12,11 @@
           
           <img src="{{ post.image.url }}" alt="post image">
         </div>
-  
-      {% comment %} <div class="img-select">
-        <div class="img-item">
-          <a href="#" data-id="1">
-            <img
-              src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_1.jpg"
-              alt="shoe image">
-          </a>
-        </div>
-        <div class="img-item">
-          <a href="#" data-id="2">
-            <img
-              src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_2.jpg"
-              alt="shoe image">
-          </a>
-        </div>
-        <div class="img-item">
-          <a href="#" data-id="3">
-            <img
-              src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_3.jpg"
-              alt="shoe image">
-          </a>
-        </div>
-        <div class="img-item">
-          <a href="#" data-id="4">
-            <img
-              src="https://fadzrinmadu.github.io/hosted-assets/product-detail-page-design-with-image-slider-html-css-and-javascript/shoe_4.jpg"
-              alt="shoe image">
-          </a>
-        </div>
-      </div> {% endcomment %}
-    
+      
     <!-- card right -->
     <div class="product-content">
       <h2 class="product-title">{{ post.title }}</h2>
-      <!-- <a href = "#" class = "product-link">visit nike store</a> -->
-      <!-- <div class = "product-rating">
-              <i class = "fas fa-star"></i>
-              <i class = "fas fa-star"></i>
-              <i class = "fas fa-star"></i>
-              <i class = "fas fa-star"></i>
-              <i class = "fas fa-star-half-alt"></i>
-              <span>4.7(21)</span>
-            </div> -->
-      <!--       
-            <div class = "product-price">
-              <p class = "last-price">Old Price: <span>$257.00</span></p>
-            </div> -->
-
+      
       <label for="date">{{ post.post_date }}</label>
 
       <input type="date" id="start" name="trip-start" value="2018-07-22" />
@@ -74,10 +30,7 @@
 
         <ul>
           <li>Landmark where found/lost: <span>{{ post.location }}</span></li>
-          <!-- <li>Available: <span>in stock</span></li>
-                <li>Category: <span>Shoes</span></li>
-                <li>Shipping Area: <span>All over the world</span></li>
-                <li>Shipping Fee: <span>Free</span></li> -->
+
         </ul>
       </div>
 
@@ -86,8 +39,8 @@
         <button type="button" class="btn">
           Contact Owner <i class="fas fa-shopping-cart"></i>
         </button>
-        <button type="button" class="btn">Save</button>
-        <button type="button" class="btn">Report</button>
+        {% comment %} <button type="button" class="btn">Save</button>
+        <button type="button" class="btn">Report</button> {% endcomment %}
       </div>
 
       <div class="social-links">
@@ -102,6 +55,5 @@
 
 
 <script src="{% static 'js/lostfounddetail.js' %}"></script>
-<!-- <h1>Hello, World!</h1>
-    <p>This is a simple HTML file.</p> -->
+
 {% endblock content %}
