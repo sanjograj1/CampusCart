@@ -3,7 +3,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .forms import FreeItemForm
 from .models import FreeStuffItem
 from django.contrib import messages
-
+from notifications.signals import notify
+from django.contrib.auth import get_user_model
 
 @login_required
 def index(request):
@@ -22,6 +23,10 @@ def upload_item(request):
             free_item = form.save(commit=False)
             free_item.seller = request.user
             free_item.save()
+            sender = get_user_model().objects.get(username=request.user)
+            receiver = get_user_model().objects.exclude(username=request.user)
+            description = f'<b>{free_item.title}</b> (Free {free_item.category} Item). Click <a href="/free/item-detail/{free_item.id}">here</a> to view.'
+            notify.send(sender, recipient=receiver, verb='Upload', description=description)
             return redirect('freestuff:home')
     else:
         form = FreeItemForm()
