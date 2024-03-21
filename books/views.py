@@ -4,18 +4,46 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from notifications.signals import notify
 from django.contrib import messages
-
-from .forms import BookForm
+ 
+from .forms import BookForm,BooksFilter
 from .models import Book
-
-
+ 
+ 
 @login_required
 # Create your views here.
 def bookhome(request):
-    all_books = Book.objects.all()
+    if request.method == 'GET':
+        form = BooksFilter(request.GET)
+        if form.is_valid():
+            book_name = form.cleaned_data['name']
+            category = form.cleaned_data['category']
+            price_range = form.cleaned_data['price']
+            if category and price_range and book_name:
+                price = price_range.split('-')
+                books = Book.objects.filter(category=category).filter(price__gte=price[0], price__lte=price[1]).filter(title__contains=book_name)
+            elif category and price_range:
+                price = price_range.split('-')
+                books = Book.objects.filter(category=category).filter(price__gte=price[0], price__lte=price[1])
+            elif category and book_name:
+                books = Book.objects.filter(category=category, title__contains=book_name)
+            elif price_range and book_name:
+                price = price_range.split('-')
+                books = Book.objects.filter(price__gte=price[0], price__lte=price[1], title__contains=book_name)
+            elif category:
+                books = Book.objects.filter(category=category)
+            elif price_range:
+                price = price_range.split('-')
+                books = Book.objects.filter(price__gte=price[0], price__lte=price[1])
+            elif book_name:
+                books = Book.objects.filter(title__contains=book_name)
+            else:
+                books = Book.objects.all()
+    else:
+        books = Book.objects.all()
     return render(request, 'books/home.html', {
         'title': 'Books',
-        'all_books': all_books
+        'all_books': books,
+        'form': form
     })
 
 
