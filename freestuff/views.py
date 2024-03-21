@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import FreeItemForm
 from .models import FreeStuffItem
+from django.contrib import messages
 
 
 @login_required
@@ -26,16 +27,16 @@ def upload_item(request):
         form = FreeItemForm()
     return render(request, 'freestuff/upload_item.html', {
         'form': form,
-        'title':'Upload your Item'
-        })
+        'title': 'Upload your Item'
+    })
 
 
 @login_required
 def item_detail(request, itemid):
     current_item = get_object_or_404(FreeStuffItem, pk=itemid)
-    return render(request, 'freestuff/item_detail.html',{
-        'title':current_item.title,
-        'item':current_item,
+    return render(request, 'freestuff/item_detail.html', {
+        'title': current_item.title,
+        'item': current_item,
     })
 
 
@@ -43,22 +44,22 @@ def item_detail(request, itemid):
 def edit_item(request, itemid):
     my_item = get_object_or_404(FreeStuffItem, pk=itemid)
     if my_item.seller != request.user:
-        messages.success(request, "You don't have the access to the Item",extra_tags='danger')
+        messages.success(request, "You don't have the access to the Item", extra_tags='danger')
         return redirect('accounts:user-listing')
     if request.method == 'POST':
         if 'action' in request.POST:
-            form = FreeItemForm(request.POST,request.FILES, instance=my_item)
+            form = FreeItemForm(request.POST, request.FILES, instance=my_item)
             if form.is_valid():
                 book = form.save(commit=False)
                 book.save()
                 return redirect('accounts:user-listing')
         else:
             my_item.delete()
-            messages.success(request, "Your Item has been deleted",extra_tags='danger')
+            messages.success(request, "Your Item has been deleted", extra_tags='danger')
             return redirect('accounts:user-listing')
-    else:    
+    else:
         form = FreeItemForm(instance=my_item)
-    return render(request, 'freestuff/edit_item.html',{
+    return render(request, 'freestuff/edit_item.html', {
         'form': form,
-        'title':'Edit Item'
-        })    
+        'title': 'Edit Item'
+    })
