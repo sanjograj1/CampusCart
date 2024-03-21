@@ -10,8 +10,9 @@
 <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
-<div class="container">
-  <div class="row">
+<div class="container position-relative">
+  <a class="position-absolute upload-btn" href='{% url "accounts:profile-view" request.user %}'>Upload your Book</a>
+  <div class="row pt-5">
     <div class="col-7">
       <div class="card">
         <div class="card-header">

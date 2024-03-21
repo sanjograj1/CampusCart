@@ -39,17 +39,21 @@
               bookmark
             </span></a>
           {% endif %}
-          <p class="card-text">Price: ${{ product.price }}</p>
+          <p class="card-text d-flex align-items-center"><span class="material-symbols-outlined">
+              attach_money
+            </span>{{ product.price }}</p>
+          {% if product.is_sold %}
           <div>
-            {% if product.is_sold %}
             <span class="badge badge-pill badge-danger">Sold</span>
-            {% endif %}
           </div>
+          {% endif %}
           <div class="aha-card-tags">
             <span class="tag font-italic">{{ product.category }}</span>
           </div>
           <p class="card-text">{{ product.description }}</p>
-          <p class="card-text pb-2">Uploaded At : {{product.created_at}}
+          <p class="card-text pb-2 d-flex align-items-center"><span class="material-symbols-outlined">
+              schedule
+            </span>{{product.created_at}}
           <div class="position-absolute seller-information w-100 pr-4">
             <p>Seller Information</p>
             <div class="d-flex align-items-center justify-content-between">
