@@ -15,7 +15,7 @@
         <div class="header-underline"></div>
     </div>
     <div class="mt-4">
-        <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row-reverse">
+        <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row-reverse mb-4">
             <div class="book-image d-flex justify-content-center align-items-center one-half">
                 <img class="mw-100 h-auto" src="{{ item.item_image.url }}" alt="{{ item.title }}">
             </div>
@@ -45,6 +45,57 @@
                 </div>
             </div>
         </section>
+        {% if same_category_products or same_category_free_items %}
+        <h2 class="mt-4">Products with Similar Category</h2>
+        <div id="multiple-carousel-slider" class="carousel slide aui-multiple-carousel" data-ride="carousel"
+            data-interval="false">
+            <div id="carousel-container" class="carousel-inner row p-0 m-0 card__container">
+                {% for item in same_category_free_items %}
+                <article class="card__article carousel-item carousel-column ci {% if forloop.first %}active{% endif %}">
+                    <img src="{{ item.item_image.url }}" alt="image" class="card__img">
+                    <div class="card__data">
+                        <div>
+                            {% if item.is_sold %}
+                            <span class="badge badge-pill badge-danger">Sold</span>
+                            {% endif %}
+                        </div>
+                        <span class="card__description">{{ item.condition }}</span>
+                        <h2 class="card__title">{{ item.title }}</h2>
+                        <span class="card__description">{{ item.category }}</span>
+                        <a href="{% url 'freestuff:item-detail' item.id %}" class="card__button">Read More</a>
+                    </div>
+                </article>
+                {% endfor %}
+                {% for item in same_category_products %}
+                <article class="card__article carousel-item carousel-column ci {% if forloop.first %}active{% endif %}">
+                    <img src="{{ item.image.url }}" alt="image" class="card__img">
+                    <div class="card__data">
+                        <div>
+                            {% if item.is_sold %}
+                            <span class="badge badge-pill badge-danger">Sold</span>
+                            {% endif %}
+                        </div>
+                        <p>${{ item.price }}</p>
+                        <span class="card__description">{{ item.condition }}</span>
+                        <h2 class="card__title">{{ item.title }}</h2>
+                        <span class="card__description">{{ item.category }}</span>
+                        <a href="{% url 'products:detail_product' item.pk %}" class="card__button">Read More</a>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+            <a class="carousel-control-next" href="#multiple-carousel-slider" role="button" data-slide="next">
+                <span class="carousel-control-next-icon aha-icon-arrow-right" aria-hidden="true"></span>
+                <span class="sr-only">Next</span>
+            </a>
+            <a class="carousel-control-prev action-disable" href="#multiple-carousel-slider" role="button"
+                data-slide="prev">
+                <span class="carousel-control-prev-icon aha-icon-arrow-left" aria-hidden="true"></span>
+                <span class="sr-only">Previous</span>
+            </a>
+
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

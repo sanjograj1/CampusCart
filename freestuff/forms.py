@@ -20,3 +20,24 @@ class FreeItemForm(forms.ModelForm):
             Field('condition', css_class='form-control'),
             Field('item_image', css_class='form-control'),
         )
+
+class FreeItemFiltersForm(forms.Form):
+    CATEGORY_LIST = [
+        ("", "----"),
+        ("Electronics", "Electronics"),
+        ("Clothing", "Clothing"),
+        ("Shoes", "Shoes"),
+        ("Furniture", "Furniture"),
+        ("Others", "Others"),
+    ]
+    CONDITION_LIST = [
+        ("", "----"),
+        ("New", "New"),
+        ("Used", "Used"),
+    ]
+    condition = forms.ChoiceField(
+        choices=CONDITION_LIST, required=False, label="Condition"
+    )
+    category = forms.ChoiceField(
+        choices=CATEGORY_LIST, required=False, label="Category"
+    )
