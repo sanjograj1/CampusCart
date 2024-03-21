@@ -48,7 +48,7 @@ def post(request):
             receiver = get_user_model().objects.exclude(username=request.user)
             description = f'Item has been uploaded - <b>{item.title}</b>'
             notify.send(sender, recipient=receiver, verb='Upload', description=description)
-            return redirect('lostfound:upload')
+            return redirect('lostfound:home')
     else:
         form = LostandfoundItemForm()
     return render(request,'lostfound/upload.html',{'title': 'Upload Post','form':form})
