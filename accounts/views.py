@@ -29,14 +29,13 @@ from django.core.mail import send_mail
 from django.contrib.auth.forms import PasswordChangeForm
 
 
-
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
         return redirect("accounts:home")
-    
+
     if request.method == "POST":
-        form = LoginForm(None,data=request.POST)
+        form = LoginForm(None, data=request.POST)
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
@@ -44,26 +43,24 @@ def login(request):
                 return redirect("accounts:home")
         else:
             messages.add_message(
-                    request,
-                    messages.ERROR,
-                    "Invalid credentials! Please try again",
-                    extra_tags="danger",
-                )        
+                request,
+                messages.ERROR,
+                "Invalid credentials! Please try again",
+                extra_tags="danger",
+            )
     else:
-        form = LoginForm()  
-    return render(request,"accounts/login.html", {
+        form = LoginForm()
+    return render(request, "accounts/login.html", {
         "title": "Login",
-        "form":form
+        "form": form
     })
 
-import json
 
 @login_required()
 def profile_view(request, username):
-    
     user = get_object_or_404(get_user_model(), username=username)
     comments = UserComment.objects.filter(user=user).order_by('-commented_date')
-        
+
     if request.method == "POST":
         if 'report' in request.POST:
             report_form = ReportForm(request.POST)
@@ -84,7 +81,7 @@ def profile_view(request, username):
                 description = f'{request.user} added a new comnent on your profile Click <a href="/profile/rating/{user.username}">here</a> to view.'
                 notify.send(request.user, recipient=user, verb='Comment', description=description)
                 messages.success(request, "Your comment has been added")
-                return redirect("accounts:profile-view", username=username)  
+                return redirect("accounts:profile-view", username=username)
     else:
         report_form = ReportForm()
         comment_form = UserCommentsForm()
@@ -94,10 +91,10 @@ def profile_view(request, username):
         {
             "user": user,
             "report_form": report_form,
-            'comments':comments,
+            'comments': comments,
             'current_user': user,
             'title': f'{user.username} Rating',
-            'comment_form':comment_form
+            'comment_form': comment_form
         },
     )
 
@@ -131,21 +128,21 @@ def register(request):
 def home(request):
     # get all products sorted count of interested users
     products = Product.objects.filter(interested_users=request.user).order_by("-interested_users")
-    current_viewed_books = request.COOKIES.get('viewed_books','')
+    current_viewed_books = request.COOKIES.get('viewed_books', '')
     current_viewed_books = [int(book) for book in current_viewed_books.split(',') if book]
     viewed_books = Book.objects.filter(id__in=current_viewed_books)
-    viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
+    viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id), reverse=True)
 
-    current_viewed_properties = request.COOKIES.get('viewed_properties','')
+    current_viewed_properties = request.COOKIES.get('viewed_properties', '')
     current_viewed_properties = [int(rental) for rental in current_viewed_properties.split(',') if rental]
     viewed_properties = Rental.objects.filter(id__in=current_viewed_properties)
-    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id),reverse=True)
+    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id), reverse=True)
 
     context = {
         "title": "Home",
         "products": products,
-        'viewed_books':viewed_books,
-        'viewed_properties':viewed_properties
+        'viewed_books': viewed_books,
+        'viewed_properties': viewed_properties
     }
     return render(request, "accounts/home.html", context)
 
@@ -159,7 +156,6 @@ def user_logout(request):
         extra_tags="success",
     )
     return redirect("accounts:login")
-
 
 
 @login_required
@@ -204,8 +200,6 @@ def profile(request):
             "user_longitude": user_longitude,
         },
     )
-
-
 
 
 @login_required
@@ -272,7 +266,6 @@ def toggle_sold_status(request, model, id):
     return redirect("accounts:user-listing")
 
 
-
 @login_required
 def user_rating(request, username):
     current_user = get_object_or_404(get_user_model(), username=username)
@@ -304,7 +297,6 @@ def contactus(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-
             form.save()
             email = form.cleaned_data.get("email")
             # send email to user
@@ -320,9 +312,9 @@ def contactus(request):
             messages.info(request, "We'll get in touch with you soon.")
             return redirect("accounts:contactus")
     else:
-        form = ContactForm(initial={"email": request.user.email,"name":request.user.first_name,"number":request.user.profile.phone_number})
+        form = ContactForm(initial={"email": request.user.email, "name": request.user.first_name,
+                                    "number": request.user.profile.phone_number})
     return render(request, "accounts/contactus.html", {"form": form})
-
 
 
 @login_required
@@ -338,22 +330,23 @@ def login_history(request):
     })
 
 
-
 @login_required
 def change_theme(request):
     current_theme = request.COOKIES.get('theme', 'primary')
     response = HttpResponse("Setting Theme")
-    
+
     if current_theme == 'primary':
         next_theme = 'secondary'
     else:
         next_theme = 'primary'
     response = redirect(request.META.get('HTTP_REFERER', '/'))
-    response.set_cookie('theme', next_theme, max_age=5*24*60*60)
-    
+    response.set_cookie('theme', next_theme, max_age=5 * 24 * 60 * 60)
+
     return response
 
     # chnage password for user form
+
+
 @login_required
 def change_password(request):
     if request.method == "POST":

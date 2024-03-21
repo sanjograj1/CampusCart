@@ -7,7 +7,6 @@ from django.contrib.auth.views import (
     PasswordResetCompleteView,
 )
 
-
 app_name = "accounts"
 urlpatterns = [
     path('', views.home, name='home'),
@@ -22,7 +21,7 @@ urlpatterns = [
         views.toggle_sold_status,
         name="toggle-sold-status",
     ),
-     path(
+    path(
         "password-reset/",
         PasswordResetView.as_view(
             template_name="accounts/password_reset.html",
