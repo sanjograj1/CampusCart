@@ -1,13 +1,20 @@
-.home{
+.home {
     position: relative;
     width: 100%;
     height: 100vh;
     justify-content: space-between;
     display: flex;
     align-items: center;
-    padding: 80px 100px 0;
+    padding: 25px 50px;
     background-color: black;
     margin-top: -3rem;
+    font-weight: 600;
+}
+
+@media screen and (max-width: 992px) {
+    .home {
+        flex-direction: column;
+    }
 }
 
 .blur-background {
@@ -18,28 +25,26 @@
     height: 100%;
     background-repeat: no-repeat;
     background-size: cover;
-    background-position: center center; 
+    background-position: center center;
     opacity: 0.55;
-    filter: blur(1px); 
-    /* z-index: -1;  */
-} 
+}
 
-.home .content{
+.home .content {
     max-width: 600px;
     color: #fff;
     position: relative;
 }
 
-.content h2{
+.content h2 {
     font-size: 2.5em;
 }
 
-.content p{
-    margin: 10px 10px 40px -1px;
+.content p {
+    margin-inline: 10px;
 }
 
-.content a{
-    color:#fff;
+.content a {
+    color: #fff;
     text-decoration: none;
     border: 2px solid #fff;
     font-weight: 500;
@@ -47,18 +52,17 @@
     border-radius: 40px;
 }
 
-.home .wrapper-login{
+.home .wrapper-login {
     position: relative;
-    width: 440px;
 }
 
-.wrapper-login h2{
+.wrapper-login h2 {
     font-size: 1.8em;
     color: #fff;
     text-align: center;
 }
 
-.input-box label{
+.input-box label {
     position: absolute;
     font-size: 1em;
     color: #fff;
@@ -69,13 +73,13 @@
 }
 
 .input-box input:focus~label,
-.input-box input:valid~label{
+.input-box input:valid~label {
     font-size: .8em;
     top: -18px;
     left: 17px;
 }
 
-.input-box .icon{
+.input-box .icon {
     position: absolute;
     top: 14px;
     left: 15px;
@@ -83,7 +87,7 @@
     color: #fff;
 }
 
-.wrapper-login .button{
+.wrapper-login .button {
     width: 50% !important;
     height: 50px;
     margin: 0 auto;
@@ -100,43 +104,19 @@
     text-align: center;
 }
 
-.wrapper-login .launch-time{
-    position: absolute;
-    top: 125%;
-    left: 14%;
-}   
-
-.wrapper-login .button:hover{
+.wrapper-login .button:hover {
     color: #FFCE00;
 }
 
-.launch-time{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 60px;
-    gap: 10px;
-    margin-top: 10px;
-}
 
-.launch-time > * {
-    margin: 0 !important;
-}
-
-.launch-time div{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.launch-time div p{
-    margin-top: -15px;
-    font-size: 60px;
-    margin-bottom: -14px;
-    color: #fff;
-}
 
 .time-label {
     margin-top: 5px;
 }
 
+
+.launch-time {
+    color: white;
+    font-size: 24px;
+    font-weight: 900;
+}

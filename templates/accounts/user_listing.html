@@ -221,7 +221,7 @@
                   {% if event.is_sold %}
                   <span class="badge badge-pill badge-danger">Sold</span>
                   {% else %}
-                  <a class="btn btn-sm btn-secondary">Edit</a>
+                  <a class="btn btn-sm btn-secondary" href="{% url 'events:edit-event' event.id %}">Edit</a>
                   <a class="btn btn-sm btn-outline-success"
                     href="{% url 'accounts:toggle-sold-status' 'events'  event.id %}">Mark as
                     Sold</a>
