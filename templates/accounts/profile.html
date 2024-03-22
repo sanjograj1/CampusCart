@@ -3,6 +3,8 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/css/lightbox.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightbox2/2.11.3/js/lightbox.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
   integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
@@ -47,7 +49,10 @@
           <h4 class="card-title mb-0">Preview Profile</h4>
         </div>
         <div class="card-body">
-          <img id="prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+          <a href="{{user.profile.profile_image.url}}" data-lightbox="profile-image" data-title="Profile Image">
+            <img id="prev_profie_img" src="{{user.profile.profile_image.url}}" class="circle" alt="Profile Image">
+        </a>
+        
           <hr />
           <h6 class="card-subtitle mb-2 text-body-secondary">
             <span id="prev_first_name">[First Name]</span> <span id="prev_last_name">[Last Name]</span>

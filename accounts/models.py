@@ -8,8 +8,8 @@ class Profile(models.Model):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-    user_class = models.CharField("Class", max_length=15, blank=True, null=True)
-    course = models.CharField(max_length=15, blank=True, null=True)
+    user_class = models.CharField("Class", max_length=50, blank=True, null=True)
+    course = models.CharField(max_length=50, blank=True, null=True)
     profile_image = models.ImageField(
         upload_to="profile_images/", default="profile_images/default.png"
     )
