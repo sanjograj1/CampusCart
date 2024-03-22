@@ -25,15 +25,10 @@
       </form>
     </div>
   </div>
-
-  {% if form.search.value %}
-  Searched for: <b>{{ form.search.value }} </b> with Category: {{ form.category.category }}
-  <hr />
-  {% endif %}
   <div class="custom-container">
     <div class="card__container">
-      {% if products %}
-      {% for product in products %}
+      {% if page_obj %}
+      {% for product in page_obj %}
       <div class="my-3">
         <div class="card-hover">
           <div class="card-hover__content">
@@ -66,6 +61,31 @@
         No products available.
       </div>
       {% endif %}
+    </div>
+    <div class="d-flex align-items-center justify-content-center mt-5">
+      <div class="pagination align-items-center justify-content-center">
+        {% if page_obj.has_previous %}
+        <span class="page-item">
+          <a href="?page=1" class="page-link p-2">&laquo; First</a>
+        </span>
+        <span class="page-item">
+          <a href="?page={{ page_obj.previous_page_number }}" class="page-link p-2">Previous</a>
+        </span>
+        {% endif %}
+        <span class="aui-tag-list">
+          <span class="aui-tag-item mx-2">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </span>
+        </span>
+        {% if page_obj.has_next %}
+        <span class="page-item">
+          <a href="?page={{ page_obj.next_page_number }}" class="page-link p-2">Next</a>
+        </span>
+        <span class="page-item">
+          <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link p-2">Last &raquo;</a>
+        </span>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>
