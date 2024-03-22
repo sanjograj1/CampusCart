@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate
+import requests
 from .models import Contact, UserComment, UserSession
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
@@ -29,14 +30,13 @@ from django.core.mail import send_mail
 from django.contrib.auth.forms import PasswordChangeForm
 
 
-
 # Create your views here.
 def login(request):
     if request.user.is_authenticated:
         return redirect("accounts:home")
-    
+
     if request.method == "POST":
-        form = LoginForm(None,data=request.POST)
+        form = LoginForm(None, data=request.POST)
         if form.is_valid():
             user = authenticate(username=form.cleaned_data['username'], password=form.cleaned_data['password'])
             if user is not None:
@@ -44,51 +44,88 @@ def login(request):
                 return redirect("accounts:home")
         else:
             messages.add_message(
-                    request,
-                    messages.ERROR,
-                    "Invalid credentials! Please try again",
-                    extra_tags="danger",
-                )        
+                request,
+                messages.ERROR,
+                "Invalid credentials! Please try again",
+                extra_tags="danger",
+            )
     else:
-        form = LoginForm()  
-    return render(request,"accounts/login.html", {
+        form = LoginForm()
+    return render(request, "accounts/login.html", {
         "title": "Login",
-        "form":form
+        "form": form
     })
 
-import json
 
 @login_required()
 def profile_view(request, username):
-    
     user = get_object_or_404(get_user_model(), username=username)
-    address_dict = user.profile.address
-    try:
-        address_dict = user.profile.address
-        print("USER", address_dict)
-    except:
-        address_dict = "Address does not exist"
+    comments = UserComment.objects.filter(user=user).order_by('-commented_date')
 
-    # add ReportForm and handel post request
     if request.method == "POST":
-        report_form = ReportForm(request.POST)
-        if report_form.is_valid():
-            report = report_form.save(commit=False)
-            report.user = user
-            report.reported_by = request.user
-            report.save()
-            messages.success(request, "Report has been submitted")
-            return redirect("accounts:profile_view", username=username)
+        if 'report' in request.POST:
+            report_form = ReportForm(request.POST)
+            if report_form.is_valid():
+                report = report_form.save(commit=False)
+                report.user = user
+                report.reported_by = request.user
+                report.save()
+                messages.success(request, "Report has been submitted")
+                return redirect("accounts:profile-view", username=username)
+        else:
+            comment_form = UserCommentsForm(request.POST)
+            if comment_form.is_valid():
+                form = comment_form.save(commit=False)
+                form.commented_by = request.user
+                form.user = user
+                form.save()
+                description = f'{request.user} added a new comnent on your profile Click <a href="/profile/rating/{user.username}">here</a> to view.'
+                notify.send(request.user, recipient=user, verb='Comment', description=description)
+                messages.success(request, "Your comment has been added")
+                return redirect("accounts:profile-view", username=username)
     else:
         report_form = ReportForm()
-
+        comment_form = UserCommentsForm()
+        myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
+        print(user.profile.address)
+        url = f"https://api.geoapify.com/v1/geocode/search?text={user.profile.address}&limit=1&apiKey={myAPIKey}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            result = data["features"][0]
+            selleruserlatitude = result["geometry"]["coordinates"][1]
+            selleruserlongitude = result["geometry"]["coordinates"][0]
+        else:
+            selleruserlatitude = -83.06649144027972
+            selleruserlongitude = 42.305201350000004
+            
+        url = f"https://api.geoapify.com/v1/geocode/search?text={request.user.profile.address}&limit=1&apiKey={myAPIKey}"
+        response = requests.get(url)
+        print(response)
+        if response.status_code == 200:
+            data = response.json()
+            result = data["features"][0]
+            curruserlatitude = result["geometry"]["coordinates"][1]
+            curruserlongitude = result["geometry"]["coordinates"][0]
+        else:
+            curruserlatitude = 42.31749
+            curruserlongitude = -83.0387979    
+          
+             
     return render(
         request,
         "accounts/profile_view.html",
         {
             "user": user,
-            "address_dict": address_dict,
             "report_form": report_form,
+            'comments': comments,
+            'current_user': user,
+            'title': f'{user.username} Rating',
+            'comment_form': comment_form,
+            'selleruserlatitude':selleruserlatitude,
+            'selleruserlongitude':selleruserlongitude,
+            'curruserlatitude':curruserlatitude,
+            'curruserlongitude':curruserlongitude
         },
     )
 
@@ -122,21 +159,21 @@ def register(request):
 def home(request):
     # get all products sorted count of interested users
     products = Product.objects.filter(interested_users=request.user).order_by("-interested_users")
-    current_viewed_books = request.COOKIES.get('viewed_books','')
+    current_viewed_books = request.COOKIES.get('viewed_books', '')
     current_viewed_books = [int(book) for book in current_viewed_books.split(',') if book]
     viewed_books = Book.objects.filter(id__in=current_viewed_books)
-    viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id),reverse=True)
+    viewed_books = sorted(viewed_books, key=lambda x: current_viewed_books.index(x.id), reverse=True)
 
-    current_viewed_properties = request.COOKIES.get('viewed_properties','')
+    current_viewed_properties = request.COOKIES.get('viewed_properties', '')
     current_viewed_properties = [int(rental) for rental in current_viewed_properties.split(',') if rental]
     viewed_properties = Rental.objects.filter(id__in=current_viewed_properties)
-    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id),reverse=True)
+    viewed_properties = sorted(viewed_properties, key=lambda x: current_viewed_properties.index(x.id), reverse=True)
 
     context = {
         "title": "Home",
         "products": products,
-        'viewed_books':viewed_books,
-        'viewed_properties':viewed_properties
+        'viewed_books': viewed_books,
+        'viewed_properties': viewed_properties
     }
     return render(request, "accounts/home.html", context)
 
@@ -152,11 +189,9 @@ def user_logout(request):
     return redirect("accounts:login")
 
 
-
 @login_required
 def profile(request):
     if request.method == "POST":
-        print("FILES", request.FILES)
         user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         profile_form = ProfileUpdateForm(
             request.POST, request.FILES, instance=request.user.profile
@@ -195,8 +230,6 @@ def profile(request):
             "user_longitude": user_longitude,
         },
     )
-
-
 
 
 @login_required
@@ -263,7 +296,6 @@ def toggle_sold_status(request, model, id):
     return redirect("accounts:user-listing")
 
 
-
 @login_required
 def user_rating(request, username):
     current_user = get_object_or_404(get_user_model(), username=username)
@@ -295,7 +327,6 @@ def contactus(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
         if form.is_valid():
-
             form.save()
             email = form.cleaned_data.get("email")
             # send email to user
@@ -311,9 +342,9 @@ def contactus(request):
             messages.info(request, "We'll get in touch with you soon.")
             return redirect("accounts:contactus")
     else:
-        form = ContactForm(initial={"email": request.user.email,"name":request.user.first_name,"number":request.user.profile.phone_number})
+        form = ContactForm(initial={"email": request.user.email, "name": request.user.first_name,
+                                    "number": request.user.profile.phone_number})
     return render(request, "accounts/contactus.html", {"form": form})
-
 
 
 @login_required
@@ -329,22 +360,23 @@ def login_history(request):
     })
 
 
-
 @login_required
 def change_theme(request):
     current_theme = request.COOKIES.get('theme', 'primary')
     response = HttpResponse("Setting Theme")
-    
+
     if current_theme == 'primary':
         next_theme = 'secondary'
     else:
         next_theme = 'primary'
     response = redirect(request.META.get('HTTP_REFERER', '/'))
-    response.set_cookie('theme', next_theme, max_age=5*24*60*60)
-    
+    response.set_cookie('theme', next_theme, max_age=5 * 24 * 60 * 60)
+
     return response
 
     # chnage password for user form
+
+
 @login_required
 def change_password(request):
     if request.method == "POST":

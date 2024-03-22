@@ -11,7 +11,7 @@
   <div class="pt-4">
     <h1>
       Product Details</h1>
-      <div class="header-underline"></div>
+    <div class="header-underline"></div>
   </div>
   <div class="card mb-3 mt-4">
     <div class="d-flex card-inner">
@@ -39,24 +39,31 @@
               bookmark
             </span></a>
           {% endif %}
-          <p class="card-text">Price: ${{ product.price }}</p>
+          <p class="card-text d-flex align-items-center"><span class="material-symbols-outlined">
+              attach_money
+            </span>{{ product.price }}</p>
+          {% if product.is_sold %}
+          <div>
+            <span class="badge badge-pill badge-danger">Sold</span>
+          </div>
+          {% endif %}
           <div class="aha-card-tags">
             <span class="tag font-italic">{{ product.category }}</span>
           </div>
           <p class="card-text">{{ product.description }}</p>
-          <p class="card-text pb-2">Uploaded At : {{product.created_at}}
-          <div class="seller-information position-absolute">
-          
-          <a href="{% url 'accounts:profile_view' product.user.username %}" class="text-link">Seller Information</a>
-        
-        <br></br>
-
-            <div class="">
-              <a href="{% url 'accounts:user-rating' product.user.username %}" class="btn btn-sm btn-primary"><b class="mr-4">
-                  My feedback </b></a>
+          <p class="card-text pb-2 d-flex align-items-center"><span class="material-symbols-outlined">
+              schedule
+            </span>{{product.created_at}}
+          <div class="position-absolute seller-information w-100 pr-4">
+            <p>Seller Information</p>
+            <div class="d-flex align-items-center justify-content-between">
               <a class="contact-seller"
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>
+              <div>
+                <a href="{% url 'accounts:profile-view' product.user.username %}">
+                  <b>{{ product.user.get_full_name }}</b></a>
+              </div>
             </div>
           </div>
           </p>
@@ -76,7 +83,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <div class="d-flex flex-wrap row">
+        <div class="d-flex flex-wrap row justify-content-center">
           {% for product in same_price_products %}
           <div class="col-md-3">
             <div class="card mb-4">
@@ -105,15 +112,30 @@
   </div>
   <div class="row mt-2">
     {% for product in similar_products %}
-    <div class="col-md-3">
-      <div class="card mb-4">
-        <img src="{{ product.image.url }}" class="img-fluid rounded-start w-100" alt="{{ product.title }}">
-        <div class="card-body">
-          <h5 class="card-title
-            ">{{ product.title }}</h5>
-          <p class="card-text">Price: ${{ product.price }}</p>
-          <a href="{% url 'products:detail_product' product.id %}" class="btn btn-primary">View Product</a>
+    <div class="my-3 mx-3">
+      <div class="card-hover">
+        <div class="card-hover__content">
+          <h3 class="card-hover__title">
+            {{ product.title }}
+          </h3>
+          <h6>{{ product.price }}</h6>
+          <p class="card-hover__text">{{ product.description }}</p>
+          <div>
+            {% if product.is_sold %}
+            <span class="badge badge-pill badge-danger">Sold</span>
+            {% endif %}
+          </div>
+          <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
+            <span>View Details</span>
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+            </svg>
+          </a>
         </div>
+        <div class="card-hover__extra">
+          <h4>{{product.category }}</h4>
+        </div>
+        <img src="{{ product.image.url }}" alt="{{ product.title }}" />
       </div>
     </div>
     {% endfor %}

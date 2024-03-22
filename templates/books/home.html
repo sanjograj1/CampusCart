@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
 {{ block.super }}
@@ -15,12 +16,23 @@
     <a class="position-absolute upload-btn" href='{% url "books:upload-book" %}'>Upload your Book</a>
     <div class="pt-4">
         <h1>Books</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
+    </div>
+    <div class="mt-4 mb-3">
+        <div>
+            <form class="d-flex">
+                <div class="input-group align-items-end justify-content-start">
+                    {{ form|crispy }}
+                    <button class="btn" type="submit">Search</button>
+                    <a href="{% url 'books:home' %}" class="text-link float-end">Reset</a>
+                </div>
+            </form>
+        </div>
     </div>
     <div class="mt-4">
         <div class="custom-container">
             <div class="card__container">
-                {% for book in all_books %}
+                {% for book in page_obj %}
                 <a href="{% url 'books:book-detail' book.id %}" class="book-card">
                     <div class="book-card__cover">
                         <div class="book-card__book">
@@ -36,6 +48,9 @@
                             {{ book.title }}
                         </div>
                         <div class="book-card__author">
+                            <b>{{ book.category }}</b>
+                        </div>
+                        <div class="book-card__author">
                             By {{ book.author }}
                         </div>
                         <div class="book-card__author">
@@ -49,6 +64,31 @@
                     </div>
                 </a>
                 {% endfor %}
+            </div>
+            <div class="d-flex align-items-center justify-content-center mt-5">
+                <div class="pagination align-items-center justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <span class="page-item">
+                        <a href="?page=1" class="page-link p-2">&laquo; First</a>
+                    </span>
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link p-2">Previous</a>
+                    </span>
+                    {% endif %}
+                    <span class="aui-tag-list">
+                        <span class="aui-tag-item mx-2">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </span>
+                    {% if page_obj.has_next %}
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link p-2">Next</a>
+                    </span>
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link p-2">Last &raquo;</a>
+                    </span>
+                    {% endif %}
+                </div>
             </div>
         </div>
     </div>

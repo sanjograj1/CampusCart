@@ -22,6 +22,11 @@
     crossorigin="anonymous"></script>
   <link rel="stylesheet" href="{% static 'css/login.css' %}" type="text/css" />
   <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@1,300..900&display=swap" rel="stylesheet">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 </head>
@@ -45,21 +50,24 @@
         {% endfor %}
         {% endif %}
         <div class="w-100">
-          <h2 class="text-center">Log In</h2> 
+          <h2 class="text-center">Log In</h2>
           <form method="post">
-               {% csrf_token %}
-               <div class="row g-3">
-                  {% for field in form %}
-                  <div>
-                     {{ field|as_crispy_field }}
-                  </div>
-                  {% endfor %}
-               </div>
-               <input type="submit" class="login-submit" value="Log In" /> <a class="login-submit" href="{% url 'password-reset' %}" style="text-decoration: none;">Forgot Password</a>
-            </form>
+            {% csrf_token %}
+            <div class="row g-3">
+              {% for field in form %}
+              <div>
+                {{ field|as_crispy_field }}
+              </div>
+              {% endfor %}
+            </div>
+            <input type="submit" class="login-submit" value="Log In" />
+            <br>
+            <a class="reset-password" href="{% url 'password-reset' %}" style="text-decoration: none;">Forgot
+              Password</a>
+          </form>
           <div class="or-tag"><span class="or-tag-span">or</span></div>
           <a class="go-to-register" href="{% url 'accounts:register' %}">Create new account</a>
-          
+
         </div>
       </div>
       <div class="campus-cart pt-4 d-flex flex-column justify-content-center align-items-center">

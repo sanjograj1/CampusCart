@@ -9,9 +9,9 @@
 {% block content %}
 {% load crispy_forms_tags %}
 <div class="container position-relative">
-  <a class="position-absolute upload-book" href='{% url "products:sell" %}'>Upload your Product</a>
+  <a class="position-absolute upload-btn" href='{% url "products:sell" %}'>Upload your Product</a>
   <div class="books-header pt-4">
-    <h1>All Products</h2>
+    <h1>All Products</h1>
       <div class="books-header-underline"></div>
   </div>
   <div class="mt-4">
@@ -21,18 +21,14 @@
           {{ form|crispy }}
           <button class="btn" type="submit">Search</button>
           <a href="{% url 'products:home' %}" class="text-link float-end">Reset</a>
+        </div>
       </form>
     </div>
   </div>
-
-  {% if form.search.value %}
-  Searched for: <b>{{ form.search.value }} </b> with Category: {{ form.category.category }}
-  <hr />
-  {% endif %}
   <div class="custom-container">
     <div class="card__container">
-      {% if products %}
-      {% for product in products %}
+      {% if page_obj %}
+      {% for product in page_obj %}
       <div class="my-3">
         <div class="card-hover">
           <div class="card-hover__content">
@@ -41,6 +37,11 @@
             </h3>
             <h6>{{ product.price }}</h6>
             <p class="card-hover__text">{{ product.description }}</p>
+            <div>
+              {% if product.is_sold %}
+              <span class="badge badge-pill badge-danger">Sold</span>
+              {% endif %}
+            </div>
             <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
               <span>View Details</span>
               <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
@@ -60,6 +61,31 @@
         No products available.
       </div>
       {% endif %}
+    </div>
+    <div class="d-flex align-items-center justify-content-center mt-5">
+      <div class="pagination align-items-center justify-content-center">
+        {% if page_obj.has_previous %}
+        <span class="page-item">
+          <a href="?page=1" class="page-link p-2">&laquo; First</a>
+        </span>
+        <span class="page-item">
+          <a href="?page={{ page_obj.previous_page_number }}" class="page-link p-2">Previous</a>
+        </span>
+        {% endif %}
+        <span class="aui-tag-list">
+          <span class="aui-tag-item mx-2">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+          </span>
+        </span>
+        {% if page_obj.has_next %}
+        <span class="page-item">
+          <a href="?page={{ page_obj.next_page_number }}" class="page-link p-2">Next</a>
+        </span>
+        <span class="page-item">
+          <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link p-2">Last &raquo;</a>
+        </span>
+        {% endif %}
+      </div>
     </div>
   </div>
 </div>

@@ -2,18 +2,13 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
-{% if theme == 'primary' %}
-<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
-{% else %}
-<link rel="stylesheet" href="{% static 'css/books-custom.css' %}" type="text/css" />
-{% endif %}
 <link rel="stylesheet" href="{% static 'css/userhistory.css' %}" type="text/css" />
 {% endblock %}
 {% block content %}
 <div class="container">
-    <div class="books-header pt-4">
+    <div class="header pt-4">
         <h1>Login History</h1>
-        <div class="books-header-underline"></div>
+        <div class="header-underline"></div>
     </div>
     <div class="mt-4">
         <div class="user-history d-flex flex-column-reverse">
@@ -38,7 +33,7 @@
                 </table>
             </div>
             <div class="second">
-                <div class="login-extra-details d-flex flex-wrap justify-content-around align-items-center pt-5">
+                <div class="login-extra-details d-flex flex-wrap justify-content-around align-items-center pt-4">
                     <div class="total">
                         <h3>Total Login</h3>
                         <p>{{ all_history|length }}</p>
