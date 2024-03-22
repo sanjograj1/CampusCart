@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from notifications.signals import notify
 from django.contrib import messages
+from django.core.paginator import Paginator
  
 from .forms import BookForm,BooksFilter
 from .models import Book
@@ -18,32 +19,26 @@ def bookhome(request):
             book_name = form.cleaned_data['name']
             category = form.cleaned_data['category']
             price_range = form.cleaned_data['price']
-            if category and price_range and book_name:
+            books = Book.objects.all()
+            if category:
+                books = books.filter(category=category)
+            if price_range:
                 price = price_range.split('-')
-                books = Book.objects.filter(category=category).filter(price__gte=price[0], price__lte=price[1]).filter(title__contains=book_name)
-            elif category and price_range:
-                price = price_range.split('-')
-                books = Book.objects.filter(category=category).filter(price__gte=price[0], price__lte=price[1])
-            elif category and book_name:
-                books = Book.objects.filter(category=category, title__contains=book_name)
-            elif price_range and book_name:
-                price = price_range.split('-')
-                books = Book.objects.filter(price__gte=price[0], price__lte=price[1], title__contains=book_name)
-            elif category:
-                books = Book.objects.filter(category=category)
-            elif price_range:
-                price = price_range.split('-')
-                books = Book.objects.filter(price__gte=price[0], price__lte=price[1])
-            elif book_name:
-                books = Book.objects.filter(title__contains=book_name)
-            else:
-                books = Book.objects.all()
+                books = books.filter(price__gte=price[0], price__lte=price[1])
+            if book_name:
+                books = books.filter(title__contains=book_name)
+
+            paginator = Paginator(books, 9)
+
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
     else:
         books = Book.objects.all()
     return render(request, 'books/home.html', {
         'title': 'Books',
         'all_books': books,
-        'form': form
+        'form': form,
+        'page_obj':page_obj
     })
 
 

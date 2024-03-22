@@ -58,7 +58,7 @@
       <div id="carousel-container" class="carousel-inner row p-0 m-0">
         {% for book in viewed_books %}
         <div
-          class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 mt-lg-4 ci {% if forloop.first %}active{% endif %}">
+          class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 ci {% if forloop.first %}active{% endif %}">
           <a href="{% url 'books:book-detail' book.id %}" class="book-card book-card-shadow-none">
             <div class="book-card__cover">
               <div class="book-card__book">
@@ -102,7 +102,7 @@
   </div>
   {% endif %}
   {% if viewed_properties %}
-  <div class="books-header pt-4">
+  <div class="pt-4">
     <h2 class="mt-5 ml-5 display-4">Recently Viewed Properties</h2>
     <div class="underline ml-5"></div>
   </div>
@@ -112,7 +112,7 @@
       <div id="carousel-container" class="carousel-inner row p-0 m-0">
         {% for rental in viewed_properties %}
         <div
-          class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 mt-lg-4 ci {% if forloop.first %}active{% endif %}">
+          class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 ci {% if forloop.first %}active{% endif %}">
           <a class="property-container d-flex row" href="{% url 'rentals:property-detail' rental.id %}">
             <div class="property-image">
               <img src="{{ rental.property_image.url }}" alt="Property Image" />
@@ -150,41 +150,40 @@
   </div>
   {% endif %}
   {% if products %}
-  <div class="mt-5">
-    <div class="books-header pt-4">
-      <h2 class="mt-5 ml-5 display-4">Interested Products</h2>
-      <div class="underline ml-5"></div>
-    </div>
-    <div class="mx-5">
-      <div id="multiple-carousel-slider-product" class="carousel slide aui-multiple-carousel p-5 border-0"
-        data-ride="carousel" data-interval="false">
-        <div id="carousel-container" class="carousel-inner row p-0 m-0">
-          {% for product in products %}
-          <div
-            class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 mt-lg-4 ci {% if forloop.first %}active{% endif %}">
-            <div class="card">
-              <img src="{{ product.image.url }}" class="card-img-top" height="300" alt="{{ product.title }}">
-              <div class="card-body">
-                <div class="aha-card-tags">
-                  <span class="tag font-italic">{{product.category}}</span>
-                </div>
-                <div>
-                  <h5 class="card-title">{{ product.title }}
-                  </h5>
-                  <a href="{% url 'products:detail_product' product.pk %}" class="btn btn-primary btn-sm mb-2">View
-                    Details</a>
-                  <p class="card-text mb-0 d-flex align-items-center"><span class="material-symbols-outlined">
-                      attach_money
-                    </span>{{ product.price }}</p>
-                  {% if product.is_sold %}
-                  <span class="badge badge-pill badge-danger">Sold</span>
-                  {% endif %}
-                </div>
+  <div class="pt-4">
+    <h2 class="mt-5 ml-5 display-4">Interested Products</h2>
+    <div class="underline ml-5"></div>
+  </div>
+  <div class="mx-5">
+    <div id="multiple-carousel-slider-product" class="carousel slide aui-multiple-carousel border-0"
+      data-ride="carousel" data-interval="false">
+      <div id="carousel-container" class="carousel-inner row p-5 m-0">
+        {% for product in products %}
+        <div
+          class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 ci  {% if forloop.first %}active{% endif %}">
+          <div class="card-hover w-auto"
+            style="background-image: url('{{ product.image.url }}'); background-size: contain; background-repeat: no-repeat; background-position: center;background-position: top;">
+            <div class="card-hover__content">
+              <h3 class="card-hover__title">
+                {{ product.title }}
+              </h3>
+              <h6>{{ product.price }}</h6>
+              <p class="card-hover__text mb-1">{{ product.description }}</p>
+              <div>
+                {% if product.is_sold %}
+                <span class="badge badge-pill badge-danger">Sold</span>
+                {% endif %}
               </div>
+              <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
+                <span>View Details</span>
+              </a>
+            </div>
+            <div class="card-hover__extra">
+              <h4>{{product.category }}</h4>
             </div>
           </div>
-          {% endfor %}
         </div>
+        {% endfor %}
         <a class="carousel-control-next" href="#multiple-carousel-slider-product" role="button" data-slide="next">
           <span class="carousel-control-next-icon aha-icon-arrow-right" aria-hidden="true"></span>
           <span class="sr-only">Next</span>
@@ -193,7 +192,6 @@
           <span class="carousel-control-prev-icon aha-icon-arrow-left" aria-hidden="true"></span>
           <span class="sr-only">Previous</span>
         </a>
-
       </div>
     </div>
   </div>

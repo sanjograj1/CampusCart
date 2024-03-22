@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
@@ -29,7 +30,11 @@ def home(request):
                 products = Product.objects.filter(title__icontains=search)
             else:
                 products = Product.objects.all()
-                print(products[0].description)
+
+            paginator = Paginator(products, 9)
+
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
     else:
 
         products = Product.objects.all()
@@ -37,7 +42,7 @@ def home(request):
     return render(
         request,
         "products/home.html",
-        {"products": products, "form": form, "title": "Products"},
+        {"products": products, "form": form, "title": "Products",'page_obj':page_obj},
     )
 
 
