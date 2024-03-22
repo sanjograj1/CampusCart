@@ -3,6 +3,11 @@
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/lostfounddetail.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+
 {% endblock %}
 {% block content %}
 <div class="card-wrapper">
@@ -17,16 +22,13 @@
     <div class="product-content">
       <h2 class="product-title">{{ post.title }}</h2>
       
-      <label for="date">{{ post.post_date }}</label>
+      <label for="date">Posted On:  {{ post.post_date }}</label>
 
-      <input type="date" id="start" name="trip-start" value="2018-07-22" />
+      {% comment %} <input type="date" id="start" name="trip-start" value="2018-07-22" /> {% endcomment %}
 
       <div class="product-detail">
         <h2>About this item: </h2>
         <p>{{ post.product_description }}</p>
-        {% comment %} <p>P.S : I will need to see proof for this, if this cycle belongs to you</p> {% endcomment %}
-
-
 
         <ul>
           <li>Landmark where found/lost: <span>{{ post.location }}</span></li>
@@ -35,18 +37,21 @@
       </div>
 
       <div class="purchase-info">
-        <!-- <input type = "number" min = "0" value = "1"> -->
-        <button type="button" class="btn">
-          Contact Owner <i class="fas fa-shopping-cart"></i>
-        </button>
-        {% comment %} <button type="button" class="btn">Save</button>
-        <button type="button" class="btn">Report</button> {% endcomment %}
+        <div class="d-flex align-items-center justify-content-between">
+          <a class="contact-seller"
+              href="MSTeams:/l/chat/0/0?users={{ post.user.email }}&message=I would like to inquire regarding an item.">Contact
+              User</a>
+          <div>
+              <a href="{% url 'accounts:profile-view' post.user.username %}">Posted By:
+                  <b>{{ post.user.first_name }} {{ post.user.last_name }}</b></a>
+          </div>
+      </div>
       </div>
 
       <div class="social-links">
         <p>Share this post: </p>
-        <a href="#">
-          <i class="fab fa-facebook-f"></i>
+        <a href="#" id="sharepost">
+          <i class="fas fa-share"></i>
         </a>
       </div>
     </div>
@@ -55,5 +60,20 @@
 
 
 <script src="{% static 'js/lostfounddetail.js' %}"></script>
+
+<script>
+  // JavaScript function to create a link of the page and copy it to clipboard
+  document.getElementById('sharepost').addEventListener('click', function(event) {
+    event.preventDefault();
+    var link = window.location.href;
+    navigator.clipboard.writeText(link)
+      .then(function() {
+        alert('Link copied to clipboard: ' + link);
+      })
+      .catch(function() {
+        alert('Failed to copy link to clipboard.');
+      });
+  });
+</script>
 
 {% endblock content %}

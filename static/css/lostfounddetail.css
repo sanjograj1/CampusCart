@@ -38,6 +38,10 @@ body{
 	transform: scale(1.1);
 }
 
+.user-name{
+    margin-left: 20px;
+}
+
 .img-select{
     display: flex;
 }

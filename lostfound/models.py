@@ -16,7 +16,7 @@ class LostandfoundItem(models.Model):
     post_date = models.DateTimeField(auto_now_add = True)
     image = models.ImageField(upload_to='lost_and_found_images/', blank =False)
     location = models.CharField(max_length=100, blank =False)
-    # user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User,on_delete=models.CASCADE)
 
 
     def __str__(self):
