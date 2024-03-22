@@ -2,7 +2,7 @@
     position: relative;
     margin: 24px;
     width: 320px;
-    height: 570px;
+    height: 510px;
     overflow: hidden;
     background-color: #fff;
     box-shadow: 0 0 30px 5px rgba(0, 0, 0, 0.15);
@@ -29,7 +29,7 @@
 .overlay {
     position: relative;
     width: 100%;
-    height: 400px;
+    height: 335px;
     background-color: rgba(24, 83, 122, 0.6);
     opacity: 0;
     transition: height linear 0.4s, opacity linear 0.2s;
@@ -56,7 +56,11 @@
     font-size: 1.5em;
     font-weight: bold;
     letter-spacing: 1px;
-    margin: 12px;
+    margin-inline: 8px;
+}
+
+.title{
+    min-height: 72px;
 }
 
 .info {
@@ -68,13 +72,13 @@
     width: 20%;
     height: 6px;
     background-color: #17537a;
-    margin-bottom: 16px;
+    margin-bottom: 5px;
 }
 
 .additional-info {
     border-top: 1px solid #bbb;
     margin-top: 12px;
-    padding: 28px;
+    padding: 15px;
     padding-bottom: 0;
 }
 
@@ -103,7 +107,7 @@
     top: -100px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
+    /* width: 60%; */
     outline: none;
     cursor: pointer;
     padding: 12px;
@@ -112,6 +116,11 @@
     font-weight: bold;
     letter-spacing: 2px;
     transition: backgroung-color 0.4s, top 0.4s;
+    text-align: center;
+}
+
+.action:hover{
+    color: white;
 }
 
 .item-container:hover .action {

@@ -7,6 +7,7 @@
     align-items: center;
     padding: 80px 100px 0;
     background-color: black;
+    margin-top: -3rem;
 }
 
 .blur-background {
@@ -19,7 +20,7 @@
     background-size: cover;
     background-position: center center; 
     opacity: 0.55;
-    /* filter: blur(3px);  */
+    filter: blur(1px); 
     /* z-index: -1;  */
 } 
 
@@ -55,24 +56,6 @@
     font-size: 1.8em;
     color: #fff;
     text-align: center;
-}
-
-.wrapper-login .input-box{
-    position: relative;
-    width: 100%;
-    height: 50px;
-    margin: 40px 0;
-}
-
-.input-box input{
-    width: 100%;
-    height: 100%;
-    background: transparent;
-    border: 1px solid #fff;
-    outline: none;
-    border-radius: 40px;
-    color: #fff;
-    padding: 0 5px 0 45px;
 }
 
 .input-box label{
@@ -114,8 +97,46 @@
     font-size: 1em;
     color: #fff;
     font-weight: 500;
+    text-align: center;
 }
+
+.wrapper-login .launch-time{
+    position: absolute;
+    top: 125%;
+    left: 14%;
+}   
 
 .wrapper-login .button:hover{
     color: #FFCE00;
 }
+
+.launch-time{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 60px;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.launch-time > * {
+    margin: 0 !important;
+}
+
+.launch-time div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.launch-time div p{
+    margin-top: -15px;
+    font-size: 60px;
+    margin-bottom: -14px;
+    color: #fff;
+}
+
+.time-label {
+    margin-top: 5px;
+}
+
