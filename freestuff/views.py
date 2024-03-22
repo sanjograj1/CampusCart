@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from notifications.signals import notify
 from products.models import Product
@@ -21,12 +22,18 @@ def index(request):
                 items = items.filter(category=category)
             elif condition:
                 items = items.filter(condition=condition)
+
+            paginator = Paginator(items, 9)
+
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
     else:
         items = FreeStuffItem.objects.all()
     return render(request, 'freestuff/home.html', {
         'items': items,
         'title': 'Free Stuff',
-        'form':form
+        'form':form,
+        'page_obj':page_obj
     })
 
 @login_required
