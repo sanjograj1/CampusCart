@@ -3,6 +3,10 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
 {% endblock %}
@@ -67,6 +71,11 @@
             {% endif %}
             <p class="mb-0">{{user.profile.bio}}</p>
           </div>
+          <div id="profile-map" class="mb-4"></div>
+          <span class="visually-hidden seleruserlat">{{ selleruserlatitude }}</span>
+          <span class="visually-hidden seleruserlong">{{selleruserlongitude }}</span>
+          <span class="visually-hidden userlat">{{ curruserlatitude }}</span>
+          <span class="visually-hidden userlong">{{curruserlongitude }}</span>
           <div class="mt-4">
             <hr>
             {% if comments %}
@@ -136,4 +145,42 @@
   </div>
   {% endif %}
 </div>
+<script>
+  const map = L.map('profile-map').setView([42.3043181, -83.0686139], 14);
+  let marker;
+  const isRetina = L.Browser.retina;
+  const myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+  const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+  const retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}";
+  map.attributionControl.setPrefix('Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a>')
+  L.tileLayer(isRetina ? retinaUrl : baseUrl, {
+    attribution: '<a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> contributors',
+    apiKey: myAPIKey,
+    maxZoom: 20,
+    id: 'osm-bright',
+  }).addTo(map);
+
+  // move zoom controls to bottom right
+  map.zoomControl.remove();
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
+
+
+  geocodeAddress()
+
+
+  function geocodeAddress() {
+    let selerlat = document.getElementsByClassName('seleruserlat')[0].textContent;
+    let selerlong = document.getElementsByClassName('seleruserlong')[0].textContent;
+    let lat = document.getElementsByClassName('userlat')[0].textContent;
+    let long = document.getElementsByClassName('userlong')[0].textContent;
+    if (lat && long) {
+      marker = L.marker(new L.LatLng(selerlat, selerlong)).addTo(map);
+      map.panTo(new L.LatLng(selerlat, selerlong));
+      marker = L.marker(new L.LatLng(lat, long)).addTo(map);
+      map.panTo(new L.LatLng(lat, long));
+    }
+  }
+</script>
 {% endblock content %}
