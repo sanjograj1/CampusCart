@@ -162,7 +162,8 @@
         <div
           class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 ci  {% if forloop.first %}active{% endif %}">
           <div class="card-hover w-auto"
-            style="background-image: url('{{ product.image.url }}'); background-size: contain; background-repeat: no-repeat; background-position: center;background-position: top;">
+          style="background-image: url('{{ product.image.url }}'); background-size: cover; background-repeat: no-repeat; background-position: center top;">
+
             <div class="card-hover__content">
               <h3 class="card-hover__title">
                 {{ product.title }}
@@ -176,6 +177,9 @@
               </div>
               <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
                 <span>View Details</span>
+                
+                
+                
               </a>
             </div>
             <div class="card-hover__extra">
