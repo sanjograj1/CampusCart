@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load crispy_forms_tags %}
 {% load static %}
 {% block head %}
 {{ block.super }}
@@ -11,29 +12,27 @@
 {% block content %}
 
 <div class="container position-relative">
-    <div class="container position-relative">
-        <div class="row">
-            <div class="col">
-                <div class="books-header pt-4">
-                    <h1>Events</h1>
-                    <div class="events-header-underline"></div>
+    <a class="position-absolute upload-btn" href='{% url "events:upload-event" %}'>Organize an Event</a>
+    <div class="books-header pt-4">
+        <h1>All Events</h1>
+        <div class="books-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div>
+            <form class="d-flex">
+                <div class="input-group align-items-end">
+                    {{ form|crispy }}
+                    <button class="btn" type="submit">Search</button>
+                    <a href="{% url 'events:event-home' %}" class="text-link float-end">Reset</a>
                 </div>
-            </div>
-            <div class="col">
-                <form class="form-inline" action="" method="GET">
-                    <div class="form-group mx-sm-3 mb-2">
-                        {{ form.category }}
-                    </div>
-                    <button type="submit" class="btn btn-primary mb-2">Search</button>
-                </form>
-            </div>
-            <a class="position-absolute upload-event" href='{% url "events:upload-event" %}'>Add an Event</a>
+            </form>
         </div>
-    </div>    
+    </div>
     <div class="mt-4">
         <div class="custom-container">
             <div class="card__container">
-                {% for event in events %}
+                {% if page_obj %}
+                {% for event in page_obj %}
                 <div class="item-container">
                     <div class="image-container">
                         <img src="{{ event.image.url }}" alt="event image">
@@ -59,63 +58,46 @@
                                 </p>
 
                                 <p class="info description">
-                                    {{ event.description|truncatechars:60}}
-                                
-                                    <span class="indo description"><a href="{% url 'events:event-detail' event.id %}">view more</a></span>
-                            </p>
+                                    {{ event.description|truncatechars:80}}
+                                </p>
                             </div>
-                        </div>  
-                        <button class="action" onclick="window.location.href='{% url 'events:event-detail' event.id %}'">Buy Tickets</button>
+                        </div>
+                        <a class="action" href="{% url 'events:event-detail' event.id %}">View Details</a>
                     </div>
                 </div>
                 {% endfor %}
-</div>
-</div></div>
-<div class="container position-relative">
-    <div class="books-header pt-4">
-        <h2>Upcoming Events</h2>
-        <div class="events-header-underline"></div>
-    </div>
-    <div class="mt-4">
-        <div class="custom-container">
-            <div class="card__container">
-                {% for event in upcoming_events %}
-                    <!-- Upcoming Event Card -->
-                    <div class="item-container">
-                        <!-- Event Image -->
-                        <div class="image-container">
-                            <img src="{{ event.image.url }}" alt="event image">
-                        </div>
-                        <!-- Event Body -->
-                        <div class="body-container">
-                            <div class="overlay"></div>
-                            <div class="event-info">
-                                <p class="title">{{ event.title }}</p>
-                                <div class="separator"></div>
-                                <p class="info">{{ event.category }}</p>
-                                <p class="price">${{ event.price}}</p>
-                                <div class="additional-info">
-                                    <p class="info">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                        {{ event.location }}
-                                    </p>
-                                    <p class="info">
-                                        <i class="far fa-calendar-alt"></i>
-                                        {{ event.date_and_time }}
-                                    </p>
-                                    <p class="info description">
-                                        {{ event.description|truncatechars:60}}
-                                        <span class="indo description"><a href="{% url 'events:event-detail' event.id %}">view more</a></span>
-                                    </p>
-                                </div>
-                            </div>
-                            <!-- Buy Tickets Button -->
-                            <button class="action" onclick="window.location.href='{% url 'events:event-detail' event.id %}'">Buy Tickets</button>
-                        </div>
-                    </div>
-                {% endfor %}
+                {% else %}
+                <div class="alert alert-info mt-3" role="alert">
+                    No Events available.
+                </div>
+                {% endif %}
             </div>
-        </div>  
+            <div class="d-flex align-items-center justify-content-center mt-5">
+                <div class="pagination align-items-center justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <span class="page-item">
+                        <a href="?page=1" class="page-link p-2">&laquo; First</a>
+                    </span>
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.previous_page_number }}" class="page-link p-2">Previous</a>
+                    </span>
+                    {% endif %}
+                    <span class="aui-tag-list">
+                        <span class="aui-tag-item mx-2">
+                            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+                        </span>
+                    </span>
+                    {% if page_obj.has_next %}
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.next_page_number }}" class="page-link p-2">Next</a>
+                    </span>
+                    <span class="page-item">
+                        <a href="?page={{ page_obj.paginator.num_pages }}" class="page-link p-2">Last &raquo;</a>
+                    </span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
