@@ -5,6 +5,7 @@ from notifications.signals import notify
 from django.utils import timezone
 from datetime import datetime, timedelta
 from django.core.paginator import Paginator
+from django.contrib import messages
 
 from .forms import EventForm, EventFilterForm
 from .models import Event
@@ -43,10 +44,10 @@ def eventdetail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     today = timezone.now()
     two_weeks = today + timezone.timedelta(weeks=2)
-    upcomingevents = Event.objects.filter(date_and_time__range=[today, two_weeks])
+    upcomingevents = Event.objects.filter(date_and_time__range=[today, two_weeks]).exclude(pk=event_id)
     remaining_time = event.date_and_time - timezone.now()
     if remaining_time.total_seconds() < 0:
-        remaining_time_str = "Event has passed"
+        remaining_time_str = "Event has Expired"
     else:
         remaining_days = remaining_time.days
         remaining_hours = remaining_time.seconds // 3600
@@ -58,6 +59,7 @@ def eventdetail(request, event_id):
             'minutes': remaining_minutes,
             'seconds': remaining_seconds
         }
+        
 
     return render(request, 'events/eventdetail.html', {
         'title': 'Event Detail',
@@ -65,6 +67,7 @@ def eventdetail(request, event_id):
         'upcomingevents': upcomingevents,
         'remaining_time_str': remaining_time_str,  
     })
+
 
 @login_required
 def uploadevent(request):
@@ -82,3 +85,28 @@ def uploadevent(request):
     else:
         form = EventForm()
     return render(request,'events/upload_event.html',{'title': 'Upload Event','form':form})
+
+
+@login_required
+def editevent(request, eventid):
+    my_event = get_object_or_404(Event, pk=eventid)
+    if my_event.organizer != request.user:
+        messages.success(request, "You don't have the access to the Event", extra_tags='danger')
+        return redirect('accounts:user-listing')
+    if request.method == 'POST':
+        if 'action' in request.POST:
+            form = EventForm(request.POST, request.FILES, instance=my_event)
+            if form.is_valid():
+                book = form.save(commit=False)
+                book.save()
+                return redirect('accounts:user-listing')
+        else:
+            my_event.delete()
+            messages.success(request, "Your Event has been deleted", extra_tags='danger')
+            return redirect('accounts:user-listing')
+    else:
+        form = EventForm(instance=my_event)
+    return render(request, 'events/edit_event.html', {
+        'form': form,
+        'title': 'Edit Item'
+    })
