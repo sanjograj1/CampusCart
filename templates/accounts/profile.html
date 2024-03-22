@@ -11,7 +11,9 @@
 {% endblock %}
 {% block content %}
 <div class="container position-relative">
-  <a class="position-absolute upload-btn" href='{% url "accounts:profile-view" request.user %}'>View your profile</a>
+  <a class="position-absolute upload-btn view-profile" onclick="showLoader()"
+    href='{% url "accounts:profile-view" request.user %}'>View your
+    profile</a>
   <div class="row pt-5">
     <div class="col-7 pt-4">
       <div class="card">
@@ -60,8 +62,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </div>
 
@@ -141,6 +141,10 @@
     if (e.target.name == 'profile_image')
       prev_profie_img.src = URL.createObjectURL(form.profile_image.files[0]);
   });
+
+  const showLoader = () => {
+    document.querySelector('.wrapper').classList.remove('display-none');
+  }
 </script>
 
 

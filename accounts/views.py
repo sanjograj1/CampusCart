@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate
+import requests
 from .models import Contact, UserComment, UserSession
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
@@ -85,6 +86,32 @@ def profile_view(request, username):
     else:
         report_form = ReportForm()
         comment_form = UserCommentsForm()
+        myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
+        print(user.profile.address)
+        url = f"https://api.geoapify.com/v1/geocode/search?text={user.profile.address}&limit=1&apiKey={myAPIKey}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            result = data["features"][0]
+            selleruserlatitude = result["geometry"]["coordinates"][1]
+            selleruserlongitude = result["geometry"]["coordinates"][0]
+        else:
+            selleruserlatitude = -83.06649144027972
+            selleruserlongitude = 42.305201350000004
+            
+        url = f"https://api.geoapify.com/v1/geocode/search?text={request.user.profile.address}&limit=1&apiKey={myAPIKey}"
+        response = requests.get(url)
+        print(response)
+        if response.status_code == 200:
+            data = response.json()
+            result = data["features"][0]
+            curruserlatitude = result["geometry"]["coordinates"][1]
+            curruserlongitude = result["geometry"]["coordinates"][0]
+        else:
+            curruserlatitude = 42.31749
+            curruserlongitude = -83.0387979    
+          
+             
     return render(
         request,
         "accounts/profile_view.html",
@@ -94,7 +121,11 @@ def profile_view(request, username):
             'comments': comments,
             'current_user': user,
             'title': f'{user.username} Rating',
-            'comment_form': comment_form
+            'comment_form': comment_form,
+            'selleruserlatitude':selleruserlatitude,
+            'selleruserlongitude':selleruserlongitude,
+            'curruserlatitude':curruserlatitude,
+            'curruserlongitude':curruserlongitude
         },
     )
 
@@ -161,7 +192,6 @@ def user_logout(request):
 @login_required
 def profile(request):
     if request.method == "POST":
-        print("FILES", request.FILES)
         user_form = UserUpdateForm(request.POST, request.FILES, instance=request.user)
         profile_form = ProfileUpdateForm(
             request.POST, request.FILES, instance=request.user.profile
