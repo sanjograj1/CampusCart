@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import LostandfoundItemForm
+from .forms import LostandfoundItemForm, ItemFilter
 from django.contrib.auth import get_user_model
 
 from notifications.signals import notify
@@ -29,11 +29,31 @@ def laf_detail(request, post_id):
 #     return render(request,'lostfoundupload.html', {'form':form})
 
 def index(request):
-    posts = LostandfoundItem.objects.all()
-    return render(request, 'lostfound/home.html',{
-        'title': 'LostandFoundItems',
-        'posts': posts
+    # posts = LostandfoundItem.objects.all()
+    # return render(request, 'lostfound/home.html',{
+    #     'title': 'LostandFoundItems',
+    #     'posts': posts
+    # })
+
+    if request.method == 'GET':
+        form = ItemFilter(request.GET)
+        if form.is_valid():
+            item_name = form.cleaned_data['name']
+            category = form.cleaned_data['category']
+            items  = LostandfoundItem.objects.all()
+            if category:
+                items = items.filter(category=category)
+            if item_name:
+                items = items.filter(title__contains=item_name)
+
+    else:
+        items = LostandfoundItem.objects.all()
+    return render(request, 'lostfound/home.html', {
+        'title': 'Items',
+        'items': items,
+        'form': form,
     })
+
 
 @login_required
 
