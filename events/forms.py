@@ -37,6 +37,8 @@ class EventForm(forms.ModelForm):
             Field('total_seats', css_class='form-control'),
             Field('image', css_class='form-control')
         )
+        self.fields['location'].help_text = 'Please provide the complete location'
+        self.fields['date_and_time'].help_text = 'Select the date and time of the event'
 
 class EventFilterForm(forms.Form):
     category = forms.ChoiceField(
