@@ -2,30 +2,144 @@
 {% load static %}
 {% block head %}
 {{ block.super }}
+
+<link rel="stylesheet" href="{% static 'css/events.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
+<link rel="stylesheet" href="{% static 'css/free.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/eventdetail.css' %}" type="text/css" />
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
 {% endblock %}
 {% block content %}
 
-<section class="home">
-    <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
-    <div class="content">
-        <h2>{{ event.title }}</h2>
-        <p>{{ event.description }}</p>
-        <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
-        <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
-        <p>${{ event.price }}</p>
-        <p>Available Seats: {{ event.total_seats }}
-        <div>
-            {% if event.is_sold %}
-            <span class="badge badge-pill badge-danger">Sold</span>
-            {% endif %}
+    <section class="home">
+        <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
+        <div class="content pt-5">
+            <h2>{{ event.title }}</h2>
+            <p>{{ event.description }}</p>
+            <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
+            <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
+            <p>${{ event.price }}</p>
+            <p>Available Seats: {{ event.total_seats }}
+            {% comment %} <p>Remaining time: 
+                {{ remaining_time }}
+            </p> {% endcomment %}
+        </div>
+        <div class="wrapper-login">
+            <h2>Join the event</h2>
+            <button onclick="window.location.href='msteams:/l/chat/0/0?users={{ event.organizer.email }}&message=I want to register for the Event'" class="button">Contact Organizer</button>
+                <div class="launch-time">
+                    <div>
+                        <p id="days"></p>
+                        <span class="time-label" style="color:white;">{{ remaining_time_str.days }}</span>
+                    </div>
+                    <p style="color:white;">:</p>
+                    <div>
+                        <p id="hours"></p>
+                        <span class="time-label" style="color:white;">{{remaining_time_str.hours}}</span>
+                    </div>
+                    <p style="color:white;">:</p>
+                    <div>
+                        <p id="minutes"></p>
+                        <span class="time-label" style="color:white;">{{remaining_time_str.minutes}}</span>
+                    </div>
+                    <p style="color:white;">:</p>
+                    <div>
+                        <p id="seconds"></p>
+                        <span class="time-label" style="color:white;">{{remaining_time_str.seconds}}</span>
+                    </div>
+                    
+                </div>
+        </div>
+    </section>  
+    <div class="container position-relative">
+        <div class="books-header pt-4">
+            <h2>Upcoming Events</h2>
+            <div class="events-header-underline"></div>
+        </div>
+        <div class="mt-4">
+            <div class="custom-container">
+                <div class="card__container">
+                    {% if upcomingevents %}
+                    {% for event in upcomingevents %}
+                    <div class="item-container">
+                        <div class="image-container">
+                            <img src="{{ event.image.url }}" alt="event image">
+                        </div>
+    
+                        <div class="body-container">
+                            <div class="overlay"></div>
+    
+                            <div class="event-info">
+                                <p class="title">{{ event.title }}</p>
+                                <div class="separator"></div>
+                                <p class="info">{{ event.category }}</p>
+                                <p class="price">${{ event.price}}</p>
+    
+                                <div class="additional-info">
+                                    <p class="info">
+                                        <i class="fas fa-map-marker-alt"></i>
+                                        {{ event.location }}
+                                    </p>
+                                    <p class="info">
+                                        <i class="far fa-calendar-alt"></i>
+                                        {{ event.date_and_time }}
+                                    </p>
+    
+                                    <p class="info description">
+                                        {{ event.description|truncatechars:80}}
+                                    
+                                        {% comment %} <span class="indo description"><a href="{% url 'events:event-detail' event.id %}">view more</a></span> {% endcomment %}
+                                </p>
+                                </div>
+                            </div>  
+                            <a class="action" href="{% url 'events:event-detail' event.id %}">View Details</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+          <div class="alert alert-info mt-3" role="alert">
+            No Events available.
+          </div>
+          {% endif %}
+                </div>  
+            </div>
         </div>
     </div>
-    <div class="wrapper-login">
-        <h2>Join the event</h2>
-        <button type="submit" class="button">Contact Organizer</button>
-    </div>
-</section>
-{% endblock content %}
+    {% endblock content %}
+
+    {% block extra_js %}
+
+    <!-- <script>
+        // Get the event date and time from the Django template
+        var date_and_time = new Date("{{ event.date_and_time.isoformat }}");
+        console.log("Event Date:", date_and_time);
+    
+        // Calculate the remaining time
+        var remainingTime = date_and_time.getTime() - Date.now();
+    
+        // Function to update the countdown timer
+        function updateTimer() {
+            // Calculate days, hours, minutes, and seconds
+            var days = Math.floor(remainingTime / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((remainingTime % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((remainingTime % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((remainingTime % (1000 * 60)) / 1000);
+    
+            // Display the countdown timer
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours;
+            document.getElementById('minutes').textContent = minutes;
+            document.getElementById('seconds').textContent = seconds;
+    
+            // Update remaining time
+            remainingTime -= 1000; // Subtract one second
+        }
+    
+        // Update the countdown timer every second
+        setInterval(updateTimer, 1000);
+    </script> -->
+    
+
+{% endblock extra_js %}
