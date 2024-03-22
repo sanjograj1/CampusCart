@@ -24,3 +24,14 @@ class LostandfoundItemForm(forms.ModelForm):
             Field('image', css_class='form-control'),
             Field('location', css_class='form-control'),
         )
+
+class ItemFilter(forms.Form):
+    ITEM_CATEGORY = [
+        ("", "----"),
+        ("LOST", "Lost"),
+        ("FOUND", "Found"),
+    ]
+    name = forms.CharField(label="Item Name",required=False)
+    category = forms.ChoiceField(
+        choices=ITEM_CATEGORY, required=False, label="Category"
+    )

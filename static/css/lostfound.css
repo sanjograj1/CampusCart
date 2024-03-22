@@ -87,6 +87,10 @@ item-category{
 
 }
 
+.card-details{
+    margin-top: 12%;
+}
+
 
 .card-sub-title {
     text-transform: capitalize;
@@ -265,3 +269,4 @@ item-category{
 .footer {
     margin-top: 30px;
 }
+

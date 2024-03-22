@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% block head %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/lostfound.css' %}" type="text/css" />
@@ -8,87 +9,65 @@
 {% endblock %}
 {% block content %}
 
-<div class="container">
-    <div class="user-options">
-        {% comment %} <div class="search-box">
-            <button class="btn-search"><i class="fas fa-search"></i></button>
-            <input type="text" class="input-search" placeholder="Type to Search...">
-        </div> {% endcomment %}
-        <div class="books-header pt-4">
-            <h1>Lost and Found Items</h2>
-                <div class="books-header-underline"></div>
-        </div>
-        <a class="upload-item" href='{% url "lostfound:upload" %}'>Post</a>
-
+<div class="container" >
+    <a class="position-absolute upload-btn" style="text-align: center;" href='{% url "lostfound:upload" %}'>Post</a>
+    <div class="pt">
+        <h1>Lost and Found Items</h1>
+            <div class="header-underline"></div>
     </div>
+    <div class="mt-4 mb-3">
+        <div>
+            <form class="d-flex">
+                <div class="input-group align-items-end justify-content-start">
+                    {{ form|crispy }}
+                    <button class="btn" type="submit">Search</button>
+                    <a href="{% url 'lostfound:home' %}" class="text-link float-end">Reset</a>
+                </div>
+            </form>
+        </div>
+    </div> 
     <div class="card-display justify-content-between">
         <div class="listing">
 
-            {% for post in posts %}
+            {% for item in items %}
 
-            <div class="card-details">
-                <div class="card-header">
-                    <div class="item-title">{{ post.title }}</div>
-                    <div class="post-date">{{ post.post_date }}</div>
-                    <div class="item-category">{{ post.category }}</div>
+            <div class="card-details" >
+                <div class="card-header" style="margin-top: 2px;">
+                    <div class="item-title">{{ item.title }}</div>
+                    <div class="post-date">{{ item.post_date }}</div>
+                    <div class="item-category">{{ item.category }}</div>
 
                 </div>
             </div>
-            <div class="card-desc">{{ post.product_description }}</div>
+            <div class="card-desc">{{ item.product_description }}</div>
 
             <div class="card-main-body">
                 <div class="card">
                     
-                    <img src="{{ post.image.url }}" alt="post image">
+                    <img src="{{ item.image.url }}" alt="post image">
                     
                     {% comment %} <img src="https://img.freepik.com/free-photo/white-bicycle-standing-park-morning-fitness-loneliness_1153-6768.jpg?size=626&ext=jpg"
                         class="card-img" alt=""> {% endcomment %}
                     
                     <div class="card-body">
                         <p class="cardd-sub-title">Location</p>
-                        <p class="card-info">{{ post.location }}</p>
+                        <p class="card-info">{{ item.location }}</p>
                         {% comment %} <a href="{% url 'detail' %}"> {% endcomment %}
-                            <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' post_id=post.id %}'">View Details</button>
+                            <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' post_id=item.id %}'">View Details</button>
                         {% comment %} </a> {% endcomment %}
                     </div>
                 </div>
                 <div class="option-button">
-                    <button class="claim-btn">Claim</button>
-                    <button class="message-btn">Message</button>
+                    <a class="contact-seller"
+              href="MSTeams:/l/chat/0/0?users={{ item.user.email }}&message=I would like to inquire regarding an item.">Message</a>
+                    {% comment %} <button class="claim-btn">Message</button> {% endcomment %}
+                    {% comment %} <button class="message-btn">Message</button> {% endcomment %}
                 </div>
             </div>
             {% endfor %}
 
         </div>
 
-        {% comment %} <div class="listing">
-            <div class="card-details">
-                <div class="card-header">
-                    <div class="item-title">HC Verma: Volume 1</div>
-                    <div class="post-date">2024-01-01</div>
-                </div>
-            </div>
-            <div class="card-desc">It's a New Hardcover Edition, with no identity sticker</div>
-
-            <div class="card-main-body">
-
-                <div class="card">
-                    <img src="https://rukminim2.flixcart.com/image/850/1000/jjhglu80/regionalbooks/4/4/9/combo-set-of-two-book-concepts-of-physics-vol-1-2-new-edition-original-imaf6yhsmubhk4wh.jpeg"
-                        class="card-img" alt="">
-                    <div class="card-body">
-                        <p class="cardd-sub-title">Location:</p>
-                        <p class="card-info">In CAW Building</p>
-
-                        <button class="card-btn">View Details</button>
-                    </div>
-                </div>
-                <div class="option-button">
-                    <button class="claim-btn">Claim</button>
-                    <button class="message-btn">Message</button>
-                    <button class="view-details-btn">View Details</button>
-                </div>
-            </div>
-        </div> {% endcomment %}
     </div>
 </div>
 {% endblock content %}
