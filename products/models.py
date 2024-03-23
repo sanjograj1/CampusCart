@@ -30,3 +30,19 @@ class Product(models.Model):
 
     def __str__(self):
         return self.title
+
+    def count_views(self):
+        return ProductViews.objects.filter(product=self).count()
+
+
+class ProductViews(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    user_session_key = models.CharField(max_length=60)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.product.title}"
+
+    def count_views(self):
+        return ProductViews.objects.filter(product=self).count()

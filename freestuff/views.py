@@ -5,8 +5,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from notifications.signals import notify
 from products.models import Product
 from .forms import FreeItemForm, FreeItemFiltersForm
-from .models import FreeStuffItem
+from .models import FreeStuffItem, FreeItemViews
 from django.contrib import messages
+
 
 @login_required
 def index(request):
@@ -32,9 +33,10 @@ def index(request):
     return render(request, 'freestuff/home.html', {
         'items': items,
         'title': 'Free Stuff',
-        'form':form,
-        'page_obj':page_obj
+        'form': form,
+        'page_obj': page_obj
     })
+
 
 @login_required
 def upload_item(request):
@@ -56,18 +58,22 @@ def upload_item(request):
         'title': 'Upload your Item'
     })
 
+
 @login_required
 def item_detail(request, itemid):
     current_item = get_object_or_404(FreeStuffItem, pk=itemid)
     same_category_free_items = FreeStuffItem.objects.exclude(pk=current_item.pk).filter(category=current_item.category)
     same_category_products = Product.objects.filter(category=current_item.category)
-    print(same_category_free_items,same_category_products)
+    free_view = FreeItemViews.objects.filter(user_session_key=request.session.session_key, free=current_item)
+    if not free_view.exists():
+        FreeItemViews.objects.create(free=current_item, user=request.user, user_session_key=request.session.session_key)
     return render(request, 'freestuff/item_detail.html', {
         'title': current_item.title,
         'item': current_item,
-        'same_category_free_items':same_category_free_items,
-        'same_category_products':same_category_products
+        'same_category_free_items': same_category_free_items,
+        'same_category_products': same_category_products
     })
+
 
 @login_required
 def edit_item(request, itemid):
@@ -92,4 +98,3 @@ def edit_item(request, itemid):
         'form': form,
         'title': 'Edit Item'
     })
- 

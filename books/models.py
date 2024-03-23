@@ -40,3 +40,16 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+
+    def count_views(self):
+        return BookViews.objects.filter(book=self).count()
+
+
+class BookViews(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user_session_key = models.CharField(max_length=60)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.book.title}"

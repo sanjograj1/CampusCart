@@ -70,11 +70,18 @@
                 <article class="card__article carousel-item carousel-column ci {% if forloop.first %}active{% endif %}">
                     <img src="{{ item.image.url }}" alt="image" class="card__img">
                     <div class="card__data">
+                        {% if item.is_sold %}
                         <div>
-                            {% if item.is_sold %}
                             <span class="badge badge-pill badge-danger">Sold</span>
-                            {% endif %}
                         </div>
+                        {% else %}
+                        <div class="book-card__author d-flex align-items-center justify-content-end">
+                            <span class="material-symbols-outlined">
+                                visibility
+                            </span>
+                            <span class="ml-2">{{ item.count_views }}</span>
+                        </div>
+                        {% endif %}
                         <p>${{ item.price }}</p>
                         <span class="card__description">{{ item.condition }}</span>
                         <h2 class="card__title">{{ item.title }}</h2>

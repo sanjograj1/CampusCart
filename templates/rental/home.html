@@ -12,7 +12,7 @@
         property</a>
     <div class="pt-4">
         <h1>Rooms and Houses on rent</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
     </div>
     <div class="mt-4 mb-3">
         <div>
@@ -41,11 +41,18 @@
                     {{ rental.address }}
                 </div>
                 <div><span>{{ rental.created_at }}</span> | <span>{{ rental.city }}</span></div>
+                {% if rental.is_sold %}
                 <div>
-                    {% if rental.is_sold %}
                     <span class="badge badge-pill badge-danger">Sold</span>
-                    {% endif %}
                 </div>
+                {% else %}
+                <div class="book-card__author d-flex align-items-center justify-content-end">
+                    <span class="material-symbols-outlined">
+                        visibility
+                    </span>
+                    <span class="ml-2">{{ rental.count_views }}</span>
+                </div>
+                {% endif %}
             </div>
         </a>
         {% endfor %}
