@@ -13,7 +13,7 @@
 <div class="container position-relative">
     <div class="pt-4">
         <h1>{{rental.property_name}}</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
     </div>
     <div class="mt-4">
         <div class="indi-property-detail-container d-flex flex-column">
@@ -117,7 +117,8 @@
                                     href="MSTeams:/l/chat/0/0?users={{ rental.seller.email }}&message=Is it Available?">Contact
                                     Seller</a>
                                 <div>
-                                    <a href="{% url 'accounts:profile-view' rental.seller.username %}">
+                                    <a href="{% url 'accounts:profile-view' rental.seller.username %}"
+                                        class="profile-link-url">
                                         <b>{{ rental.seller.get_full_name }}</b></a>
                                 </div>
                             </div>
@@ -154,6 +155,14 @@
 
 
     function geocodeAddress() {
+        var redIcon = new L.Icon({
+            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
         let lat = document.getElementsByClassName('userlat')[0].textContent;
         let long = document.getElementsByClassName('userlong')[0].textContent;
         let maincampuslat = document.getElementsByClassName('maincampuslat')[0].textContent;
@@ -161,9 +170,10 @@
         let maccampuslat = document.getElementsByClassName('maccampuslat')[0].textContent;
         let maccampuslong = document.getElementsByClassName('maccampuslong')[0].textContent;
         if (lat && long) {
-            marker = L.marker(new L.LatLng(lat, long)).addTo(map);
-            L.marker(new L.LatLng(maincampuslat, maincampuslong)).addTo(map);
-            L.marker(new L.LatLng(maccampuslat, maccampuslong)).addTo(map);
+            marker = L.marker(new L.LatLng(lat, long), { icon: redIcon }).addTo(map);
+            mainMarker = L.marker(new L.LatLng(maincampuslat, maincampuslong)).addTo(map);
+            macMarker = L.marker(new L.LatLng(maccampuslat, maccampuslong)).addTo(map);
+            macMarker.bindPopup("<b>MAC Building</b>").openPopup();
             map.panTo(new L.LatLng(lat, long));
             map.panTo(new L.LatLng(maccampuslat, maccampuslong));
             map.panTo(new L.LatLng(maincampuslat, maincampuslong));

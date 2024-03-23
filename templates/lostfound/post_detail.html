@@ -6,74 +6,103 @@
 <link rel="stylesheet" href="{% static 'css/books.css' %}" type="text/css" />
 <link rel="stylesheet" href="{% static 'css/common.css' %}" type="text/css" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 {% endblock %}
 {% block content %}
-<div class="card-wrapper">
+<div class="container position-relative">
   <div class="card">
-    <!-- card left -->
-        <div class="img-showcase">
-          
-          <img src="{{ post.image.url }}" alt="post image">
-        </div>
-      
-    <!-- card right -->
+    <div class="img-showcase">
+
+      <img src="{{ post.image.url }}" alt="post image">
+    </div>
+
     <div class="product-content">
       <h2 class="product-title">{{ post.title }}</h2>
-      
-      <label for="date">Posted On:  {{ post.post_date }}</label>
-
-      {% comment %} <input type="date" id="start" name="trip-start" value="2018-07-22" /> {% endcomment %}
-
+      <label for="date">Posted On: {{ post.post_date }}</label>
       <div class="product-detail">
-        <h2>About this item: </h2>
-        <p>{{ post.product_description }}</p>
-
-        <ul>
+        <h5>{{ post.product_description }}</h5>
+        <ul class="pl-0">
           <li>Landmark where found/lost: <span>{{ post.location }}</span></li>
-
         </ul>
       </div>
-
       <div class="purchase-info">
         <div class="d-flex align-items-center justify-content-between">
           <a class="contact-seller"
-              href="MSTeams:/l/chat/0/0?users={{ post.user.email }}&message=I would like to inquire regarding an item.">Contact
-              User</a>
-          <div>
-              <a href="{% url 'accounts:profile-view' post.user.username %}">Posted By:
-                  <b>{{ post.user.first_name }} {{ post.user.last_name }}</b></a>
+            href="MSTeams:/l/chat/0/0?users={{ post.user.email }}&message=I would like to inquire regarding an item.">Contact
+            User</a>
+          <div>Posted By:
+            <a href="{% url 'accounts:profile-view' post.user.username %}" class="profile-link-url">
+              <b>{{ post.user.first_name }} {{ post.user.last_name }}</b></a>
           </div>
+        </div>
       </div>
-      </div>
-
       <div class="social-links">
-        <p>Share this post: </p>
+        <p class="m-0">Share this post: </p>
         <a href="#" id="sharepost">
           <i class="fas fa-share"></i>
         </a>
       </div>
     </div>
   </div>
+  <div class="mt-5">
+    <div id="locationmap"></div>
+    <span class="visually-hidden userlat">{{ userlatitude }}</span>
+    <span class="visually-hidden userlong">{{ userlongitude }}</span>
+  </div>
 </div>
-
 
 <script src="{% static 'js/lostfounddetail.js' %}"></script>
 
 <script>
   // JavaScript function to create a link of the page and copy it to clipboard
-  document.getElementById('sharepost').addEventListener('click', function(event) {
+  document.getElementById('sharepost').addEventListener('click', function (event) {
     event.preventDefault();
     var link = window.location.href;
     navigator.clipboard.writeText(link)
-      .then(function() {
+      .then(function () {
         alert('Link copied to clipboard: ' + link);
       })
-      .catch(function() {
+      .catch(function () {
         alert('Failed to copy link to clipboard.');
       });
   });
+</script>
+<script>
+  const map = L.map('locationmap').setView([42.3043181, -83.0686139], 15);
+  let marker;
+  const isRetina = L.Browser.retina;
+  const myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69';
+  const baseUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey={apiKey}";
+  const retinaUrl = "https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey={apiKey}";
+  map.attributionControl.setPrefix('Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a>')
+  L.tileLayer(isRetina ? retinaUrl : baseUrl, {
+    attribution: '<a href="https://openmaptiles.org/" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">© OpenStreetMap</a> contributors',
+    apiKey: myAPIKey,
+    maxZoom: 20,
+    id: 'osm-bright',
+  }).addTo(map);
+
+  // move zoom controls to bottom right
+  map.zoomControl.remove();
+  L.control.zoom({
+    position: 'bottomright'
+  }).addTo(map);
+
+
+  geocodeAddress()
+
+
+  function geocodeAddress() {
+    let lat = document.getElementsByClassName('userlat')[0].textContent;
+    let long = document.getElementsByClassName('userlong')[0].textContent;
+    if (lat && long) {
+      marker = L.marker(new L.LatLng(lat, long)).addTo(map);
+      map.panTo(new L.LatLng(lat, long));
+    }
+  }
 </script>
 
 {% endblock content %}

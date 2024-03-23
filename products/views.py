@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from notifications.signals import notify
 from .forms import ProductForm, ProductFilterForm
-from .models import Product
+from .models import Product, ProductViews
 from django.contrib.auth import get_user_model
 
 from django.contrib import messages
@@ -82,7 +82,9 @@ def detail_product(request, pk):
         price__gte=Decimal(product.price) * Decimal("0.5"),
         price__lte=Decimal(product.price) * Decimal("1.5"),
     ).exclude(id=product.id)[:4]
-
+    product_view = ProductViews.objects.filter(user_session_key=request.session.session_key, product=product)
+    if not product_view.exists():
+        ProductViews.objects.create(product=product, user=request.user, user_session_key=request.session.session_key)
     return render(
         request,
         "products/product_detail.html",

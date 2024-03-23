@@ -61,7 +61,7 @@
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>
               <div>
-                <a href="{% url 'accounts:profile-view' product.user.username %}">
+                <a href="{% url 'accounts:profile-view' product.user.username %}" class="profile-link-url">
                   <b>{{ product.user.get_full_name }}</b></a>
               </div>
             </div>
@@ -120,11 +120,18 @@
           </h3>
           <h6>{{ product.price }}</h6>
           <p class="card-hover__text">{{ product.description }}</p>
-          <div>
-            {% if product.is_sold %}
-            <span class="badge badge-pill badge-danger">Sold</span>
+          {% if product.is_sold %}
+            <div>
+              <span class="badge badge-pill badge-danger">Sold</span>
+            </div>
+            {% else %}
+            <div class="book-card__author d-flex align-items-center justify-content-end">
+              <span class="material-symbols-outlined">
+                visibility
+              </span>
+              <span class="ml-2">{{ product.count_views }}</span>
+            </div>
             {% endif %}
-          </div>
           <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
             <span>View Details</span>
             <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

@@ -131,8 +131,20 @@
     {% endblock %}
   </div>
   <div class="wrapper display-none">
-      <div class="spinner"></div>
-   </div>
+    <div class="spinner"></div>
+  </div>
   <footer>©️ 2024 <a href="/">Campus Cart</a> | <a href="{% url 'accounts:contactus' %}">Contact Us</a></footer>
 </body>
+<script>
+  const profileURL = document.querySelectorAll('.profile-link-url');
+  if (profileURL.length > 0) {
+    profileURL.forEach((url) => {
+      url.addEventListener('click', () => {
+        const wrapper = document.querySelector('.wrapper');
+        wrapper.classList.remove('display-none');
+      })
+    })
+  }
+</script>
+
 </html>

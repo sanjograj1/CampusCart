@@ -29,3 +29,17 @@ class Rental(models.Model):
 
     def __str__(self):
         return self.property_name
+
+
+    def count_views(self):
+        return RentalViews.objects.filter(rental=self).count()
+
+
+class RentalViews(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    rental = models.ForeignKey(Rental, on_delete=models.CASCADE)
+    user_session_key = models.CharField(max_length=60)
+    viewed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.rental.property_name}"

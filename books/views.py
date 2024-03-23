@@ -1,15 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from notifications.signals import notify
 from django.contrib import messages
 from django.core.paginator import Paginator
- 
 from .forms import BookForm,BooksFilter
-from .models import Book
- 
- 
+from .models import Book, BookViews
+
+
 @login_required
 # Create your views here.
 def bookhome(request):
@@ -77,7 +75,10 @@ def book_detail(request, bookid):
         current_viewed_books.append(bookid)
 
     current_viewed_books_str = ','.join(map(str, current_viewed_books))
-    response = HttpResponse("Viewed Books")
+    book_view = BookViews.objects.filter(user_session_key=request.session.session_key,book=current_book)
+    if not book_view.exists():
+        BookViews.objects.create(book=current_book, user=request.user, user_session_key=request.session.session_key)
+
     response = render(request, 'books/book_detail.html', {
         'title': current_book.title,
         'book': current_book,
