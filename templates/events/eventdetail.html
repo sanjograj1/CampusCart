@@ -16,7 +16,7 @@
 <section class="home">
     <div class="blur-background" style="background-image: url('{{ event.image.url }}');"></div>
     <div class="content pt-5">
-        <h2>{{ event.title }}</h2>
+        <h2>  {{ event.title }}</h2>
         <p>{{ event.description }}</p>
         <p><i class="fas fa-map-marker-alt"></i> {{ event.location }}</p>
         <p><i class="far fa-calendar-alt"></i> {{ event.date_and_time }}</p>
@@ -79,7 +79,7 @@
                                     {{ event.date_and_time }}
                                 </p>
                                 <p class="info description">
-                                    {{ event.description|truncatechars:80}}
+                                    {{ event.description|truncatechars:30}}
                                 </p>
                             </div>
                         </div>
