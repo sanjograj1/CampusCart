@@ -61,7 +61,7 @@
                 href="MSTeams:/l/chat/0/0?users={{ product.user.email }}&message=Is it available">Contact
                 Seller</a>
               <div>
-                <a href="{% url 'accounts:profile-view' product.user.username %}">
+                <a href="{% url 'accounts:profile-view' product.user.username %}" class="profile-link-url">
                   <b>{{ product.user.get_full_name }}</b></a>
               </div>
             </div>

@@ -9,11 +9,12 @@
 {% endblock %}
 {% block content %}
 
-<div class="container" >
-    <a class="position-absolute upload-btn" style="text-align: center;" href='{% url "lostfound:upload" %}'>Post</a>
+<div class="container position-relative">
+    <a class="position-absolute upload-btn" style="text-align: center;" href='{% url "lostfound:upload" %}'>Post
+        Something</a>
     <div class="pt">
         <h1>Lost and Found Items</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
     </div>
     <div class="mt-4 mb-3">
         <div>
@@ -25,13 +26,11 @@
                 </div>
             </form>
         </div>
-    </div> 
+    </div>
     <div class="card-display justify-content-between">
         <div class="listing">
-
             {% for item in items %}
-
-            <div class="card-details" >
+            <div class="card-details">
                 <div class="card-header" style="margin-top: 2px;">
                     <div class="item-title">{{ item.title }}</div>
                     <div class="post-date">{{ item.post_date }}</div>
@@ -40,34 +39,29 @@
                 </div>
             </div>
             <div class="card-desc">{{ item.product_description }}</div>
-
             <div class="card-main-body">
                 <div class="card">
-                    
                     <img src="{{ item.image.url }}" alt="post image">
-                    
-                    {% comment %} <img src="https://img.freepik.com/free-photo/white-bicycle-standing-park-morning-fitness-loneliness_1153-6768.jpg?size=626&ext=jpg"
-                        class="card-img" alt=""> {% endcomment %}
-                    
                     <div class="card-body">
-                        <p class="cardd-sub-title">Location</p>
-                        <p class="card-info">{{ item.location }}</p>
-                        {% comment %} <a href="{% url 'detail' %}"> {% endcomment %}
-                            <button class="view-details-btn" onclick="window.location.href='{% url 'lostfound:detail' post_id=item.id %}'">View Details</button>
-                        {% comment %} </a> {% endcomment %}
+                        <p class="cardd-sub-title d-flex align-items-center">
+                            <span class="material-symbols-outlined">
+                                location_on
+                            </span>
+                            <span>{{ item.location }}</span>
+                        </p>
+                        <a class="view-details-btn" href="{% url 'lostfound:detail' post_id=item.id %}">View
+                            Details</a>
                     </div>
                 </div>
                 <div class="option-button">
                     <a class="contact-seller"
-              href="MSTeams:/l/chat/0/0?users={{ item.user.email }}&message=I would like to inquire regarding an item.">Message</a>
+                        href="MSTeams:/l/chat/0/0?users={{ item.user.email }}&message=I would like to inquire regarding the item.">Message</a>
                     {% comment %} <button class="claim-btn">Message</button> {% endcomment %}
                     {% comment %} <button class="message-btn">Message</button> {% endcomment %}
                 </div>
             </div>
             {% endfor %}
-
         </div>
-
     </div>
 </div>
 {% endblock content %}
