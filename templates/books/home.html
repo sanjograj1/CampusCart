@@ -56,11 +56,18 @@
                         <div class="book-card__author">
                             ${{ book.price }}
                         </div>
+                        {% if book.is_sold %}
                         <div class="position-absolute right-0 bottom-0">
-                            {% if book.is_sold %}
                             <span class="badge badge-pill badge-danger">Sold</span>
-                            {% endif %}
                         </div>
+                        {% else %}
+                        <div class="book-card__author d-flex align-items-center justify-content-end">
+                            <span class="material-symbols-outlined">
+                                visibility
+                            </span>
+                            <span class="ml-2">{{ book.count_views }}</span>
+                        </div>
+                        {% endif %}
                     </div>
                 </a>
                 {% endfor %}

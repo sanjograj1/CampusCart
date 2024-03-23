@@ -2,7 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from .forms import PropertyForm, PropertySearchForm
 from django.contrib.auth.decorators import login_required
-from .models import Rental
+from .models import Rental, RentalViews
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
@@ -115,6 +115,10 @@ def property_detail(request, rentid):
             distance_values = [item['distance'] for sublist in json_resp['sources_to_targets'] for item in sublist]
         except requests.exceptions.HTTPError as e:
             print(e.response.text)
+            
+    free_view = RentalViews.objects.filter(user_session_key=request.session.session_key, rental=current_rental)
+    if not free_view.exists():
+        RentalViews.objects.create(rental=current_rental, user=request.user, user_session_key=request.session.session_key)            
     response = render(request, 'rental/property-detail.html', {
         'title': f'Edit {current_rental.property_name}',
         'rental': current_rental,

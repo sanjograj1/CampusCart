@@ -79,11 +79,18 @@
               <div class="book-card__author">
                 ${{ book.price }}
               </div>
+              {% if book.is_sold %}
               <div class="position-absolute right-0 bottom-0">
-                {% if book.is_sold %}
                 <span class="badge badge-pill badge-danger">Sold</span>
-                {% endif %}
               </div>
+              {% else %}
+              <div class="book-card__author d-flex align-items-center justify-content-end">
+                <span class="material-symbols-outlined">
+                  visibility
+                </span>
+                <span class="ml-2">{{ book.count_views }}</span>
+              </div>
+              {% endif %}
             </div>
           </a>
         </div>
@@ -127,11 +134,18 @@
                 {{ rental.address }}
               </div>
               <div><span>{{ rental.created_at }}</span> | <span>{{ rental.city }}</span></div>
-              <div>
-                {% if rental.is_sold %}
-                <span class="badge badge-pill badge-danger">Sold</span>
+              {% if rental.is_sold %}
+                <div>
+                    <span class="badge badge-pill badge-danger">Sold</span>
+                </div>
+                {% else %}
+                <div class="book-card__author d-flex align-items-center justify-content-end">
+                    <span class="material-symbols-outlined">
+                        visibility
+                    </span>
+                    <span class="ml-2">{{ rental.count_views }}</span>
+                </div>
                 {% endif %}
-              </div>
             </div>
           </a>
         </div>
@@ -162,7 +176,7 @@
         <div
           class="carousel-item carousel-column col-12 col-sm-6 col-md-4 col-lg-3 ci  {% if forloop.first %}active{% endif %}">
           <div class="card-hover w-auto"
-          style="background-image: url('{{ product.image.url }}'); background-size: cover; background-repeat: no-repeat; background-position: center top;">
+            style="background-image: url('{{ product.image.url }}'); background-size: cover; background-repeat: no-repeat; background-position: center top;">
 
             <div class="card-hover__content">
               <h3 class="card-hover__title">
@@ -170,16 +184,23 @@
               </h3>
               <h6>{{ product.price }}</h6>
               <p class="card-hover__text mb-1">{{ product.description }}</p>
+              {% if product.is_sold %}
               <div>
-                {% if product.is_sold %}
                 <span class="badge badge-pill badge-danger">Sold</span>
-                {% endif %}
               </div>
+              {% else %}
+              <div class="book-card__author d-flex align-items-center justify-content-end">
+                <span class="material-symbols-outlined">
+                  visibility
+                </span>
+                <span class="ml-2">{{ product.count_views }}</span>
+              </div>
+              {% endif %}
               <a href="{% url 'products:detail_product' product.pk %}" class="card-hover__link">
                 <span>View Details</span>
-                
-                
-                
+
+
+
               </a>
             </div>
             <div class="card-hover__extra">
