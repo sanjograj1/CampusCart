@@ -28,17 +28,16 @@
         </div>
     </div>
     <div class="card-display justify-content-between">
+        {% for item in items %}
         <div class="listing">
-            {% for item in items %}
-            <div class="card-details">
-                <div class="card-header" style="margin-top: 2px;">
+            <div class="card-details mt-0">
+                <div class="card-header p-2 flex-column">
                     <div class="item-title">{{ item.title }}</div>
                     <div class="post-date">{{ item.post_date }}</div>
-                    <div class="item-category">{{ item.category }}</div>
-
+                    <div class="item-category badge badge-pill badge-danger">{{ item.category }}</div>
                 </div>
             </div>
-            <div class="card-desc">{{ item.product_description }}</div>
+            <div class="card-desc px-2 mb-1">{{ item.product_description|truncatechars:200 }}</div>
             <div class="card-main-body">
                 <div class="card">
                     <img src="{{ item.image.url }}" alt="post image">
@@ -56,12 +55,10 @@
                 <div class="option-button">
                     <a class="contact-seller"
                         href="MSTeams:/l/chat/0/0?users={{ item.user.email }}&message=I would like to inquire regarding the item.">Message</a>
-                    {% comment %} <button class="claim-btn">Message</button> {% endcomment %}
-                    {% comment %} <button class="message-btn">Message</button> {% endcomment %}
                 </div>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
 </div>
 {% endblock content %}
