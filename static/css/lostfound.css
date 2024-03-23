@@ -4,7 +4,8 @@
 } */
 
 .card-display {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     flex-direction: row;
     margin-top: 20px;
     margin-bottom: 30px;
@@ -29,9 +30,10 @@
     justify-content: center;
 }
 
-item-category{
+item-category {
     justify-content: right;
 }
+
 .card-desc {
     margin-top: 10px;
     display: flex;
@@ -87,7 +89,7 @@ item-category{
 
 }
 
-.card-details{
+.card-details {
     margin-top: 12%;
 }
 
@@ -178,25 +180,20 @@ item-category{
 }
 
 .view-details-btn {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 150px;
-    height: 40px;
-    margin-bottom: 10px;
-    padding: 1rem 2rem;
-    background-color: rgb(6, 29, 98);
-    color: white;
-    cursor: pointer;
-    border-radius: 10px;
-    ;
     border: none;
-    outline: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    right: 0;
+    background-color: #005596;
+    color: #fff;
+    height: max-content;
+    width: max-content;
 }
 
+/* .view-details-btn */
+
 .view-details-btn:hover {
-    background-color: royalblue;
+    color: white;
 }
 
 .user-options {
@@ -269,4 +266,3 @@ item-category{
 .footer {
     margin-top: 30px;
 }
-

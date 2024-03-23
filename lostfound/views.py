@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LostandfoundItemForm, ItemFilter
@@ -6,35 +7,34 @@ from django.contrib.auth import get_user_model
 
 from notifications.signals import notify
 from .models import LostandfoundItem
+import requests
 
 
 def laf_detail(request, post_id):
-    post = get_object_or_404(LostandfoundItem, pk=post_id)
-
-    return render(request, 'lostfound/post_detail.html', {'title': 'LostandFoundItem',
-                                                          'post': post
+    post = get_object_or_404(LostandfoundItem, pk=post_id)  
+    myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
+    print(post.location)
+    url = f"https://api.geoapify.com/v1/geocode/search?text={post.location}&limit=1&apiKey={myAPIKey}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        result = data["features"][0]
+        print(result)
+        userlatitude = result["geometry"]["coordinates"][1]
+        userlongitude = result["geometry"]["coordinates"][0]
+    else:
+        print(f"Request failed with status code {response.status_code}")
+    
+    return render(request, 'lostfound/post_detail.html',{
+        'title': 'LostandFoundItem',
+        'post': post,
+        'userlatitude':userlatitude,
+        'userlongitude':userlongitude
     })
 
-# def post(request):
-#     if request.method == "POST":
-#         form = LostandfoundItemForm(request.POST, request.FILES)
 
-#         if form.is_valid():
-#             form.save()
-#             return redirect('home')
-
-#         else:
-#             form = LostandfoundItemForm()
-        
-#     return render(request,'lostfoundupload.html', {'form':form})
-
+@login_required
 def index(request):
-    # posts = LostandfoundItem.objects.all()
-    # return render(request, 'lostfound/home.html',{
-    #     'title': 'LostandFoundItems',
-    #     'posts': posts
-    # })
-
     if request.method == 'GET':
         form = ItemFilter(request.GET)
         if form.is_valid():
@@ -56,7 +56,6 @@ def index(request):
 
 
 @login_required
-
 def post(request):
     if request.method == 'POST':
         form = LostandfoundItemForm(request.POST,request.FILES)
@@ -66,7 +65,7 @@ def post(request):
             item.save()
             sender = get_user_model().objects.get(username=request.user)
             receiver = get_user_model().objects.exclude(username=request.user)
-            description = f'Item has been uploaded - <b>{item.title}</b>'
+            description = f'<b>{item.title}</b> (Lost & Found Item). Click <a href="/lostandfound/post_detail/{item.id}">here</a> to view.'
             notify.send(sender, recipient=receiver, verb='Upload', description=description)
             return redirect('lostfound:home')
     else:
