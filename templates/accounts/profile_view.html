@@ -171,14 +171,28 @@
 
 
   function geocodeAddress() {
+    var greenIcon = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
     let selerlat = document.getElementsByClassName('seleruserlat')[0].textContent;
     let selerlong = document.getElementsByClassName('seleruserlong')[0].textContent;
     let lat = document.getElementsByClassName('userlat')[0].textContent;
     let long = document.getElementsByClassName('userlong')[0].textContent;
-    if (lat && long) {
-      marker = L.marker(new L.LatLng(selerlat, selerlong)).addTo(map);
-      map.panTo(new L.LatLng(selerlat, selerlong));
-      marker = L.marker(new L.LatLng(lat, long)).addTo(map);
+    if (lat && long && selerlat && selerlong) {
+      if (lat == selerlat && long == selerlong) {
+        console.log('Same USER');
+      }
+      else {
+        marker = L.marker(new L.LatLng(selerlat, selerlong), { icon: greenIcon }).addTo(map);
+        marker.bindPopup("<b>Seller</b>").openPopup();
+        map.panTo(new L.LatLng(selerlat, selerlong));
+      }
+      markerMe = L.marker(new L.LatLng(lat, long)).addTo(map);
       map.panTo(new L.LatLng(lat, long));
     }
   }
