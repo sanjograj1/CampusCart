@@ -6,8 +6,9 @@ from .models import Rental, RentalViews
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from notifications.signals import notify
+from django.core.paginator import Paginator
 import requests
-from requests.structures import CaseInsensitiveDict
+
 
 
 @login_required
@@ -29,12 +30,18 @@ def rental_home(request):
                     rental_list = rental_list.order_by('-price')
                 else:
                     rental_list = rental_list.order_by('created_at')
+
+            paginator = Paginator(rental_list, 8)
+
+            page_number = request.GET.get("page")
+            page_obj = paginator.get_page(page_number)
     else:
         rental_list = Rental.objects.all()
     return render(request, 'rental/home.html', {
         'title': 'Rental',
         'form': form,
-        'rental_list': rental_list
+        'rental_list': rental_list,
+        'page_obj':page_obj
     })
 
 

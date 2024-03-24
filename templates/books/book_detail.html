@@ -11,7 +11,7 @@
 <div class="container">
     <div class="pt-4">
         <h1>{{ book.title }}</h1>
-            <div class="header-underline"></div>
+        <div class="header-underline"></div>
     </div>
     <div class="mt-4">
         <section class="book-detail-section d-flex justify-content-between flex-column flex-lg-row">
@@ -53,6 +53,10 @@
             <div class="book-extra-info">
                 <span>Category : </span>
                 <span>{{ book.category }}</span>
+            </div>
+            <div class="book-extra-info">
+                <span>Condition : </span>
+                <span>{{ book.condition }}</span>
             </div>
         </section>
         {% if same_category_books %}
