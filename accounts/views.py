@@ -401,6 +401,10 @@ def user_item_request(request):
             saved_item = form.save(commit=False)
             saved_item.requested_by = request.user
             saved_item.save()
+            sender = get_user_model().objects.get(username=request.user)
+            receiver = get_user_model().objects.exclude(username=request.user)
+            description = f'<b>{request.user.get_full_name()}</b> is looking for an Item ({saved_item.item_name} - {saved_item.item_category}). Please ping the user on teams to get more details.'
+            notify.send(sender, recipient=receiver, verb='Request', description=description)
             messages.success(request, "Your request has been uploaded !")
             url = reverse('accounts:my-suggestions', args=[saved_item.pk])
             return redirect(url)
