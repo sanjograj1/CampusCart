@@ -13,17 +13,18 @@
 <div class="container position-relative">
     <div class="pt-4">
         <h1>Your Notifications</h1>
-            <div class="notification-header-underline"></div>
+        <div class="notification-header-underline"></div>
     </div>
     <div class="mt-4">
         <div class="notification-container d-flex flex-column w-75 m-auto">
             {% if notifications %}
             {% for notification in notifications %}
             <div class="notification-box d-flex align-items-center">
-                <div class="notification-user-pic-container">
-                    <img src="{{ notification.actor.profile.profile_image.url }}" class="profile-pic"
+                <a href="{% url 'accounts:profile-view' notification.actor.username %}"
+                    class="notification-user-pic-container"><img
+                        src="{{ notification.actor.profile.profile_image.url }}" class="profile-pic"
                         alt="Profile Pic" />
-                </div>
+                </a>
                 <div class="notification-description">
                     <div>
                         {%if notification.verb == 'Upload' %}
@@ -49,4 +50,15 @@
         </div>
     </div>
 </div>
+<script>
+    const profilePic = document.querySelectorAll('.notification-user-pic-container');
+    if (profilePic.length > 0) {
+        profilePic.forEach((url) => {
+            url.addEventListener('click', () => {
+                const wrapper = document.querySelector('.wrapper');
+                wrapper.classList.remove('display-none');
+            })
+        })
+    }
+</script>
 {% endblock content %}

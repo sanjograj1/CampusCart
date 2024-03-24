@@ -74,7 +74,7 @@
       </div>
     </nav>
     <div class="profile-pic-container position-absolute dropdown dropleft ">
-      <img src="{{ user.profile.profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1"
+      <img src="{{ request.user.profile.profile_image.url }}" class="profile-pic dropdown-toggle" id="navDropdown1"
         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" alt="Profile Pic" />
       <div class="dropdown-menu profile-dropdown" aria-labelledby="navDropdown1" role="menu">
         <ul class="p-0 m-0">
@@ -86,7 +86,7 @@
                 class="material-symbols-outlined">
                 inventory
               </span>My Listings</a></li>
-            <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:item-request" %}'><span
+          <li><a class="dropdown-item py-2 d-flex align-items-center" href='{% url "accounts:item-request" %}'><span
                 class="material-symbols-outlined">
                 search
               </span>Request an Item</a></li>
