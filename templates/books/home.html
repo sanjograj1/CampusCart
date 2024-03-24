@@ -56,6 +56,9 @@
                         <div class="book-card__author">
                             ${{ book.price }}
                         </div>
+                        <div class="book-card__author">
+                            {{ book.condition }}
+                        </div>
                         {% if book.is_sold %}
                         <div class="position-absolute right-0 bottom-0">
                             <span class="badge badge-pill badge-danger">Sold</span>
