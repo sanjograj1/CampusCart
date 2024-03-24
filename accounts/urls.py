@@ -55,5 +55,9 @@ urlpatterns = [
     path('contactus/', views.contactus, name='contactus'),
     path('login-history/', views.login_history, name='login-history'),
     path('change-theme/', views.change_theme, name='change-theme'),
-    path("change-password/", views.change_password, name="change-password")
+    path("change-password/", views.change_password, name="change-password"),
+    path("item-request/", views.user_item_request, name="item-request"),
+    path("my-requests/", views.my_requests, name="my-requests"),
+    path("delete-request/<int:requestid>", views.delete_request, name="delete-request"),
+    path("my-suggestions/<int:requestid>", views.my_suggestions, name="my-suggestions")
 ]

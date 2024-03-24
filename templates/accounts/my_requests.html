@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head %}
+{{ block.super }}
+{% if theme == 'primary' %}
+<link rel="stylesheet" href="{% static 'css/notifications.css' %}" type="text/css" />
+{% else %}
+<link rel="stylesheet" href="{% static 'css/notifications-custom.css' %}" type="text/css" />
+{% endif %}
+{% endblock %}
+{% block content %}
+
+<div class="container position-relative">
+    <div class="pt-4">
+        <h1>My Requests</h1>
+        <div class="notification-header-underline"></div>
+    </div>
+    <div class="mt-4">
+        <div class="notification-container d-flex flex-column w-75 m-auto">
+            {% if user_requests %}
+            {% for request in user_requests %}
+            <div class="notification-box d-flex align-items-center justify-content-between">
+                <div class="notification-description">
+                    <div>
+                        <b>{{ request.item_name }} ({{ request.item_category }})</b>
+                    </div>
+                    <p>
+                        {% autoescape off %}
+                        {{ request.description }}
+                        {% endautoescape %}
+                    </p>
+                    <div>{{ request.requested_date }}</div>
+                </div>
+                <div class="request-options d-flex flex-column">
+                    <a class="badge badge-pill badge-danger" href="{% url 'accounts:delete-request' request.pk %}">Delete Request</a>
+                    <a class="suggestions" href="{% url 'accounts:my-suggestions' request.pk %}">View Suggestions</a>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h2 class="text-center mt-4">You have not placed any requests !!</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}

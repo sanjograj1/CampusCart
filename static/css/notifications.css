@@ -73,3 +73,32 @@
 .notification-svg:hover {
     transform: rotate(30deg);
 }
+
+
+.request-options a {
+    color: white;
+}
+
+.request-options a:hover {
+    color: white;
+}
+
+.request-options .suggestions {
+    background: #005595;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    display: inline-block;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    cursor: pointer;
+}
+
+.request-options .suggestions:hover{
+    color: white;
+}
