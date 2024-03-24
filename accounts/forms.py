@@ -1,5 +1,5 @@
 from django import forms
-from .models import Profile, UserComment, Report, Contact
+from .models import Profile, UserComment, Report, Contact, UserRequest
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import (
     UserCreationForm,
@@ -172,3 +172,20 @@ class ReportForm(forms.ModelForm):
             Field("report", css_class="form-control"),
             Submit("submit", "Submit", css_class="btn btn-primary"),
         )
+
+
+class UserRequestForm(forms.ModelForm):
+    class Meta:
+        model = UserRequest
+        fields = ['item_name', 'description', 'item_category']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field("item_name", css_class="form-control"),
+            Field("description", css_class="form-control"),
+            Field("item_category", css_class="form-control"),
+        )
+        self.fields['item_name'].help_text = 'Please enter the item you are looking for.'
+        self.fields['item_category'].help_text = 'Please select the category you are looking for.'
