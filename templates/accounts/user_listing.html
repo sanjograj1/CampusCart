@@ -249,8 +249,28 @@
           data-parent="#tabsTemplate1" role="tabpanel">
           <div class="custom-container">
             <div class="card__container">
-              Lost and Found
-            </div>
+              {% if user_lostfound %}
+              {% for post in user_lostfound %}
+              <div class="property-container d-flex row">
+                <div class="property-image">
+                  <img src="{{ post.image.url }}" alt="LostFound Image" />
+                </div>
+                <div class="property-details flex-column">
+                  <a class="btn btn-sm btn-secondary" href="{% url 'lostfound:edit-post' post.id %}">Edit</a>
+                  <h3 class="property-title">{{ post.title }}</h3>
+                  <div class="d-flex align-items-center">
+                    Location : <b class="ml-2">{{ post.location }}</b>
+                  </div>
+                  <div class="d-flex align-items-center">
+                    Category : <b class="ml-2">{{ post.category }}</b>
+                  </div>
+                  <div><span>{{ post.post_date }}</span></span></div>
+                </div>
+              </div>
+              {% endfor %}
+              {% else %}
+              <h3>No Posts Available</h3>
+              {% endif %}            </div>
           </div>
         </div>
       </div>
