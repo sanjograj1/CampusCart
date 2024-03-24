@@ -43,11 +43,10 @@
           </div>
           <p>
             {% autoescape off %}
-            {{ notification.description }}
+            {{ notification.description }} <a  href="MSTeams:/l/chat/0/0?users={{notification.actor.email}}&message=Is it available" style="color: rgb(18, 56, 128);text-decoration: none;">Message User</a>
             {% endautoescape %}
           </p>
           <div>{{ notification.timestamp }}</div>
-          
           <br/>
         </div>
       </div>
