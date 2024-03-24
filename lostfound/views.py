@@ -4,6 +4,8 @@ from django.shortcuts import render, redirect
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import LostandfoundItemForm, ItemFilter
 from django.contrib.auth import get_user_model
+from django.contrib import messages
+
 
 from notifications.signals import notify
 from .models import LostandfoundItem
@@ -72,3 +74,26 @@ def post(request):
         form = LostandfoundItemForm()
     return render(request,'lostfound/upload.html',{'title': 'Upload Post','form':form})
 
+@login_required
+def editpost(request, postid):
+    my_post = get_object_or_404(LostandfoundItem, pk=postid)
+    if my_post.user != request.user:
+        messages.success(request, "You don't have the access to the Post", extra_tags='danger')
+        return redirect('accounts:user-listing')
+    if request.method == 'POST':
+        if 'action' in request.POST:
+            form = LostandfoundItemForm(request.POST, request.FILES, instance=my_post)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.save()
+                return redirect('accounts:user-listing')
+        else:
+            my_post.delete()
+            messages.success(request, "Your Post has been deleted", extra_tags='danger')
+            return redirect('accounts:user-listing')
+    else:
+        form = LostandfoundItemForm(instance=my_post)
+    return render(request, 'lostfound/edit_post.html', {
+        'form': form,
+        'title': 'Edit Post'
+    })

@@ -25,6 +25,8 @@ from products.models import Product
 from freestuff.models import FreeStuffItem
 from rentals.models import Rental
 from events.models import Event
+from lostfound.models import LostandfoundItem
+
 from django.utils import timezone
 from datetime import timedelta
 from django.conf import settings
@@ -250,6 +252,8 @@ def user_listing(request):
     user_products = Product.objects.filter(user=request.user)
     user_rentals = Rental.objects.filter(seller=request.user)
     user_events = Event.objects.filter(organizer=request.user)
+    user_lostfound = LostandfoundItem.objects.filter(user=request.user)
+
     return render(
         request,
         "accounts/user_listing.html",
@@ -259,6 +263,7 @@ def user_listing(request):
             "user_products": user_products,
             "user_rentals": user_rentals,
             "user_events": user_events,
+            "user_lostfound": user_lostfound,
             "title": "My Listings",
         },
     )
