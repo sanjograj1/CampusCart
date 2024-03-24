@@ -121,12 +121,15 @@
     filter: drop-shadow(rgba(0, 0, 0, 0.2) 0px 0.2rem 0.4rem);
     flex: 0.6;
     max-height: 500px;
+    min-height: 350px;
 }
 
 .indi-property-image>img {
     max-width: 100%;
     height: auto;
     border-radius: 12px;
+    aspect-ratio: 1;
+    object-fit: cover;
 }
 
 .addition-property-detail {

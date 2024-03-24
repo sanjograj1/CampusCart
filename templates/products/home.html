@@ -35,7 +35,9 @@
             <h3 class="card-hover__title">
               {{ product.title }}
             </h3>
-            <h6>{{ product.price }}</h6>
+            <h6 class="d-flex align-items-center justify-content-center"><span class="material-symbols-outlined">
+              attach_money
+            </span>{{ product.price }}</h6>
             <p class="card-hover__text">{{ product.description }}</p>
             {% if product.is_sold %}
             <div>
