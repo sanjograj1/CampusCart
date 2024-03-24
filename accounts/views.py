@@ -67,7 +67,7 @@ def profile_view(request, username):
     comments = UserComment.objects.filter(user=user).order_by('-commented_date')
 
     if request.method == "POST":
-        if 'report' in request.POST:
+        if 'reportform' in request.POST:
             report_form = ReportForm(request.POST)
             if report_form.is_valid():
                 report = report_form.save(commit=False)
@@ -91,7 +91,6 @@ def profile_view(request, username):
         report_form = ReportForm()
         comment_form = UserCommentsForm()
         myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
-        print(user.profile.address)
         url = f"https://api.geoapify.com/v1/geocode/search?text={user.profile.address}&limit=1&apiKey={myAPIKey}"
         response = requests.get(url)
         if response.status_code == 200:
@@ -105,7 +104,6 @@ def profile_view(request, username):
 
         url = f"https://api.geoapify.com/v1/geocode/search?text={request.user.profile.address}&limit=1&apiKey={myAPIKey}"
         response = requests.get(url)
-        print(response)
         if response.status_code == 200:
             data = response.json()
             result = data["features"][0]
@@ -211,7 +209,6 @@ def profile(request):
         try:
             address_dict = request.user.profile.address
             address_dict = json.loads(address_dict)
-            print("ADDRESS DICT", address_dict)
             coordinates = address_dict.get("coordinates")
             user_latitude = coordinates.get("latitude")
             user_longitude = coordinates.get("longitude")

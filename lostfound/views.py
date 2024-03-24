@@ -15,17 +15,17 @@ import requests
 def laf_detail(request, post_id):
     post = get_object_or_404(LostandfoundItem, pk=post_id)  
     myAPIKey = 'c20c43b8dddc42939c4304857ea1ce69'
-    print(post.location)
     url = f"https://api.geoapify.com/v1/geocode/search?text={post.location}&limit=1&apiKey={myAPIKey}"
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        result = data["features"][0]
-        print(result)
-        userlatitude = result["geometry"]["coordinates"][1]
-        userlongitude = result["geometry"]["coordinates"][0]
+        if data["features"]:
+            result = data["features"][0]
+            userlatitude = result["geometry"]["coordinates"][1]
+            userlongitude = result["geometry"]["coordinates"][0]
     else:
-        print(f"Request failed with status code {response.status_code}")
+        userlatitude = 42.31749
+        userlongitude = -83.0387979
     
     return render(request, 'lostfound/post_detail.html',{
         'title': 'LostandFoundItem',

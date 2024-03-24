@@ -103,13 +103,17 @@ def property_detail(request, rentid):
     response = requests.get(url)
     if response.status_code == 200:
         data = response.json()
-        result = data["features"][0]
-        userlatitude = result["geometry"]["coordinates"][1]
-        userlongitude = result["geometry"]["coordinates"][0]
+        if data["features"]:
+            result = data["features"][0]
+            userlatitude = result["geometry"]["coordinates"][1]
+            userlongitude = result["geometry"]["coordinates"][0]
+        else:
+            userlatitude = 42.31749
+            userlongitude = -83.0387979
 
-        print(f"Latitude: {userlatitude}, Longitude: {userlongitude}")
     else:
-        print(f"Request failed with status code {response.status_code}")
+        userlatitude = 42.31749
+        userlongitude = -83.0387979
 
     urldistance = f"https://api.geoapify.com/v1/routematrix?apiKey={myAPIKey}"
     headers = {"Content-Type": "application/json"}
