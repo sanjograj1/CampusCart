@@ -1,4 +1,6 @@
 import json
+
+from django.db.models import Q
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect, reverse
@@ -6,7 +8,7 @@ from django.contrib.auth.models import auth
 from django.contrib import messages
 from django.contrib.auth import get_user_model, authenticate
 import requests
-from .models import Contact, UserComment, UserSession
+from .models import Contact, UserComment, UserSession, UserRequest
 from notifications.signals import notify
 from verify_email.email_handler import send_verification_email
 from .forms import (
@@ -16,7 +18,7 @@ from .forms import (
     UserCommentsForm,
     RegistrationForm,
     LoginForm,
-    ReportForm
+    ReportForm, UserRequestForm
 )
 from books.models import Book
 from products.models import Product
@@ -98,7 +100,7 @@ def profile_view(request, username):
         else:
             selleruserlatitude = -83.06649144027972
             selleruserlongitude = 42.305201350000004
-            
+
         url = f"https://api.geoapify.com/v1/geocode/search?text={request.user.profile.address}&limit=1&apiKey={myAPIKey}"
         response = requests.get(url)
         print(response)
@@ -109,9 +111,8 @@ def profile_view(request, username):
             curruserlongitude = result["geometry"]["coordinates"][0]
         else:
             curruserlatitude = 42.31749
-            curruserlongitude = -83.0387979    
-          
-             
+            curruserlongitude = -83.0387979
+
     return render(
         request,
         "accounts/profile_view.html",
@@ -122,10 +123,10 @@ def profile_view(request, username):
             'current_user': user,
             'title': f'{user.username} Rating',
             'comment_form': comment_form,
-            'selleruserlatitude':selleruserlatitude,
-            'selleruserlongitude':selleruserlongitude,
-            'curruserlatitude':curruserlatitude,
-            'curruserlongitude':curruserlongitude
+            'selleruserlatitude': selleruserlatitude,
+            'selleruserlongitude': selleruserlongitude,
+            'curruserlatitude': curruserlatitude,
+            'curruserlongitude': curruserlongitude
         },
     )
 
@@ -390,3 +391,99 @@ def change_password(request):
     else:
         form = PasswordChangeForm(request.user)
     return render(request, "accounts/change_password.html", {"form": form})
+
+
+@login_required
+def user_item_request(request):
+    if request.method == "POST":
+        form = UserRequestForm(request.POST)
+        if form.is_valid():
+            saved_item = form.save(commit=False)
+            saved_item.requested_by = request.user
+            saved_item.save()
+            messages.success(request, "Your request has been uploaded !")
+            url = reverse('accounts:my-suggestions', args=[saved_item.pk])
+            return redirect(url)
+        else:
+            messages.error(request, "Please correct the error below.")
+    else:
+        form = UserRequestForm()
+    return render(request, "accounts/request_item.html", {
+        "form": form,
+    })
+
+
+@login_required
+def my_requests(request):
+    user_requests = UserRequest.objects.filter(requested_by=request.user)
+    return render(request, 'accounts/my_requests.html', {
+        'user_requests': user_requests,
+        'title': 'My Requests'
+    })
+
+
+@login_required
+def delete_request(request, requestid):
+    current_request = UserRequest.objects.get(id=requestid)
+    current_request.delete()
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Your request has been deleted !!",
+        extra_tags="danger",
+    )
+    return redirect("accounts:my-requests")
+
+
+@login_required
+def my_suggestions(request, requestid):
+    current_request = UserRequest.objects.get(id=requestid)
+    item_name = current_request.item_name
+    category = current_request.item_category
+    words = item_name.split()
+    bookresults = []
+    rentalresults = []
+    freeresults = []
+    productresults = []
+    if category == 'Book':
+        query = Q()
+        for word in words:
+            query |= Q(title__icontains=word)
+        bookresults = Book.objects.filter(query)
+    elif category == 'Rental':
+        query = Q()
+        for word in words:
+            query |= Q(property_name__icontains=word)
+        rentalresults = Rental.objects.filter(query)
+    else:
+        query = Q()
+        for word in words:
+            query |= Q(title__icontains=word)
+        productresults = Product.objects.filter(query, category=category)
+        freeresults = FreeStuffItem.objects.filter(query, category=category)
+
+    if bookresults:
+        return render(request, "accounts/suggested_item.html", {
+            "bookresults": bookresults,
+            'title': 'Suggested Items',
+            'item_name': item_name,
+            'category': category
+        })
+    if rentalresults:
+        return render(request, "accounts/suggested_item.html", {
+            "rentalresults": rentalresults,
+            'title': 'Suggested Items',
+            'item_name': item_name,
+            'category': category
+        })
+    if productresults or freeresults:
+        return render(request, "accounts/suggested_item.html", {
+            "productresults": productresults,
+            "freeresults": freeresults,
+            'title': 'Suggested Items',
+            'item_name': item_name,
+            'category': category
+        })
+    return render(request, 'accounts/suggested_item.html', {
+        'title': 'My Suggestions'
+    })

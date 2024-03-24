@@ -22,6 +22,11 @@ class Book(models.Model):
         ("Drama", "Drama"),
         ("Others", "Others"),
     ]
+
+    CONDITION_LIST = [
+        ("New", "New"),
+        ("Used", "Used"),
+    ]
     title = models.CharField(max_length=100)
     author = models.CharField(max_length=100)
     description = models.TextField()
@@ -37,6 +42,7 @@ class Book(models.Model):
         upload_to="upload_book/", default="upload_book/book-cover.png", blank=True
     )
     is_sold = models.BooleanField(default=False)
+    condition = models.CharField(max_length=255, choices=CONDITION_LIST, default="New")
 
     def __str__(self):
         return self.title

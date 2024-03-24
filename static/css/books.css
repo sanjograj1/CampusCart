@@ -264,15 +264,3 @@ main {
 .input-group .btn:hover {
     color: #FFCE00;
 }
-
-.input-group a {
-    box-shadow: none;
-    font-size: 1rem;
-    line-height: 1.375rem;
-    padding: 10px 20px;
-    font-weight: 500;
-    color: #f8f9fa !important;
-    background-color: #C10E21;
-    border-color: #C10E21;
-    border-radius: 6px;
-}
