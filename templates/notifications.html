@@ -9,56 +9,64 @@
 {% endif %}
 {% endblock %}
 {% block content %}
-
 <div class="container position-relative">
-    <div class="pt-4">
-        <h1>Your Notifications</h1>
-        <div class="notification-header-underline"></div>
-    </div>
-    <div class="mt-4">
-        <div class="notification-container d-flex flex-column w-75 m-auto">
-            {% if notifications %}
-            {% for notification in notifications %}
-            <div class="notification-box d-flex align-items-center">
-                <a href="{% url 'accounts:profile-view' notification.actor.username %}"
-                    class="notification-user-pic-container"><img
-                        src="{{ notification.actor.profile.profile_image.url }}" class="profile-pic"
-                        alt="Profile Pic" />
-                </a>
-                <div class="notification-description">
-                    <div>
-                        {%if notification.verb == 'Upload' %}
-                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> uploaded a new
-                        Item
-                        {% elif notification.verb == 'Comment' %}
-                        <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> commented on your
-                        profile
-                        {% endif %}
-                    </div>
-                    <p>
-                        {% autoescape off %}
-                        {{ notification.description }}
-                        {% endautoescape %}
-                    </p>
-                    <div>{{ notification.timestamp }}</div>
-                </div>
-            </div>
-            {% endfor %}
-            {% else %}
-            <h2 class="text-center mt-4">No New Notifications to display.</h2>
+  <div class="pt-4">
+    <h1>Your {{title}}</h1>
+    <div class="notification-header-underline"></div>
+  </div>
+  <div class="mt-4">
+    <div class="notification-container d-flex flex-column w-75 m-auto">
+      {% if notifications %}
+<div class="filter-buttons">Filters:
+  <a  href="?filter-by=upload" class="btn ml-2 btn btn btn-outline-warning btn-sm filter-button">Upload</a>
+  <a  href="?filter-by=request" class="btn  btn btn-outline-warning btn-sm filter-button">Request</a>
+  <a  href="?filter-by=comment" class="btn  btn btn-outline-warning btn-sm filter-button">Comment</a>
+  <a  href="?filter-by=all" class="btn  btn btn-outline-warning btn-sm filter-button">All</a>
+</div>
+      
+      {% for notification in notifications %}
+      <div class="notification-box d-flex align-items-center">
+        <a href="{% url 'accounts:profile-view' notification.actor.username %}"
+          class="notification-user-pic-container"><img
+          src="{{ notification.actor.profile.profile_image.url }}" class="profile-pic"
+          alt="Profile Pic" />
+        </a>
+        <div class="notification-description">
+          <div>
+            {%if notification.verb == 'Upload' %}
+            <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> uploaded a new
+            Item
+            {% elif notification.verb == 'Comment' %}
+            <b>{{ notification.actor.first_name }} {{ notification.actor.last_name }}</b> commented on your
+            profile
             {% endif %}
+          </div>
+          <p>
+            {% autoescape off %}
+            {{ notification.description }}
+            {% endautoescape %}
+          </p>
+          <div>{{ notification.timestamp }}</div>
+          
+          <br/>
         </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <h2 class="text-center mt-4">No New Notifications to display.</h2>
+      {% endif %}
     </div>
+  </div>
 </div>
 <script>
-    const profilePic = document.querySelectorAll('.notification-user-pic-container');
-    if (profilePic.length > 0) {
-        profilePic.forEach((url) => {
-            url.addEventListener('click', () => {
-                const wrapper = document.querySelector('.wrapper');
-                wrapper.classList.remove('display-none');
-            })
-        })
-    }
+  const profilePic = document.querySelectorAll('.notification-user-pic-container');
+  if (profilePic.length > 0) {
+      profilePic.forEach((url) => {
+          url.addEventListener('click', () => {
+              const wrapper = document.querySelector('.wrapper');
+              wrapper.classList.remove('display-none');
+          })
+      })
+  }
 </script>
 {% endblock content %}

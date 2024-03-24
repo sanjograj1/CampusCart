@@ -234,13 +234,27 @@ def profile(request):
 
 @login_required
 def notifications_view(request):
-    notifications = request.user.notifications.all()
     request.user.notifications.mark_all_as_read()
-    return render(request, 'notifications.html', {
-        'notifications': notifications,
-        'title': 'Notifications'
-    })
+    filter_by = request.GET.get("filter-by")
+    print("dfg", filter_by)
+    title = "Notifications"
+    if filter_by == "upload":
+        notifications = request.user.notifications.filter(verb="Upload")
+        title = "Upload Notifications"
+    elif filter_by == "comment":
+        notifications = request.user.notifications.filter(verb="Comment")
+        title = "Comment Notifications"
+    elif filter_by == "request":
+        notifications = request.user.notifications.filter(verb="Request")
+        title = "Request Notifications"
+    else:
+        notifications = request.user.notifications.all()
 
+    return render(
+        request,
+        "notifications.html",
+        {"notifications": notifications, "title": title},
+    )
 
 @login_required
 def user_listing(request):
