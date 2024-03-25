@@ -64,7 +64,7 @@ def create_product(request):
             return redirect("products:home")
     else:
         form = ProductForm()
-    return render(request, "products/create_product.html", {"form": form})
+    return render(request, "products/create_product.html", {"form": form,'title':'Upload Product'})
 
 
 # detail product
