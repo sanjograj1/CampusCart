@@ -361,7 +361,7 @@ def contactus(request):
     else:
         form = ContactForm(initial={"email": request.user.email, "name": request.user.first_name,
                                     "number": request.user.profile.phone_number})
-    return render(request, "accounts/contactus.html", {"form": form})
+    return render(request, "accounts/contactus.html", {"form": form,'title':'Contact Us'})
 
 
 @login_required
@@ -406,7 +406,7 @@ def change_password(request):
             messages.error(request, "Please correct the error below.")
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, "accounts/change_password.html", {"form": form})
+    return render(request, "accounts/change_password.html", {"form": form,'title':'Change Password'})
 
 
 @login_required
@@ -430,6 +430,7 @@ def user_item_request(request):
         form = UserRequestForm()
     return render(request, "accounts/request_item.html", {
         "form": form,
+        'title' : 'Enter Request'
     })
 
 
